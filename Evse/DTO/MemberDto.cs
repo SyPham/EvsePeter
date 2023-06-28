@@ -36,10 +36,57 @@ namespace Evse.DTO
         public string MemberAddress { get; set; }
         public string MemberLine { get; set; }
         public string CarGuid { get; set; }
+        
+        public string CarName { get; set; }
+        public string CarNumber { get; set; }
+        public string CarVIN { get; set; }
         public string PaymentGuid { get; set; }
         public string PhotoPath { get; set; }
         public List<IFormFile> File { get; set; }
         public string MemberSexName { get; set; }
+        public string StatusName { get; set; }
+        public string MemberStatus { get; set; }
+        public string LastLocation { get; set; }
+        public string RoleType { get; set; }
+        public bool? CarLicenseCheck { get; set; }
+        public bool? IdCardCheck { get; set; }
+        public string IdCard1Path { get; set; }
+        public string IdCard2Path { get; set; }
+        public string CarLicensePath { get; set; }
+        public string CarLicense2Path { get; set; }
+    }
+    public partial class MemberProfileDto
+    {
+        public decimal Id { get; set; }
+     
+        public string MemberSex { get; set; }
+        public string MemberName { get; set; }
+             public string CarName { get; set; }
+        public string CarNumber { get; set; }
+        public string CarVIN { get; set; }
+        public string MemberIdcard { get; set; }
+        public string CarGuid { get; set; }
+    
+        public DateTime? MemberBirthday { get; set; }
+        public string MemberEmail { get; set; }
+        public string MemberMobile { get; set; }
+        public string MemberAddress { get; set; }
+        public string MemberStatus { get; set; }
+
+
+    }
+
+      public partial class MemberUploadFileDto
+    {
+        public IFormFile File { get; set; }
+        public decimal Id { get; set; }
+
+
+    }
+  public partial class LastLocationDto
+    {
+        public string LastLocation { get; set; }
+        public string Guid { get; set; }
 
 
     }

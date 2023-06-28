@@ -64,24 +64,26 @@ import { PigfarmCoreModule } from 'herr-core';
 import { environment } from 'src/environments/environment';
 declare var require: any;
 import { L10n, loadCldr, setCulture } from '@syncfusion/ej2-base';
+import { AccountActionComponent } from './account/account-action/account-action.component';
+import { AccountContractComponent } from './account/account-contract/account-contract.component';
 loadCldr(
   require('cldr-data/supplemental/numberingSystems.json'),
   require('cldr-data/main/en/ca-gregorian.json'),
   require('cldr-data/main/en/numbers.json'),
   require('cldr-data/main/en/timeZoneNames.json'),
-  require('cldr-data/supplemental/weekdata.json')); // To load the culture based first day of week
+  require('cldr-data/supplemental/weekData.json')); // To load the culture based first day of week
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
     require('cldr-data/main/zh/ca-gregorian.json'),
     require('cldr-data/main/zh/numbers.json'),
     require('cldr-data/main/zh/timeZoneNames.json'),
-    require('cldr-data/supplemental/weekdata.json')); 
+    require('cldr-data/supplemental/weekData.json')); 
     loadCldr(
       require('cldr-data/supplemental/numberingSystems.json'),
       require('cldr-data/main/vi/ca-gregorian.json'),
       require('cldr-data/main/vi/numbers.json'),
       require('cldr-data/main/vi/timeZoneNames.json'),
-      require('cldr-data/supplemental/weekdata.json'));
+      require('cldr-data/supplemental/weekData.json'));
     
 TreeGrid.Inject(Page, Toolbar, Filter);
 const REPORT_COMPONENT = [
@@ -123,6 +125,7 @@ const IMG_PIPE = [
   declarations: [
     ...IMG_PIPE,
     AccountComponent,
+    AccountActionComponent,
     PrivilegeComponent,
     SystemComponent,
     XAccountGroupComponent,
@@ -139,6 +142,7 @@ const IMG_PIPE = [
     SettingDashboardNormalComponent,
     CreateDashboardComponent,
     CreateAreaComponent,
+    AccountContractComponent
   ]
 })
 export class SystemModule {

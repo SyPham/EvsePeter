@@ -1,3 +1,36 @@
+export interface AccountContract {
+    id: number;
+    accountGuid: string;
+    countyGuid: string;
+    siteGuid: string;
+    deviceGuid: string;
+    contractPath: string;
+    comment: string;
+    status: number | null;
+    createBy: number | null;
+    createDate: string | null;
+    updateBy: number | null;
+    updateDate: string | null;
+    guid: string;
+    file: any;
+}
+export interface ImageConfig {
+    id: number;
+    type: string;
+    path: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: number | null;
+    guid: string;
+    file: any;
+    title: any;
+    content: any;
+}
 export interface Site {
     id: number;
     type: string;
@@ -21,6 +54,7 @@ export interface Site {
     longitude: any;
     latitude: any;
     landlordGuid: any;
+    countyGuid: any;
 }
 export interface ParkingLot {
     id: number;
@@ -60,6 +94,8 @@ export interface Device {
     deleteBy: number | null;
     status: number | null;
     guid: string;
+    longitude: any;
+    latitude: any;
 }
 export interface Landlord {
     id: number;
@@ -98,6 +134,7 @@ export interface Member {
     siteGuid: string;
     uid: string;
     upwd: string;
+    reupwd: string;
     memberNo: string;
     memberName: string;
     startDate: string | null;
@@ -120,10 +157,22 @@ export interface Member {
     memberMobile: string;
     memberAddress: string;
     memberLine: string;
-    carGuid: string;
     paymentGuid: string;
     photoPath: string;
+    carGuid: any;
+    carName: any;
+    carNumber: any;
+    carVIN: any;
+    memberStatus
     file: any;
+    roleType: any;
+    birthday: any;
+    carLicenseCheck: any;
+    idCard1Path: any;
+    idCard2Path: any;
+    carLicensePath: any;
+    carLicense2Path: any;
+    idCardCheck: any;
 }
 export interface Engineer {
     id: number;
@@ -246,4 +295,214 @@ export interface User2Message {
     readDate: string | null;
     status: number | null;
     guid: string;
+}
+export interface ReportError {
+    id: number;
+    deviceGuid: string;
+    guid: string;
+    deviceLeftGuid: string;
+    deviceRightGuid: string;
+    errorType: string;
+    errorDetail: string;
+    errorFixedDate: string | null;
+    errorFixedDetail: string;
+}
+export interface CreditCard {
+    id: number;
+    memberGuid: string;
+    creditCardNo: string;
+    creditCardMy: string;
+    creditCardCvc: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: number | null;
+    guid: string;
+}
+
+export interface Discount {
+    id: number;
+    memberGuid: string;
+    siteGuid: string;
+    discountTitle: string;
+    discountBody1: string;
+    discountBody2: string;
+    discountDeadline: string | null;
+    discountLocation: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: number | null;
+    guid: string;
+}
+export interface Favorite {
+    id: number;
+    memberGuid: string;
+    siteGuid: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: number | null;
+    guid: string;
+}
+
+export interface County {
+    countyId: string;
+    countyName: string;
+    cmt: string;
+    cancelFlag: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    signingId: number | null;
+    countyNameOld: string;
+    latitude: string;
+    longitude: string;
+}
+export interface Township {
+    countyId: string;
+    townshipId: string;
+    townshipName: string;
+    cmt: string;
+    cancelFlag: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    mlsId: string;
+    countyIdOld: string;
+    townshipNameOld: string;
+}
+
+export interface Electrician {
+    id: number;
+    siteGuid: string;
+    uid: string;
+    upwd: string;
+    electricianNo: string;
+    electricianName: string;
+    electricianIdcard: string;
+    licensePath: string;
+    photoPath: string;
+    startDate: string | null;
+    endDate: string | null;
+    lastlogin: string | null;
+    lastuse: string | null;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: number | null;
+    guid: string;
+    electricianSex: string;
+    electricianBirthday: string | null;
+    electricianEmail: string;
+    electricianMobile: string;
+    electricianAddress: string;
+    electricianSexName: string;
+    file: any;
+}
+
+export interface Investor {
+    id: number;
+    siteGuid: string;
+    uid: string;
+    upwd: string;
+    investorNo: string;
+    investorName: string;
+    investorIdcard: string;
+    licensePath: string;
+    photoPath: string;
+    startDate: string | null;
+    endDate: string | null;
+    lastlogin: string | null;
+    lastuse: string | null;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: number | null;
+    guid: string;
+    investorSex: string;
+    investorBirthday: string | null;
+    investorEmail: string;
+    investorMobile: string;
+    investorAddress: string;
+    investorSexName: string;
+    file: any;
+}
+
+export interface AuditLog {
+    id: number;
+    actionType?: number;
+    tableName: string;
+    accountId: string;
+    recordId: number;
+    createDate: string | null;
+
+}
+
+export interface ElectricianErrorReport {
+    id: number;
+    errorSite: string;
+    deviceGuid: string;
+    viewError: string;
+    photoPath: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: string;
+    guid: string;
+    statusName: string;
+    errorSiteName: string;
+    deviceGuidName: string;
+    viewErrorName: string;
+    file: any;
+    deviceLR: string;
+}
+
+export interface EngineerErrorReport {
+    id: number;
+    errorSite: string;
+    deviceGuid: string;
+    viewError: string;
+    photoPath: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: string;
+    guid: string;
+    statusName: string;
+    errorSiteName: string;
+    deviceGuidName: string;
+    viewErrorName: string;
+    file: any;
+    deviceLR: any;
 }

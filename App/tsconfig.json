@@ -4,7 +4,7 @@
     "paths": {
       "@pigfarm-core": [
         "projects/pigfarm-core/src/public-api.ts",
-        "dist/pigfarm-core",
+        "dist/pigfarm-core/*"
       ],
       "ngx-org-chart": [
         "projects/ngx-org-chart/*",

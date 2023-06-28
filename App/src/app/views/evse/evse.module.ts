@@ -36,12 +36,42 @@ import { ContractActionComponent } from './contract/contract-action/contract-act
 import { WebNewsComponent } from './web-news/web-news.component';
 import { RichTextEditorAllModule, RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
 import { LandlordBankComponent } from './landlord/landlord-bank/landlord-bank.component';
-import { GoogleMapComponent } from './google-map/google-map.component';
 import { AgmCoreModule, LazyMapsAPILoaderConfigLiteral } from '@agm/core';
 import { LandlordBankActionComponent } from './landlord/landlord-bank/landlord-bank-action/landlord-bank-action.component';
 import { LandlordDetailComponent } from './landlord/landlord-detail/landlord-detail.component';
 import { LandlordDeviceComponent } from './landlord/landlord-device/landlord-device.component';
 import { LandlordDeviceActionComponent } from './landlord/landlord-device/landlord-device-action/landlord-device-action.component';
+import { ImageConfigComponent } from './image-config/image-config.component';
+import { ImageConfigActionComponent } from './image-config/image-config-action/image-config-action.component';
+import { CreditCardComponent } from './member/credit-card/credit-card.component';
+import { CreditCardActionComponent } from './member/credit-card/credit-card-action/credit-card-action.component';
+import { FavoriteComponent } from './member/favorite/favorite.component';
+import { FavoriteActionComponent } from './member/favorite/favorite-action/favorite-action.component';
+import { DiscountComponent } from './member/discount/discount.component';
+import { DiscountActionComponent } from './member/discount/discount-action/discount-action.component';
+import { MaskedTextBoxModule, UploaderModule } from '@syncfusion/ej2-angular-inputs';
+import { CountyComponent } from './county/county.component';
+import { CountyActionComponent } from './county/county-action/county-action.component';
+import { TownshipComponent } from './county/township/township.component';
+import { TownshipActionComponent } from './county/township/township-action/township-action.component';
+import { QRCodeGeneratorAllModule } from '@syncfusion/ej2-angular-barcode-generator';
+import { RoleComponent } from './role/role.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ElectricianProfileComponent } from './electrician-profile/electrician-profile.component';
+import { SettingRoleComponent } from './setting-role/setting-role.component';
+import { Memberv2Component } from './memberv2/memberv2.component';
+import { StationStatusComponent } from './station-status/station-status.component';
+import { MemberListComponent } from './member-list/member-list.component';
+import { InvestorAreaComponent } from './investor-area/investor-area.component';
+import { ElectricianStatusComponent } from './electrician-status/electrician-status.component';
+import { DeviceUserComponent } from './device-user/device-user.component';
+import { AppUpdateComponent } from './app-update/app-update.component';
+import { MemberActionComponent } from './memberv2/member-action/member-action.component';
+import { ElectricianErrorReportComponent } from './electrician-error-report/electrician-error-report.component';
+import { EngineerErrorReportComponent } from './engineer-error-report/engineer-error-report.component';
+import { EngineerErrorReportActionComponent } from './engineer-error-report/engineer-error-report-action/engineer-error-report-action.component';
+import { ElectricianErrorReportActionComponent } from './electrician-error-report/electrician-error-report-action/electrician-error-report-action.component';
+
 interface Environment {
   production: boolean;
   apiUrl: string;
@@ -68,12 +98,16 @@ const mapOptions:  LazyMapsAPILoaderConfigLiteral = {
     ChartModule,
     RichTextEditorModule,
     SharedModule.forRoot(),
-    PigfarmCoreModule.forRoot(environment.apiUrl),
-    AgmCoreModule.forRoot({
-      apiKey: "AIzaSyAi9VYgdZUeOo2Wngl_5ho1H4_5clWGFTU"
-    }),
+    MaskedTextBoxModule ,
+    QRCodeGeneratorAllModule ,
+    UploaderModule,
+    PigfarmCoreModule.forRoot(environment.apiUrl)
+  ],
+  exports: [
+    SiteActionComponent
   ],
   declarations: [
+    RoleComponent,
     HomeComponent,
     StationComponent,
     DeviceComponent,
@@ -92,11 +126,38 @@ const mapOptions:  LazyMapsAPILoaderConfigLiteral = {
     ContractActionComponent,
     WebNewsComponent,
     LandlordBankComponent,
-    GoogleMapComponent,
     LandlordBankActionComponent,
     LandlordDetailComponent,
     LandlordDeviceComponent,
-    LandlordDeviceActionComponent
+    LandlordDeviceActionComponent,
+    ImageConfigComponent,
+    ImageConfigActionComponent,
+    CreditCardComponent,
+    CreditCardActionComponent,
+    FavoriteComponent,
+    FavoriteActionComponent,
+    DiscountComponent,
+    DiscountActionComponent,
+    CountyComponent,
+    CountyActionComponent,
+    TownshipComponent,
+    TownshipActionComponent,
+    ProfileComponent,
+    ElectricianProfileComponent,
+    SettingRoleComponent,
+    Memberv2Component,
+    StationStatusComponent,
+    MemberListComponent,
+    InvestorAreaComponent,
+    ElectricianStatusComponent,
+    DeviceUserComponent,
+    AppUpdateComponent,
+    MemberActionComponent,
+    ElectricianErrorReportComponent,
+    EngineerErrorReportComponent,
+    EngineerErrorReportActionComponent,
+    ElectricianErrorReportActionComponent,
+
   ]
 })
 export class EvseModule {

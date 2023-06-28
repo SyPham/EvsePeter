@@ -65,7 +65,9 @@ namespace Evse.DTO
         public string AccountDomicileAddress { get; set; }
         public string AccessTokenLineNotify { get; set; }
         public string StatusName { get; set; }
-
+        public string ContactRel { get; set; }
+        public string ContactTel { get; set; }
+        public string ContactName { get; set; }
         public List<IFormFile> File { get; set; }
 
     }
@@ -76,10 +78,24 @@ namespace Evse.DTO
         public List<string> Permissions { get; set; }
 
     }
+public partial class StorePermissionForCheckBoxDto
+    {
+        public string Guid { get; set; }
+       
+        public string Permission { get; set; }
+
+    }
 
     public partial class ForgotUsernameDto
     {
         public string email { get; set; }
+    }
+      
+     public partial class ChangePasswordDto
+    {
+        public decimal Id { get; set; }
+        public string Password { get; set; }
+        public string RePassword { get; set; }
     }
     public partial class ResetPasswordDto
     {
@@ -91,6 +107,12 @@ namespace Evse.DTO
         public string Username { get; set; }
         public string Password { get; set; }
     }
+           public partial class RegisterEngineerDto
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+    
     public partial class StoreProfileDto
     {
         public string NickName { get; set; }
@@ -108,6 +130,8 @@ namespace Evse.DTO
         public string PageSizeSettingValue { get; set; }
         public string StatusName { get; set; }
         public string Status { get; set; }
+        public string ContactRel { get; set; }
+        public string ContactRelName { get; set; }
 
     }
 }

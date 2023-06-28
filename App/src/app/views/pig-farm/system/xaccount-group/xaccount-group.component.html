@@ -39,6 +39,33 @@
             </span>
           </button>
         </ng-template>
+        <ng-template #pagerTemplate let-data>
+          <pre
+          class="page-text"
+          [translate]="pageText"
+          [translateParams]="{ items: grid.pageSettings.totalRecordsCount }"
+          > </pre>
+         <div class="d-flex justify-content-center">
+          <ngb-pagination
+          [collectionSize]="grid.pageSettings.totalRecordsCount"
+          [(page)]="grid.pageSettings.currentPage"
+          [pageSize]="grid.pageSettings.pageSize"
+          [maxSize]="5"
+          [rotate]="true"
+          [ellipses]="false"
+          [boundaryLinks]="true"
+        >
+        
+        <ng-template ngbPaginationFirst><i class="fa fa-step-backward"></i></ng-template>
+        <ng-template ngbPaginationLast><i class="fa fa-step-forward"></i></ng-template>
+        <ng-template ngbPaginationPrevious><i class="fa fa-caret-left"></i></ng-template>
+        <ng-template ngbPaginationNext><i class="fa fa-caret-right"></i></ng-template>
+        <ng-template ngbPaginationEllipsis>...</ng-template>
+        <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+        
+        </ngb-pagination>
+         </div>
+          </ng-template>
         <e-columns>
           <e-column
             field="#"
@@ -56,29 +83,6 @@
           </e-column>
 
           <e-column
-            field="option"
-            textAlign="Left"
-            headerTextAlign="Center"
-            width="10%"
-            headerTextAlign="Center"
-            [allowSorting]="false"
-            [allowSearching]="false"
-            [allowGrouping]="false"
-            [allowFiltering]="false"
-            [allowEditing]="false"
-            headerText="{{ 'OPTION' | translate }}"
-          >
-            <ng-template #template let-data>
-              <span (click)="delete(data.id)" class="delete-grid">
-                <i class="fa fa-trash"></i>
-              </span>
-              <span (click)="openModal(optionModal, data)" class="edit-grid">
-                <i class="fa fa-edit"></i>
-              </span>
-            </ng-template>
-          </e-column>
-
-          <e-column
             field="groupNo"
             textAlign="Left"
             headerTextAlign="Center"
@@ -92,6 +96,26 @@
             headerText="{{ 'ACCOUNT_GROUP_NAME' | translate }}"
           >
           </e-column>
+          
+          <e-column
+            field="option"
+            textAlign="Left"
+            headerTextAlign="Center"
+            headerTextAlign="Center"
+            [allowSorting]="false"
+            [allowSearching]="false"
+            [allowGrouping]="false"
+            [allowFiltering]="false"
+            [allowEditing]="false"
+            headerText="{{ 'OPTION' | translate }}"
+          >
+            <ng-template #template let-data>
+
+              <button type="button" (click)="openModal(optionModal, data)"  class="btn btn-sm btn-success mr-2">{{ 'Edit' | translate }}</button>
+              <button type="button" (click)="delete(data.accountId)" class="btn btn-sm btn-danger">{{ 'Delete' | translate }}</button>
+            </ng-template>
+          </e-column>
+
         </e-columns>
       </ejs-grid>
     </div>
@@ -169,8 +193,9 @@
             [dataSource]="permissionData"
             placeholder="{{ 'CHOOSE PERMISSIONS' | translate }}"
             [fields]="fields"
+            [mode]="'CheckBox'"
+            [showSelectAll]="true"
             (filtering)="onFiltering($event)"
-            [mode]="'Box'"
           >
           </ejs-multiselect>
         </div>

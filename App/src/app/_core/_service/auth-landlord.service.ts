@@ -164,7 +164,7 @@ export class AuthLandlordService implements OnDestroy {
     this.timer?.unsubscribe();
   }
   private validToken() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token_landlord');
     const pattern = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/;
     const result = pattern.test(token);
     return result;

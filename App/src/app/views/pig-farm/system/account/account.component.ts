@@ -4,10 +4,9 @@ import { EmployeeService } from './../../../../_core/_service/employee.service';
 import { BaseComponent } from 'herr-core';
 import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit, TemplateRef, ViewChild, AfterViewInit } from '@angular/core';
-import { AlertifyService } from 'src/app/_core/_service/alertify.service';
 import { EditService, ToolbarService, PageService, GridComponent, ExcelExportProperties, ExcelExportCompleteArgs } from '@syncfusion/ej2-angular-grids';
 import { NgbModal, NgbModalRef, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { XAccount } from 'src/app/_core/_model/xaccount';
 import { XAccountGroup } from 'src/app/_core/_model/xaccount-group';
 import { ActionConstant, ImagePathConstants, MessageConstants } from 'src/app/_core/_constants';
@@ -21,6 +20,7 @@ import { UtilitiesService } from 'herr-core';
 import { EmitType, setCulture, L10n } from '@syncfusion/ej2-base';
 import { XAccountService } from 'src/app/_core/_service/xaccount.service';
 import { FarmService } from 'src/app/_core/_service/farms';
+import { AlertifyService } from '@pigfarm-core';
 
 
 declare let $: any;
@@ -39,7 +39,7 @@ export class AccountComponent extends BaseComponent implements OnInit, AfterView
   fields = { text: 'name', value: 'codeNo' };
   // toolbarOptions = ['Search'];
   passwordFake = `aRlG8BBHDYjrood3UqjzRl3FubHFI99nEPCahGtZl9jvkexwlJ`;
-
+  pageText = 'Total Records Count {{items}} items'
   @ViewChild('grid') public grid: GridComponent;
   accountCreate: XAccount;
   accountUpdate: XAccount;
@@ -56,6 +56,7 @@ export class AccountComponent extends BaseComponent implements OnInit, AfterView
   accountTypes: any[];
   employeeData: any[];
   employeeGuid = null;
+  keyWord= null;
   editSettings = { showDeleteConfirmDialog: false, allowEditing: false, allowAdding: true, allowDeleting: false, mode: 'Normal' };
   title: any;
   @ViewChild('optionModal') templateRef: TemplateRef<any>;
@@ -67,7 +68,7 @@ export class AccountComponent extends BaseComponent implements OnInit, AfterView
   status = false;
   permissionData: [] = [];
   permissions: any;
-  searchOptions = { fields: ['farmName', 'accountNo', 'accountName', 'uid', 'employeeNickName', 'accountGroupName'], operator: 'contains', ignoreCase: true };
+  searchOptions = { fields: ['accountName', 'uid'], operator: 'contains', ignoreCase: true };
   public onFiltering: any = (e: FilteringEventArgs) => {
     let query = new Query();
     //frame the query based on search string with filter type.
@@ -96,6 +97,7 @@ export class AccountComponent extends BaseComponent implements OnInit, AfterView
     private datePipe: DatePipe,
      private config: NgbTooltipConfig,
     public translate: TranslateService,
+    public router: Router,
   ) {
 	    super(translate,environment.apiUrl);
       if (this.isAdmin === false) {
@@ -104,8 +106,16 @@ export class AccountComponent extends BaseComponent implements OnInit, AfterView
   }
   ngAfterViewInit(): void {
   }
+fnSearch() {
+  this.grid.search(this.keyWord);
 
+}
+role = ''
   ngOnInit() {
+    this.route.data.subscribe(data=> {
+      this.role = data.functionCode
+      this.loadData();
+    })
     this.toolbarOptions = ['ExcelExport',{template: this.odsTemplate}, 'Add', 'Search'];
     let lang = localStorage.getItem('lang');
     let languages = JSON.parse(localStorage.getItem('languages'));
@@ -117,8 +127,7 @@ export class AccountComponent extends BaseComponent implements OnInit, AfterView
       }
     };
     L10n.load(load);
-    this.getFarms();
-    this.loadData();
+    //this.getFarms();
     this.loadXAccountGroupData();
     this.loadLang();
   }
@@ -291,13 +300,25 @@ toolbarClick(args) {
           this.grid.excelExport(excelExportProperties);
           break;
         case 'grid_add':
-          args.cancel = true;
-          this.model = {} as any;
-          this.openModal(this.templateRef);
+          this.fnAdd(args);
           break;
         default:
           break;
       }
+  }
+  fnAdd(args: any) {
+    debugger
+    if (args) {
+      args.cancel = true;
+    }
+    let link = `/system/account/action/${0}`;
+
+    if (this.role !== 'Account' ) {
+      link = `/system/account/${this.role.toLocaleLowerCase()}/action/${0}`;
+    }
+    this.router.navigateByUrl(link)
+   // this.model = {} as any;
+   // this.openModal(this.templateRef);
   }
   actionComplete(args) {
     // if (args.requestType === 'add') {
@@ -318,10 +339,9 @@ toolbarClick(args) {
 
   loadData() {
     const accessToken = localStorage.getItem('token');
-    const farmGuid = localStorage.getItem('farmGuid');
     const lang = localStorage.getItem('lang');
     this.data = new DataManager({
-      url: `${this.baseUrl}XAccount/LoadData?farmGuid=${farmGuid}&lang=${lang}`,
+      url: `${this.baseUrl}XAccount/LoadData?role=${this.role}&lang=${lang}`,
       adaptor: new UrlAdaptor,
       headers: [{ authorization: `Bearer ${accessToken}` }]
     });
@@ -333,7 +353,7 @@ toolbarClick(args) {
     });
   }
   delete(id) {
-    this.alertify.confirm4(
+    this.alertify.deleteConfirm(
       this.alert.yes_message,
       this.alert.no_message,
       this.alert.deleteTitle,
@@ -492,6 +512,23 @@ toolbarClick(args) {
       this.loading = 0;
     }
 
+  }
+  fnEdit(data) {
+    let link = `/system/account/action/${data.accountId}`;
+
+    if (this.role !== 'Account' ) {
+      link = `/system/account/${this.role.toLocaleLowerCase()}/action/${data.accountId}`;
+    }
+    this.router.navigateByUrl(link)
+
+  }
+  fnWiew(data) {
+    let link = `/system/account/view/${data.accountId}`;
+
+    if (this.role !== 'Account' ) {
+      link = `/system/account/${this.role.toLocaleLowerCase()}/view/${data.accountId}`;
+    }
+    this.router.navigateByUrl(link)
   }
   async openModal(template, data = {} as XAccount) {
     this.loading = 1;

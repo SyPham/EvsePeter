@@ -4,6 +4,7 @@ import { CookieService } from "ngx-cookie-service";
 import { AuthService } from "src/app/_core/_service/auth.service";
 import { AlertifyService } from "herr-core";
 import { TranslateService } from "@ngx-translate/core";
+import { AuthLandlordService } from "src/app/_core/_service/auth-landlord.service";
 @Component({
   selector: 'app-landlord-register',
   templateUrl: './landlord-register.component.html',
@@ -13,16 +14,25 @@ export class LandlordRegisterComponent implements OnInit {
   username;
   password;
   agree
+  areaName: string;
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private authService: AuthService,
+    private authService: AuthLandlordService,
     private cookieService: CookieService,
     private alertifyService: AlertifyService,
     private trans: TranslateService
   ) { }
 
   ngOnInit(): void {
+    const area = this.activatedRoute.snapshot.params.area;
+    this.areaName = "";
+    if (area === "landlord") {
+      this.areaName = "landlord"
+    }
+    else if (area === "engineer") {
+      this.areaName = "engineer"
+    }
   }
   authentication() {
     return this.authService

@@ -54,7 +54,7 @@ export class LandlordLoginComponent
         this.loginRememberMe(+this.key);
       }
     }
-    let backUrl = "/mobile/home";
+    let backUrl = "/mobile/home/landlord";
     this.uri = this.route.snapshot.queryParams.uri || backUrl;
   }
   role: number;
@@ -73,12 +73,12 @@ export class LandlordLoginComponent
       refreshToken &&
       this.route.routeConfig.path === "/mobile/landlord-login"
     ) {
-      let backUrl = "/mobile/home";
+      let backUrl = "/mobile/home/landlord";
       const uri = decodeURI(this.uri) || backUrl;
       this.router.navigate([uri]);
     }
     if (this.authService.loggedIn()) {
-      let backUrl = "/mobile/home";
+      let backUrl = "/mobile/home/landlord";
       const uri = decodeURI(this.uri) || backUrl;
       this.router.navigate([uri]);
     }
@@ -114,7 +114,7 @@ export class LandlordLoginComponent
         this.cookieService.set("key_temp_landlord", "");
       }
      
-      let backUrl = "/mobile/home";
+      let backUrl = "/mobile/home/landlord";
       this.router.navigate([backUrl]);
       this.alertifyService.success(this.trans.instant("Login Success!"));
       this.loading = 0;

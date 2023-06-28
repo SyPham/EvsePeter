@@ -61,18 +61,20 @@ namespace Evse.Services
         Task<bool> UpdateTokenLine(string token, object id);
         Task<bool> RemoveTokenLine(object id);
 
-         Task<object> UploadAvatarForMobile(IFormFile file, decimal key);
+        Task<object> UploadAvatarForMobile(IFormFile file, decimal key);
 
-          Task<object> SP_Record_AccountCheck_Born(string recordGuid);
+        Task<object> SP_Record_AccountCheck_Born(string recordGuid);
         Task<object> SP_Record_AccountCheck_Remove(string accountGuid);
         Task<object> SP_Record_AccountCheck_Confirm(string accountGuid);
         Task<object> SP_Record_AccountCheck_NeedCheck(string accountGuid);
+        Task<object> GetAccountNo(string type, string accountGroupGuid);
 
     }
     public class XAccountService : ServiceBase<XAccount, XAccountDto>, IXAccountService
     {
         private readonly ISPService _repoSp;
         private readonly IRepositoryBase<XAccount> _repo;
+        private readonly IRepositoryBase<SystemConfig> _repoSystemConfig;
         private readonly IRepositoryBase<CodeType> _repoCodeType;
         private readonly IRepositoryBase<XAccountPermission> _repoXAccountPermission;
         private readonly IRepositoryBase<XAccountGroupPermission> _repoXAccountGroupPermission;
@@ -87,6 +89,7 @@ namespace Evse.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _currentEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly IAuditLogService _auditLogService;
 
         public XAccountService(
             IRepositoryBase<XAccount> repo,
@@ -103,10 +106,11 @@ namespace Evse.Services
 IEvseLoggerService logger,
             IHttpContextAccessor httpContextAccessor,
             IWebHostEnvironment currentEnvironment,
-        IConfiguration configuration
+        IConfiguration configuration,
+        ISPService repoSp,
+IAuditLogService auditLogService
 ,
-        ISPService repoSp
-            )
+IRepositoryBase<SystemConfig> repoSystemConfig)
             : base(repo, logger, unitOfWork, mapper, configMapper)
         {
             _repo = repo;
@@ -125,6 +129,8 @@ IEvseLoggerService logger,
             _currentEnvironment = currentEnvironment;
             _configuration = configuration;
             _repoSp = repoSp;
+            _auditLogService = auditLogService;
+            _repoSystemConfig = repoSystemConfig;
         }
 
         public override async Task<object> GetDataDropdownlist(DataManager data)
@@ -163,12 +169,13 @@ IEvseLoggerService logger,
             }).ToListAsync()).Union(itemNo).OrderBy(x => x.Guid);
         }
 
-        public async Task<object> LoadData(DataManager data, string farmGuid, string lang)
+        public async Task<object> LoadData(DataManager data, string role, string lang)
         {
-            var datasource = (from x in _repo.FindAll(x => x.Status == "1" || x.Status == "0")
+            var roleQuery = await _repoXAccountGroup.FindAll(x => x.GroupNo == role).FirstOrDefaultAsync();
+            var datasource = (from x in _repo.FindAll(x => roleQuery != null ? roleQuery.Guid == x.AccountGroup : true)
                               join b in _repoXAccountGroup.FindAll() on x.AccountGroup equals b.Guid into gj
                               from a in gj.DefaultIfEmpty()
-                           
+
                               join e in _repoEmployee.FindAll() on x.EmployeeGuid equals e.Guid into ef
                               from d in ef.DefaultIfEmpty()
                               join st in _repoCodeType.FindAll(x => x.Status == "Y" && x.CodeType1 == CodeTypeConst.Account_Status) on x.Status equals st.CodeNo into ass
@@ -225,35 +232,39 @@ IEvseLoggerService logger,
                                   AccountSite = x.AccountSite,
                                   ErrorLogin = x.ErrorLogin,
                                   PhotoPath = x.PhotoPath,
+                                  ContactName = x.ContactName,
+                                  ContactRel = x.ContactRel,
+                                  ContactTel = x.ContactTel,
                                   AccountDomicileAddress = x.AccountDomicileAddress,
                                   AccessTokenLineNotify = x.AccessTokenLineNotify,
                                   StatusName = status == null ? "" : lang == Languages.EN ? status.CodeNameEn ?? status.CodeName : lang == Languages.VI ? status.CodeNameVn ?? status.CodeName : lang == Languages.CN ? status.CodeNameCn ?? status.CodeName : status.CodeName,
                               }).OrderByDescending(x => x.AccountId).AsNoTracking()
                 .AsQueryable();
-            var count = await datasource.CountAsync();
+            var count = await datasource.Where(x => x.Status == "1" || x.Status == "0").CountAsync();
             if (data.Where != null) // for filtering
                 datasource = QueryableDataOperations.PerformWhereFilter(datasource, data.Where, data.Where[0].Condition);
             if (data.Sorted != null)//for sorting
                 datasource = QueryableDataOperations.PerformSorting(datasource, data.Sorted);
             if (data.Search != null)
                 datasource = QueryableDataOperations.PerformSearching(datasource, data.Search);
-            count = await datasource.CountAsync();
+            count = await datasource.Where(x => x.Status == "1" || x.Status == "0").CountAsync();
             if (data.Skip >= 0)//for paging
                 datasource = QueryableDataOperations.PerformSkip(datasource, data.Skip);
             if (data.Take > 0)//for paging
                 datasource = QueryableDataOperations.PerformTake(datasource, data.Take);
             return new
             {
-                Result = await datasource.ToListAsync(),
+                Result = await datasource.Where(x => x.Status == "1" || x.Status == "0").ToListAsync(),
                 Count = count
             };
         }
+
         public override async Task<List<XAccountDto>> GetAllAsync()
         {
             var query = from x in _repo.FindAll(x => (x.Status == "1" || x.Status == "0"))
                         join b in _repoXAccountGroup.FindAll() on x.AccountGroup equals b.Guid into gj
                         from a in gj.DefaultIfEmpty()
-                      
+
                         join e in _repoEmployee.FindAll() on x.EmployeeGuid equals e.Guid into ef
                         from d in ef.DefaultIfEmpty()
 
@@ -309,8 +320,12 @@ IEvseLoggerService logger,
                             AccountSite = x.AccountSite,
                             ErrorLogin = x.ErrorLogin,
                             PhotoPath = x.PhotoPath,
+                            ContactName = x.ContactName,
+                            ContactRel = x.ContactRel,
+                            ContactTel = x.ContactTel,
                             AccountDomicileAddress = x.AccountDomicileAddress,
                             AccessTokenLineNotify = x.AccessTokenLineNotify,
+
                         };
 
             var data = await query.OrderByDescending(x => x.AccountId).ToListAsync();
@@ -329,6 +344,14 @@ IEvseLoggerService logger,
 
             item.Status = "9";
             _repo.Update(item);
+            await _auditLogService.AddAsync(new AuditLogDto
+            {
+                AccountId = accountId,
+                RecordId = item.AccountId,
+                ActionType = AuditLogConst.ActionType.Delete,
+                TableName = AuditLogConst.TableName.XAccount,
+                CreateDate = DateTime.Now,
+            });
             try
             {
                 await _unitOfWork.SaveChangeAsync();
@@ -380,7 +403,15 @@ IEvseLoggerService logger,
             }
             return operationResult;
         }
-
+        public override async Task<XAccountDto> GetByIDAsync(object id)
+        {
+            var item = await _repo.FindByIDAsync(id);
+            if (item.Status == "9")
+            {
+                return null;
+            }
+            return _mapper.Map<XAccount, XAccountDto>(item);
+        }
         public async Task<XAccountDto> GetByUsername(string username)
         {
             var result = await _repo.FindAll(x => x.Uid.ToLower() == username.ToLower()).ProjectTo<XAccountDto>(_configMapper).FirstOrDefaultAsync();
@@ -388,7 +419,7 @@ IEvseLoggerService logger,
         }
         public async Task<OperationResult> CheckExistUsername(string userName)
         {
-            var item = await _repo.FindAll(x => x.Uid == userName).AnyAsync();
+            var item = await _repo.FindAll(x => x.Uid == userName && x.Status == "1").AnyAsync();
             if (item)
             {
                 return new OperationResult { StatusCode = HttpStatusCode.OK, Message = "The username already existed!", Success = false };
@@ -402,9 +433,40 @@ IEvseLoggerService logger,
             return operationResult;
         }
 
+                public async Task<OperationResult> CheckExistUsernameByAccountGroup(string userName, string accountGroup)
+        {
+            var item = await _repo.FindAll(x => x.Uid == userName && x.Status == "1" && x.AccountGroup == accountGroup).AnyAsync();
+            if (item)
+            {
+                return new OperationResult { StatusCode = HttpStatusCode.OK, Message = "The username already existed!", Success = false };
+            }
+            operationResult = new OperationResult
+            {
+                StatusCode = HttpStatusCode.OK,
+                Success = true,
+                Data = item
+            };
+            return operationResult;
+        }
+        public async Task<OperationResult> CheckExistNoByAccountGroup(string accountNo, string accountGroup)
+        {
+            var item = await _repo.FindAll(x => x.AccountNo == accountNo && x.Status == "1" && x.AccountGroup == accountGroup).AnyAsync();
+            if (item)
+            {
+                return new OperationResult { StatusCode = HttpStatusCode.OK, Message = "The account NO already existed!", Success = false };
+            }
+            operationResult = new OperationResult
+            {
+                StatusCode = HttpStatusCode.OK,
+                Success = true,
+                Data = item
+            };
+            return operationResult;
+        }
+
         public async Task<OperationResult> CheckExistNo(string accountNo)
         {
-            var item = await _repo.FindAll(x => x.AccountNo == accountNo).AnyAsync();
+            var item = await _repo.FindAll(x => x.AccountNo == accountNo && x.Status == "1").AnyAsync();
             if (item)
             {
                 return new OperationResult { StatusCode = HttpStatusCode.OK, Message = "The account NO already existed!", Success = false };
@@ -566,9 +628,9 @@ IEvseLoggerService logger,
         }
         public async Task<OperationResult> AddFormAsync(XAccountDto model)
         {
-            var check = await CheckExistUsername(model.Uid);
+            var check = await CheckExistUsernameByAccountGroup(model.Uid, model.AccountGroup);
             if (!check.Success) return check;
-            var checkAccountNo = await CheckExistNo(model.AccountNo);
+            var checkAccountNo = await CheckExistNoByAccountGroup(model.AccountNo, model.AccountGroup);
             if (!checkAccountNo.Success) return checkAccountNo;
             FileExtension fileExtension = new FileExtension();
             var avatarUniqueFileName = string.Empty;
@@ -592,6 +654,16 @@ IEvseLoggerService logger,
                 //item.Status = "1";
                 _repo.Add(item);
                 await _unitOfWork.SaveChangeAsync();
+                string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
+                await _auditLogService.AddAsync(new AuditLogDto
+                {
+                    AccountId = accountId,
+                    RecordId = item.AccountId,
+                    ActionType = AuditLogConst.ActionType.Add,
+                    TableName = AuditLogConst.TableName.XAccount,
+                    CreateDate = DateTime.Now,
+                });
 
                 operationResult = new OperationResult
                 {
@@ -623,13 +695,13 @@ IEvseLoggerService logger,
             var itemModel = await _repo.FindAll(x => x.AccountId == model.AccountId).AsNoTracking().FirstOrDefaultAsync();
             if (itemModel.Uid != model.Uid)
             {
-                var check = await CheckExistUsername(model.Uid);
+                var check = await CheckExistUsernameByAccountGroup(model.Uid, model.AccountGroup);
                 if (!check.Success) return check;
             }
 
             if (itemModel.AccountNo != model.AccountNo)
             {
-                var checkAccountNo = await CheckExistNo(model.AccountNo);
+                var checkAccountNo = await CheckExistNoByAccountGroup(model.AccountNo, model.AccountGroup);
                 if (!checkAccountNo.Success) return checkAccountNo;
             }
             var item = _mapper.Map<XAccount>(model);
@@ -671,7 +743,16 @@ IEvseLoggerService logger,
                 //item.Comment = model.Comment;
                 _repo.Update(item);
                 await _unitOfWork.SaveChangeAsync();
-
+                string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
+                await _auditLogService.AddAsync(new AuditLogDto
+                {
+                    AccountId = accountId,
+                    RecordId = item.AccountId,
+                    ActionType = AuditLogConst.ActionType.Edit,
+                    TableName = AuditLogConst.TableName.XAccount,
+                    CreateDate = DateTime.Now,
+                });
                 operationResult = new OperationResult
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -1173,5 +1254,36 @@ IEvseLoggerService logger,
         public async Task<object> SP_Record_AccountCheck_Confirm(string accountGuid) => await _repoSp.SP_Record_AccountCheck_Confirm(accountGuid);
         public async Task<object> SP_Record_AccountCheck_NeedCheck(string accountGuid) => await _repoSp.SP_Record_AccountCheck_NeedCheck(accountGuid);
 
+        public async Task<object> GetAccountNo(string type, string accountGroupGuid)
+        {
+            var accountTotal = await _repo.FindAll(x => x.Guid == accountGroupGuid).CountAsync();
+            string result = accountTotal.ToString("D5");
+            switch (type)
+            {
+                 case "Electrician":
+                 return new {
+                        value = ""
+                    };
+                case "Landlord":
+                    string suffixElectrician = "O";
+                    var configValueElectrician = await _repoSystemConfig.FindAll(x => x.Type == "Electrician.NO").FirstOrDefaultAsync();
+                    suffixElectrician = configValueElectrician != null && !configValueElectrician.Value.IsNullOrEmpty() ? configValueElectrician.Value : suffixElectrician;
+                   suffixElectrician =  suffixElectrician + accountTotal.ToString("D9");
+                break;
+                case "Investor":
+                    string suffixInvestor = "L";
+                    var configValueInvestor = await _repoSystemConfig.FindAll(x => x.Type == "Investor.NO").FirstOrDefaultAsync();
+                    suffixInvestor = configValueInvestor != null && !configValueInvestor.Value.IsNullOrEmpty() ? configValueInvestor.Value : suffixInvestor;
+                   suffixInvestor=  suffixInvestor + accountTotal.ToString("D9");
+               break;
+                default:
+                    return new {
+                        value = result
+                    };
+            }
+            return new {
+                        value = result
+                    };
+        }
     }
 }

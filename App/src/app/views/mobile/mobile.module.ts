@@ -59,6 +59,12 @@ import { BankAccountFinishScreenComponent } from './account-screen/bank-account-
 import { AlertScreenComponent } from './alert-screen/alert-screen.component';
 import { ReportScreenComponent } from './report-screen/report-screen.component';
 import { loadCldr, setCulture, L10n } from '@syncfusion/ej2-base';
+import { ReportErrorComponent } from './field/report-error/report-error.component';
+import { ReportErrorDetailComponent } from './field/report-error-detail/report-error-detail.component';
+import { EngineerLoginComponent } from './engineer-login/engineer-login.component';
+import { EngineerDemoComponent } from './engineer-demo/engineer-demo.component';
+import { EngineerRegisterComponent } from './engineer-register/engineer-register.component';
+import { EngineerProfileComponent } from './engineer-profile/engineer-profile.component';
 let lang = localStorage.getItem('lang');
 if (!lang) {
   localStorage.setItem('lang', 'tw');
@@ -82,21 +88,21 @@ loadCldr(
   require('cldr-data/main/en/ca-gregorian.json'),
   require('cldr-data/main/en/numbers.json'),
   require('cldr-data/main/en/timeZoneNames.json'),
-  require('cldr-data/supplemental/weekdata.json')); 
+  require('cldr-data/supplemental/weekData.json')); 
 
 loadCldr(
   require('cldr-data/supplemental/numberingSystems.json'),
   require('cldr-data/main/zh/ca-gregorian.json'),
   require('cldr-data/main/zh/numbers.json'),
   require('cldr-data/main/zh/timeZoneNames.json'),
-  require('cldr-data/supplemental/weekdata.json')); 
+  require('cldr-data/supplemental/weekData.json')); 
 
   loadCldr(
     require('cldr-data/supplemental/numberingSystems.json'),
     require('cldr-data/main/vi/ca-gregorian.json'),
     require('cldr-data/main/vi/numbers.json'),
     require('cldr-data/main/vi/timeZoneNames.json'),
-    require('cldr-data/supplemental/weekdata.json'));
+    require('cldr-data/supplemental/weekData.json'));
 
     
 @NgModule({
@@ -115,8 +121,13 @@ loadCldr(
     BankAccountScreenComponent,
     BankAccountFinishScreenComponent,
     AlertScreenComponent,
-    ReportScreenComponent
-    
+    ReportScreenComponent,
+    ReportErrorComponent,
+    ReportErrorDetailComponent,
+    EngineerLoginComponent,
+    EngineerDemoComponent,
+    EngineerRegisterComponent,
+    EngineerProfileComponent
   ],
   imports: [
     CommonModule,

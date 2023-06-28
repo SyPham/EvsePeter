@@ -4,6 +4,11 @@ using Evse.Helpers;
 using Evse.Services;
 using Syncfusion.JavaScript;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using System;
+using NetUtility;
+using System.Linq;
 
 namespace Evse.Controllers
 {
@@ -37,7 +42,11 @@ namespace Evse.Controllers
         {
             return StatusCodeResult(await _service.UpdateAsync(model));
         }
-
+        [HttpPut]
+        public async Task<ActionResult> UpdatePofileAsync([FromBody] MemberProfileDto model)
+        {
+            return StatusCodeResult(await _service.UpdatePofileAsync(model));
+        }
     [HttpPost]
         public async Task<ActionResult> AddFormAsync([FromForm] MemberDto model)
         {
@@ -50,6 +59,11 @@ namespace Evse.Controllers
             return Ok(await _service.UpdateFormAsync(model));
         }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdateFileAsync([FromForm]  IFormFile file,[FromQuery] decimal id)
+        {
+            return Ok(await _service.UpdateFileAsync(new MemberUploadFileDto{Id = id, File =file}));
+        }
         [HttpDelete]
         public async Task<ActionResult> DeleteAsync(decimal id)
         {
@@ -61,7 +75,11 @@ namespace Evse.Controllers
         {
             return Ok(await _service.GetByIDAsync(id));
         }
-
+        [HttpGet]
+        public async Task<ActionResult> GetByIdAndLangAsync(decimal id, string lang)
+        {
+            return Ok(await _service.GetByIdAndLangAsync(id,lang));
+        }
         [HttpGet]
         public async Task<ActionResult> GetWithPaginationsAsync(PaginationParams paramater)
         {
@@ -84,5 +102,30 @@ namespace Evse.Controllers
         {
             return Ok(await _service.GetAudit(id));
         }
+        [HttpGet]
+        public async Task<ActionResult> GetLastLocation(string guid)
+        {
+            return Ok(await _service.GetLastLocation(guid));
+        }
+        [HttpPut]
+        public async Task<ActionResult> StoreLastLocation([FromBody] LastLocationDto model)
+        {
+            return StatusCodeResult(await _service.StoreLastLocation(model));
+        }
+        [HttpPost]
+                public async Task<ActionResult> Remove([FromForm] string cancelUploading, [FromForm] string uploadFiles, decimal id, string type)
+                {
+                  return StatusCodeResult(await _service.RemoveFile(id, type));
+                }
+         [HttpPost]
+        public async Task<ActionResult> Save(IFormFile uploadFile, decimal id, string type)
+        {
+           
+                 if(uploadFile ==null)
+                uploadFile = Request.Form.Files["UploadFiles"];
+                return StatusCodeResult(await _service.SaveFile(uploadFile,id, type));
+
+        }
+    
     }
 }

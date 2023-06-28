@@ -38,6 +38,35 @@ namespace Evse.Helpers.AutoMapper
             CreateMap<User2BankDto, User2Bank>();
             CreateMap<User2Bank, User2BankDto>();
             CreateMap<User2Message, User2MessageDto>();
+            CreateMap<ReportError, ReportErrorDto>();
+
+            CreateMap<NotificationUserDto, NotificationUser>();
+            CreateMap<DeviceUserDto, DeviceUser>();
+            CreateMap<TopicDto, Topic>();
+            CreateMap<TopicUserDto, TopicUser>();
+            CreateMap<ImageConfigDto, ImageConfig>();
+
+            CreateMap<CreditCardDto, CreditCard>();
+         
+            CreateMap<FavoriteDto, Favorite>();
+            CreateMap<DiscountDto, Discount>();
+            CreateMap<PaymentDto, Payment>();
+            CreateMap<TownshipDto, Township>();
+            CreateMap<CountyDto, County>();
+            CreateMap<DeviceErrorDto, DeviceError>();
+            CreateMap<InvestorDto, Investor>();
+            CreateMap<ElectricianDto, Electrician>();
+            CreateMap<RoleDto, Role>();
+            CreateMap<RoleDetailDto, RoleDetail>();
+            CreateMap<AccountDto, Account>();
+            CreateMap<Account2Dto, Account2>();
+            CreateMap<AuditLogDto, AuditLog>();
+            CreateMap<AccountContractDto, AccountContract>();
+            CreateMap<EngineerErrorReportDto, EngineerErrorReport>();
+            CreateMap<ElectricianErrorReportDto, ElectricianErrorReport>();
+            CreateMap<ReportConfigDto, ReportConfig>();
+            CreateMap<ReportExportParams, ReportParams>();
+            CreateMap<ReportConfigDto, ReportConfig>();
 
 
         }

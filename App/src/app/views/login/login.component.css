@@ -7,3 +7,26 @@
 input {
   cursor: pointer;
 }
+
+ul li {
+  list-style: none;
+}
+.forgot-password {
+  color:red;
+  text-align: center;
+}
+.password {
+  position: relative;
+}
+
+.password .eye {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  right: 0;
+  font-size: 20px;
+  cursor: pointer;
+}
+.e-radio + label .e-label {
+  white-space: nowrap !important;
+}

@@ -16,6 +16,12 @@ import { FieldScreenDetailComponent } from './field/field-screen-detail/field-sc
 import { BankAccountScreenComponent } from './account-screen/bank-account-screen/bank-account-screen.component';
 import { BankAccountFinishScreenComponent } from './account-screen/bank-account-finish-screen/bank-account-finish-screen.component';
 import { AlertScreenComponent } from './alert-screen/alert-screen.component';
+import { ReportErrorComponent } from './field/report-error/report-error.component';
+import { ReportErrorDetailComponent } from './field/report-error-detail/report-error-detail.component';
+import { EngineerLoginComponent } from './engineer-login/engineer-login.component';
+import { EngineerDemoComponent } from './engineer-demo/engineer-demo.component';
+import { EngineerRegisterComponent } from './engineer-register/engineer-register.component';
+import { EngineerProfileComponent } from './engineer-profile/engineer-profile.component';
 
 const routes: Routes = [
   {
@@ -26,11 +32,28 @@ const routes: Routes = [
     children: [
     
       {
+        path: 'engineer-profile',
+        component: EngineerProfileComponent,
+        data: {
+          title: 'engineer Profile'
+        }
+      },
+      {
         path: 'landlord-profile',
         component: LandlordProfileComponent,
         data: {
           title: 'Landlord Profile'
         }
+      },
+      {
+        path: 'home/:area',
+        component: HomeComponent,
+        data: {
+          title: 'home',
+          breadcrumb: 'Home',
+          functionCode: 'Home Mobile'
+        },
+        //canActivate: [AuthGuard]
       },
       {
         path: 'home',
@@ -39,12 +62,11 @@ const routes: Routes = [
           title: 'home',
           breadcrumb: 'Home',
           functionCode: 'Home Mobile'
-
         },
         //canActivate: [AuthGuard]
       },
       {
-        path: 'repair',
+        path: 'repair/:area',
         component: RepairScreenComponent,
         data: {
           title: 'Repair',
@@ -55,7 +77,7 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'field',
+        path: 'field/:area',
         component: FieldComponent,
         data: {
           title: 'Field',
@@ -66,7 +88,7 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'field/detail',
+        path: 'field/:area/detail',
         component: FieldScreenDetailComponent,
         data: {
           title: 'Field Detail',
@@ -77,7 +99,7 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'field/detail/:guid',
+        path: 'field/:area/detail/:guid',
         component: FieldScreenDetailComponent,
         data: {
           title: 'Field Detail',
@@ -88,7 +110,29 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'report',
+        path: 'field/:area/detail/:guid/report-error',
+        component: ReportErrorComponent,
+        data: {
+          title: 'Report Error',
+          breadcrumb: 'Report Error',
+          functionCode: 'Report Error'
+
+        },
+        //canActivate: [AuthGuard]
+      },
+      {
+        path: 'field/:area/detail/:guid/report-error/detail/:device',
+        component: ReportErrorDetailComponent,
+        data: {
+          title: 'Report Error Detail',
+          breadcrumb: 'Report Error Detail',
+          functionCode: 'Report Error Detail'
+
+        },
+        //canActivate: [AuthGuard]
+      },
+      {
+        path: 'report/:area',
         component: ReportScreenComponent,
         data: {
           title: 'Report',
@@ -110,7 +154,18 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'account/bank',
+        path: 'account/:area',
+        component: AccountScreenComponent,
+        data: {
+          title: 'Account',
+          breadcrumb: 'Account',
+          functionCode: 'Account'
+
+        },
+        //canActivate: [AuthGuard]
+      },
+      {
+        path: 'account/bank/:area',
         component: BankAccountScreenComponent,
         data: {
           title: 'Bank Account',
@@ -121,7 +176,7 @@ const routes: Routes = [
         //canActivate: [AuthGuard]
       },
       {
-        path: 'account/bank/finish',
+        path: 'account/bank/finish/:area',
         component: BankAccountFinishScreenComponent,
         data: {
           title: 'Bank Account',
@@ -146,14 +201,14 @@ const routes: Routes = [
 
   },
   {
-    path: 'landlord-login',
+    path: 'landlord-login-2',
     component: LandlordLoginComponent,
     data: {
       title: 'Login'
     }
   },
   {
-    path: 'login',
+    path: 'landlord-login',
     component: LandlordLoginComponent,
     data: {
       title: 'Login',
@@ -174,7 +229,42 @@ const routes: Routes = [
       title: 'Landlord Demo'
     }
   },
-
+  {
+    path: 'engineer-login',
+    component: EngineerLoginComponent,
+    data: {
+      title: 'Engineer Register'
+    }
+  },
+  {
+    path: 'engineer-login',
+    component: EngineerLoginComponent,
+    data: {
+      title: 'Engineer Login',
+      skip: 0
+    }
+  },
+  {
+    path: 'engineer-login-2',
+    component: EngineerLoginComponent,
+    data: {
+      title: 'Engineer Login'
+    }
+  },
+  {
+    path: 'engineer-demo',
+    component: EngineerDemoComponent,
+    data: {
+      title: 'Engineer Demo'
+    }
+  },
+  {
+    path: 'engineer-register',
+    component: EngineerRegisterComponent,
+    data: {
+      title: 'Engineer Register'
+    }
+  },
 ];
 
 @NgModule({

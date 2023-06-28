@@ -19,8 +19,11 @@ namespace Evse.Services
 {
     public interface ISystemLanguageService : IServiceBase<SystemLanguage, SystemLanguageDto>
     {
+        Task<object> LocalizationV2(string lang);
         Task<object> LoadLanguages();
         Task<object> GetLanguages(string lang);
+        Task<object> Localization(string lang);
+        Task<object> Localizations();
         Task<object> LoadLanguages(string lang);
         Task<object> LoadData(DataManager dm);
         Task<object> LoadData(DataManager dm, string page, string type);
@@ -245,7 +248,7 @@ _logger = logger;
 
         public async Task<object> LoadLanguages()
         {
-            var query = await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn).AsNoTracking().Select(x => new
+            var query = await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null).AsNoTracking().Select(x => new
             {
                 x.Slkey,
                 x.Sltype,
@@ -374,7 +377,7 @@ _logger = logger;
             string UPLOADER = "uploader";
             if (Languages.CN == lang)
             {
-                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn).AsNoTracking().Select(x => new
+                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null).AsNoTracking().Select(x => new
                 {
                     x.Slkey,
                     x.Sltype,
@@ -398,7 +401,7 @@ _logger = logger;
             }
             else if (Languages.TW == lang)
             {
-                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn).AsNoTracking().Select(x => new
+                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null).AsNoTracking().Select(x => new
                 {
                     x.Slkey,
                     x.Sltype,
@@ -421,7 +424,7 @@ _logger = logger;
             }
             else if (Languages.EN == lang)
             {
-                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn).AsNoTracking().Select(x => new
+                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null).AsNoTracking().Select(x => new
                 {
                     x.Slkey,
                     x.Sltype,
@@ -444,7 +447,7 @@ _logger = logger;
             }
             else if (Languages.VI == lang)
             {
-                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn).AsNoTracking().Select(x => new
+                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null).AsNoTracking().Select(x => new
                 {
                     x.Slkey,
                     x.Sltype,
@@ -468,7 +471,7 @@ _logger = logger;
 
             else 
             {
-                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn).AsNoTracking().Select(x => new
+                var data = (await _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null).AsNoTracking().Select(x => new
                 {
                     x.Slkey,
                     x.Sltype,
@@ -494,7 +497,7 @@ _logger = logger;
         }
         public async Task<object> LoadData(DataManager data)
         {
-            IQueryable<SystemLanguageDto> datasource = _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn)
+            IQueryable<SystemLanguageDto> datasource = _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null)
                 .OrderByDescending(x => x.Id).ProjectTo<SystemLanguageDto>(_configMapper);
             var count = await datasource.CountAsync();
             if (data.Where != null) // for filtering
@@ -517,7 +520,7 @@ _logger = logger;
         public async Task<object> LoadData(DataManager data, string page, string type)
         {
             IQueryable<SystemLanguageDto> datasource =
-            _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn)
+            _repo.FindAll(x => x.Sltype != SystemReport.ReportColumn && x.Slkey != null)
                  .OrderByDescending(x => x.Id)
                  .ProjectTo<SystemLanguageDto>(_configMapper);
             if (!string.IsNullOrEmpty(page) && page != "All")
@@ -563,7 +566,7 @@ _logger = logger;
 
         public async Task<object> LoadReportColumnData(DataManager data, string systemMenuGuid)
         {
-            IQueryable<SystemLanguageDto> datasource = _repo.FindAll(x => x.Status == 1 && x.SystemMenuGuid == systemMenuGuid)
+            IQueryable<SystemLanguageDto> datasource = _repo.FindAll(x => x.Status == 1 && x.SystemMenuGuid == systemMenuGuid && x.Slkey != null)
                .OrderBy(x => x.Sequence)
                .ProjectTo<SystemLanguageDto>(_configMapper);
             var count = await datasource.CountAsync();
@@ -633,6 +636,82 @@ _logger = logger;
                 createDate,
                 updateBy,
                 updateDate
+            };
+        }
+
+        public async Task<object> Localization(string lang)
+        {
+              var query = await _repo.FindAll(x => x.Sltype == "Mobile" && x.Slkey != null)
+              .AsNoTracking()
+              .Select(x => new
+            {
+               Key =  x.Slkey,
+               Value = lang== Languages.EN  ? x.Slen :  lang== Languages.VI  ? x.Slvn:  lang== Languages.CN  ? x.Slcn : x.Sltw,
+                x.Sltw,
+                x.Slen,
+                x.Slvn,
+                x.Slcn,
+            }).ToListAsync();
+            return query;
+        }
+
+        public async Task<object> LocalizationV2(string lang)
+        {
+            var query = await _repo.FindAll(x => x.Sltype == "Mobile" && x.Slkey != null)
+            .AsNoTracking()
+            .Select(x => new
+            {
+                Key = x.Slkey,
+                Value = lang == Languages.EN ? x.Slen : lang == Languages.VI ? x.Slvn : lang == Languages.CN ? x.Slcn : x.Sltw,
+            }).ToListAsync();
+            var states = new Dictionary<string, string>();
+            foreach (var item in query.DistinctBy(x => x.Key))
+            {
+                states.Add(item.Key, item.Value);
+            }
+           
+            return states;
+        }
+
+        public async Task<object> Localizations()
+        {
+              var query = await _repo.FindAll(x => x.Sltype == "Mobile" && x.Slkey != null)
+              .AsNoTracking()
+              .Select(x => new
+            {
+                x.Slkey,
+                x.Sltw,
+                x.Slen,
+                x.Slvn,
+                x.Slcn,
+            }).ToListAsync();
+          
+            var en = new Dictionary<string, string>();
+            foreach (var item in query.DistinctBy(x => x.Slkey))
+            {
+                en.Add(item.Slkey, item.Slen);
+            }
+
+            var vi = new Dictionary<string, string>();
+            foreach (var item in query.DistinctBy(x => x.Slkey))
+            {
+                vi.Add(item.Slkey, item.Slvn);
+            }
+
+            var cn = new Dictionary<string, string>();
+            foreach (var item in query.DistinctBy(x => x.Slkey))
+            {
+                cn.Add(item.Slkey, item.Slcn);
+
+            }
+            var tw = new Dictionary<string, string>();
+            foreach (var item in query.DistinctBy(x => x.Slkey))
+            {
+                tw.Add(item.Slkey, item.Sltw);
+
+            }
+            return new {
+                en,vi,cn,tw
             };
         }
     }

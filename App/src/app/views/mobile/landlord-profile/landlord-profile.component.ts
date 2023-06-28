@@ -173,6 +173,6 @@ export class LandlordProfileComponent implements OnInit {
      return model;
    }
   cancel() {
-    this.router.navigate(['/mobile/home'])
+    this.router.navigate(['/mobile/home/landlord'])
   }
 }

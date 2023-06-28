@@ -275,10 +275,15 @@ export class MemberComponent extends BaseComponent implements OnInit {
       this.title = 'Member_Edit_Model';
     } else {
       this.model.id = 0;
+    this.model.carNumber = null;
+
       this.title = 'Member_Add_Model';
     }
     this.modalReference = this.modalService.open(template, {size: 'xl',backdrop: 'static'});
-    this.configImage();
+    this.modalReference.result.then(x=> {
+      this.configImage();
+
+    })
   }
   configImage() {
     const option = {
@@ -396,10 +401,19 @@ export class MemberComponent extends BaseComponent implements OnInit {
   }
   cancel() {
     this.model = {} as Member;
+    this.model.carNumber = null;
     this.audit = {}
   }
   rowSelected(args) {
     this.model = {...args.data};
     this.getAudit(this.model.id)
+  }
+  onClickTab(value) {
+    if (!this.model.guid && value === 'Credit_Card') {
+     this.alertify.warning(this.translate.instant('Please choice a member'))
+     return;
+    }
+    this.active = value;
+    
   }
 }

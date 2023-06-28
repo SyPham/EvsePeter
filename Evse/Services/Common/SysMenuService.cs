@@ -38,8 +38,10 @@ namespace Evse.Services
     public class SysMenuService : ServiceBase<SysMenu, SysMenuDto>, ISysMenuService
     {
         private readonly IRepositoryBase<SysMenu> _repo;
+        private readonly IRepositoryBase<CodePermission> _repoCodePermission;
         private readonly IRepositoryBase<XAccount> _repoXAccount;
         private readonly IRepositoryBase<XAccountGroup> _repoXAccountGroup;
+        private readonly IRepositoryBase<XAccountGroupPermission> _repoXAccountGroupPermission;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly MapperConfiguration _configMapper;
@@ -55,8 +57,10 @@ namespace Evse.Services
             IHttpContextAccessor httpContextAccessor,
             MapperConfiguration configMapper,
 IEvseLoggerService logger
-
-            )
+,
+IRepositoryBase<XAccountGroupPermission> repoXAccountGroupPermission
+,
+IRepositoryBase<CodePermission> repoCodePermission)
             : base(repo, logger, unitOfWork, mapper, configMapper)
         {
             _repo = repo;
@@ -67,6 +71,8 @@ IEvseLoggerService logger
             _mapper = mapper;
             _configMapper = configMapper;
             _httpContextAccessor = httpContextAccessor;
+            _repoXAccountGroupPermission = repoXAccountGroupPermission;
+            _repoCodePermission = repoCodePermission;
         }
         public override async Task<OperationResult> AddAsync(SysMenuDto model)
         {
@@ -74,15 +80,23 @@ IEvseLoggerService logger
             {
                 var item = _mapper.Map<SysMenu>(model);
                 item.Status = 1;
-                item.FarmGgp = 1;
-                item.FarmGp = 1;
-                item.FarmPmpf = 1;
-                item.FarmGrower = 1;
-                item.FarmNursery = 1;
-                item.FarmSemen = 1;
                 _repo.Add(item);
                 await _unitOfWork.SaveChangeAsync();
-
+                var permission = await _repoCodePermission.FindAll(x => x.Status == "1").FirstOrDefaultAsync(x => x.CodeNo == item.Type);
+                if (permission == null)
+                {
+                    _repoCodePermission.Add(new CodePermission
+                    {
+                        CodeType = "Permission",
+                        CodeNo = item.Type,
+                        CodeName = item.MenuName,
+                        CodeNameVn = item.MenuNameVn,
+                        CodeNameCn = item.MenuNameCn,
+                        CodeNameEn = item.MenuNameEn,
+                        Status = "1"
+                    });
+                    await _unitOfWork.SaveChangeAsync();
+                }
                 operationResult = new OperationResult
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -125,17 +139,23 @@ IEvseLoggerService logger
                 item.ChartUnit = model.ChartUnit;
                 item.MenuType = model.MenuType;
 
-
-                item.FarmGgp = model.FarmGgp;
-                item.FarmGp = model.FarmGp;
-                item.FarmGrower = model.FarmGrower;
-                item.FarmNursery = model.FarmNursery;
-                item.FarmPmpf = model.FarmPmpf;
-                item.FarmSemen = model.FarmSemen;
-
                 _repo.Update(item);
                 await _unitOfWork.SaveChangeAsync();
-
+                var permission = await _repoCodePermission.FindAll(x => x.Status == "1").FirstOrDefaultAsync(x => x.CodeNo == item.Type);
+                if (permission == null)
+                {
+                    _repoCodePermission.Add(new CodePermission
+                    {
+                        CodeType = "Permission",
+                        CodeNo = item.Type,
+                        CodeName = item.MenuName,
+                        CodeNameVn = item.MenuNameVn,
+                        CodeNameCn = item.MenuNameCn,
+                        CodeNameEn = item.MenuNameEn,
+                        Status = "1"
+                    });
+                    await _unitOfWork.SaveChangeAsync();
+                }
                 operationResult = new OperationResult
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -156,11 +176,20 @@ IEvseLoggerService logger
         {
             string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
             var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
-            if (menuType == "BE") {
-             var account = await _repoXAccount.FindAll(x => x.Status == "1" && x.AccountId == accountId).FirstOrDefaultAsync();
-            if (account == null) return new List<dynamic> { };
+            var permissions = new List<string>();
+            var account = await _repoXAccount.FindAll(x => x.Status == "1" && x.AccountId == accountId).FirstOrDefaultAsync();
+            var role = await _repoXAccountGroup.FindAll(x => x.Guid == account.AccountGroup).FirstOrDefaultAsync();
+            var IS_ADMIN = role != null ? "Admin" == role.GroupNo : false;
+            if (menuType == "BE")
+            {
+                {
+                    permissions = await _repoXAccountGroupPermission.FindAll(x => x.UpperGuid == account.AccountGroup).Select(x => x.CodeNo).ToListAsync();
+
+
+                    if (account == null) return new List<dynamic> { };
+                }
             }
-          
+
 
             var query = await (from x in _repo.FindAll(x => x.Status == 1 && menuType == x.MenuType)
                                select new
@@ -172,15 +201,11 @@ IEvseLoggerService logger
                                    Url = x.MenuLink,
                                    SortId = x.SortId ?? 0,
                                    Icon = x.MenuIcon,
-                                   x.FarmGgp,
-                                   x.FarmGp,
-                                   x.FarmPmpf,
-                                   x.FarmGrower,
-                                   x.FarmNursery,
-                                   x.FarmSemen,
+
                                    Name = lang == Languages.EN ? (x.MenuNameEn == "" || x.MenuNameEn == null ? x.MenuName : x.MenuNameEn) : lang == Languages.VI ? (x.MenuNameVn == "" || x.MenuNameVn == null ? x.MenuName : x.MenuNameVn) : lang == Languages.TW ? x.MenuName : lang == Languages.CN ? (x.MenuNameCn == "" || x.MenuNameCn == null ? x.MenuName : x.MenuNameCn) : x.MenuName
 
                                }).ToListAsync();
+
             var queryTemp = query.Select(x => new
             {
 
@@ -191,45 +216,82 @@ IEvseLoggerService logger
                 SortId = x.SortId,
                 Icon = x.Icon,
                 Name = x.Name,
-                Ggp = x.FarmGgp,
-                Gp = x.FarmGp,
-                Pmpf = x.FarmPmpf,
-                Semen = x.FarmSemen,
-                Nursery = x.FarmNursery,
-                Grower = x.FarmGrower,
             });
-
-            return queryTemp.AsHierarchy(x => x.Id, y => y.UpperId, null, 3).Select(x => new
+            if (IS_ADMIN)
             {
-                x.Entity.Url,
-                x.Entity.Icon,
-                x.Entity.Name,
-                x.Entity.FunctionCode,
-                x.Entity.SortId,
-                x.HasChildren,
-                Level = x.Depth,
-                Children = x.ChildNodes.Select(a => new
+                var results = queryTemp.AsHierarchy(x => x.Id, y => y.UpperId, null, 3).Select(x => new
                 {
-                    a.Entity.Url,
-                    a.Entity.Icon,
-                    a.Entity.Name,
-                    a.Entity.FunctionCode,
-                    a.HasChildren,
-                    a.Entity.SortId,
-                    Level = a.Depth,
-                    Children = a.ChildNodes.Select(b => new
+                    x.Entity.Url,
+                    x.Entity.Icon,
+                    x.Entity.Name,
+                    x.Entity.FunctionCode,
+                    x.Entity.SortId,
+                    x.HasChildren,
+                    Level = x.Depth,
+                    Children = x.ChildNodes.Select(a => new
                     {
-                        b.Entity.Url,
-                        b.Entity.Icon,
-                        b.Entity.Name,
-                        b.Entity.FunctionCode,
-                        HasChildren = false,
-                        b.Entity.SortId,
-                        Level = b.Depth,
-                        Children = new List<dynamic>()
-                    }).OrderBy(b => b.SortId)
-                }).OrderBy(a => a.SortId)
-            }).OrderBy(x => x.SortId);
+                        a.Entity.Url,
+                        a.Entity.Icon,
+                        a.Entity.Name,
+                        a.Entity.FunctionCode,
+                        a.HasChildren,
+                        a.Entity.SortId,
+                        Level = a.Depth,
+                        Children = a.ChildNodes.Select(b => new
+                        {
+                            b.Entity.Url,
+                            b.Entity.Icon,
+                            b.Entity.Name,
+                            b.Entity.FunctionCode,
+                            HasChildren = false,
+                            b.Entity.SortId,
+                            Level = b.Depth,
+                            Children = new List<dynamic>()
+                        }).OrderBy(b => b.SortId)
+                    }).OrderBy(a => a.SortId)
+                }).OrderBy(x => x.SortId);
+
+                return results;
+            }
+            else
+            {
+                var results = queryTemp
+                .AsHierarchy(x => x.Id, y => y.UpperId, null, 3)
+                .Select(x => new
+                {
+                    x.Entity.Url,
+                    x.Entity.Icon,
+                    x.Entity.Name,
+                    x.Entity.FunctionCode,
+                    x.Entity.SortId,
+                    x.HasChildren,
+                    Level = x.Depth,
+                    Children = x.ChildNodes.Where(x => permissions.Contains(x.Entity.FunctionCode)).Select(a => new
+                    {
+                        a.Entity.Url,
+                        a.Entity.Icon,
+                        a.Entity.Name,
+                        a.Entity.FunctionCode,
+                        a.HasChildren,
+                        a.Entity.SortId,
+                        Level = a.Depth,
+                        Children = a.ChildNodes.Where(x => permissions.Contains(x.Entity.FunctionCode)).Select(b => new
+                        {
+                            b.Entity.Url,
+                            b.Entity.Icon,
+                            b.Entity.Name,
+                            b.Entity.FunctionCode,
+                            HasChildren = false,
+                            b.Entity.SortId,
+                            Level = b.Depth,
+                            Children = new List<dynamic>()
+                        }).OrderBy(b => b.SortId)
+                    }).OrderBy(a => a.SortId)
+                }).OrderBy(x => x.SortId);
+
+                return results.Where(x=> x.Children.Any() || permissions.Contains(x.FunctionCode) );;
+            }
+
         }
         public async Task<object> GetMenus(string lang = "tw")
         {
@@ -247,12 +309,6 @@ IEvseLoggerService logger
                                    Url = x.MenuLink,
                                    SortId = x.SortId ?? 0,
                                    Icon = x.MenuIcon,
-                                   x.FarmGgp,
-                                   x.FarmGp,
-                                   x.FarmPmpf,
-                                   x.FarmGrower,
-                                   x.FarmNursery,
-                                   x.FarmSemen,
                                    Name = lang == Languages.EN ? (x.MenuNameEn == "" || x.MenuNameEn == null ? x.MenuName : x.MenuNameEn) : lang == Languages.VI ? (x.MenuNameVn == "" || x.MenuNameVn == null ? x.MenuName : x.MenuNameVn) : lang == Languages.TW ? x.MenuName : lang == Languages.CN ? (x.MenuNameCn == "" || x.MenuNameCn == null ? x.MenuName : x.MenuNameCn) : x.MenuName
 
                                }).ToListAsync();
@@ -266,12 +322,7 @@ IEvseLoggerService logger
                 SortId = x.SortId,
                 Icon = x.Icon,
                 Name = x.Name,
-                Ggp = x.FarmGgp,
-                Gp = x.FarmGp,
-                Pmpf = x.FarmPmpf,
-                Semen = x.FarmSemen,
-                Nursery = x.FarmNursery,
-                Grower = x.FarmGrower,
+
             });
 
             return queryTemp.AsHierarchy(x => x.Id, y => y.UpperId, null, 3).Select(x => new
@@ -326,12 +377,6 @@ IEvseLoggerService logger
                                    Url = x.MenuLink,
                                    SortId = x.SortId ?? 0,
                                    Icon = x.MenuIcon,
-                                   x.FarmGgp,
-                                   x.FarmGp,
-                                   x.FarmPmpf,
-                                   x.FarmGrower,
-                                   x.FarmNursery,
-                                   x.FarmSemen,
                                    Name = lang == Languages.EN ? (x.MenuNameEn == "" || x.MenuNameEn == null ? x.MenuName : x.MenuNameEn) : lang == Languages.VI ? (x.MenuNameVn == "" || x.MenuNameVn == null ? x.MenuName : x.MenuNameVn) : lang == Languages.TW ? x.MenuName : lang == Languages.CN ? (x.MenuNameCn == "" || x.MenuNameCn == null ? x.MenuName : x.MenuNameCn) : x.MenuName
 
                                }).ToListAsync();
@@ -345,12 +390,7 @@ IEvseLoggerService logger
                 SortId = x.SortId,
                 Icon = x.Icon,
                 Name = x.Name,
-                Ggp = x.FarmGgp,
-                Gp = x.FarmGp,
-                Pmpf = x.FarmPmpf,
-                Semen = x.FarmSemen,
-                Nursery = x.FarmNursery,
-                Grower = x.FarmGrower,
+
             });
 
             return queryTemp.AsHierarchy(x => x.Id, y => y.UpperId, null, 3).Select(x => new
@@ -406,12 +446,6 @@ IEvseLoggerService logger
                     x.UpperId,
                     x.SortId,
                     x.Status,
-                    x.FarmGgp,
-                    x.FarmGp,
-                    x.FarmGrower,
-                    x.FarmNursery,
-                    x.FarmPmpf,
-                    x.FarmSemen,
                     x.StoredProceduresName,
                     x.ReportType,
                     x.MenuType
@@ -450,12 +484,6 @@ IEvseLoggerService logger
                     x.UpperId,
                     x.SortId,
                     x.Status,
-                    x.FarmGgp,
-                    x.FarmGp,
-                    x.FarmGrower,
-                    x.FarmNursery,
-                    x.FarmPmpf,
-                    x.FarmSemen,
                     x.ReportType,
                     x.StoredProceduresName,
                     x.MenuType
@@ -506,12 +534,7 @@ IEvseLoggerService logger
                 x.ReportType,
                 x.SortId,
                 x.Status,
-                x.FarmGgp,
-                x.FarmGp,
-                x.FarmGrower,
-                x.FarmNursery,
-                x.FarmPmpf,
-                x.FarmSemen
+
 
             });
             var count = await datasource.CountAsync();
@@ -634,12 +657,7 @@ IEvseLoggerService logger
                 x.ReportType,
                 x.SortId,
                 x.Status,
-                x.FarmGgp,
-                x.FarmGp,
-                x.FarmGrower,
-                x.FarmNursery,
-                x.FarmPmpf,
-                x.FarmSemen
+
             });
             var count = await datasource.CountAsync();
             if (data.Where != null) // for filtering
@@ -685,12 +703,7 @@ IEvseLoggerService logger
                 x.ReportType,
                 x.SortId,
                 x.Status,
-                x.FarmGgp,
-                x.FarmGp,
-                x.FarmGrower,
-                x.FarmNursery,
-                x.FarmPmpf,
-                x.FarmSemen
+
             });
             var count = await datasource.CountAsync();
             if (data.Where != null) // for filtering

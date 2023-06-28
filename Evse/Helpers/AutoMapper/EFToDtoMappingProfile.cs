@@ -14,13 +14,20 @@ namespace Evse.Helpers.AutoMapper
         public EFToDtoMappingProfile()
         {
             var list = new List<int> { };
-        
+
             CreateMap<XAccount, UserForDetailDto>()
                 .ForMember(d => d.Username, o => o.MapFrom(x => x.Uid))
                 .ForMember(d => d.ID, o => o.MapFrom(x => x.AccountId));
 
-             CreateMap<LandLord, UserForDetailDto>()
-                .ForMember(d => d.Username, o => o.MapFrom(x => x.Uid));
+            CreateMap<LandLord, UserForDetailDto>()
+               .ForMember(d => d.Username, o => o.MapFrom(x => x.Uid));
+
+            CreateMap<Engineer, UserForDetailDto>()
+          .ForMember(d => d.Username, o => o.MapFrom(x => x.Uid));
+
+            CreateMap<Member, UserMemberForDetailDto>()
+         .ForMember(d => d.Username, o => o.MapFrom(x => x.Uid));
+
             CreateMap<Employee, EmployeeDto>();
             CreateMap<Employee, EmployeeDto>();
             CreateMap<SystemLanguage, SystemLanguageDto>();
@@ -32,7 +39,7 @@ namespace Evse.Helpers.AutoMapper
             CreateMap<CodeType, CodeTypeDto>();
             CreateMap<SystemConfig, SystemConfigDto>();
             CreateMap<Site, SiteDto>();
-               CreateMap<Member, MemberDto>();
+            CreateMap<Member, MemberDto>();
             CreateMap<LandLord, LandLordDto>();
             CreateMap<Engineer, EngineerDto>();
             CreateMap<Device, DeviceDto>();
@@ -43,7 +50,35 @@ namespace Evse.Helpers.AutoMapper
             CreateMap<Contract, ContractDto>();
             CreateMap<WebNews, WebNewsDto>();
             CreateMap<User2MessageDto, User2Message>();
+            CreateMap<ReportErrorDto, ReportError>();
 
+            CreateMap<NotificationUser, NotificationUserDto>();
+            CreateMap<DeviceUser, DeviceUserDto>();
+            CreateMap<Topic, TopicDto>();
+            CreateMap<TopicUser, TopicUserDto>();
+            CreateMap<ImageConfig, ImageConfigDto>();
+            CreateMap<CreditCard, CreditCardDto>();
+            CreateMap<Favorite, FavoriteDto>();
+            CreateMap<Discount, DiscountDto>();
+            CreateMap<Payment, PaymentDto>();
+            CreateMap<Township, TownshipDto>();
+            CreateMap<County, CountyDto>();
+            CreateMap<DeviceError, DeviceErrorDto>();
+            CreateMap<Investor, InvestorDto>();
+            CreateMap<Electrician, ElectricianDto>();
+            CreateMap<Role, RoleDto>();
+            CreateMap<RoleDetail, RoleDetailDto>();
+            CreateMap<Account, AccountDto>();
+            CreateMap<Account2, Account2Dto>();
+            CreateMap<AuditLog, AuditLogDto>();
+            CreateMap<AccountContract, AccountContractDto>();
+            CreateMap<EngineerErrorReport, EngineerErrorReportDto>();
+            CreateMap<ElectricianErrorReport, ElectricianErrorReportDto>();
+            CreateMap<ReportConfig, ReportConfigDto>();
+            CreateMap<ReportParams, ReportExportParams>();
+        
+        
+        
         }
 
     }
