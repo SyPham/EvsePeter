@@ -1,0 +1,435 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <button
+        type="submit"
+        [disabled]="
+          !model.memberName ||
+          !model.memberNo ||
+          !model.uid ||
+          !model.upwd ||
+          (model.upwd != model.reupwd && model.id === 0)
+        "
+        (click)="save()"
+        class="btn btn-success"
+      >
+        {{ "SAVE" | translate }}
+      </button>
+      </div>
+      <div class="card-body">
+          <div class="d-flex justify-content-center" *ngIf="loading == 1">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+           </div>
+
+           <div class="form-group row">
+            <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
+            <div class="col-sm-10">
+              <span *ngIf="model.id > 0">{{model.id}}</span>
+            </div>
+          </div>
+
+          <fieldset class="form-group">
+            <div class="row">
+              <label for="roleType" class="col-sm-2 col-form-label">{{ 'Role_Type' | translate }}</label>
+              <div class="col-sm-10 d-flex align-items-center">
+                <div class="d-flex align-items-start flex-column">
+                  <div class="mb-2">
+                    <ng-container
+                      *ngFor="let item of roles; let i =index">
+                        <div class="pretty p-default p-round p-thick" style="width: 105px;">
+                          <input type="radio" name="roleType" [value]="item.guid" (change)="checkedRole($event)" [checked]="checked(item,i)">
+                          <div class="state">
+                              <label>{{item.name  | translate}}</label>
+                          </div>
+                      </div>
+                        
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+         
+           <div class="form-group row">
+            <label for="memberNO" class="col-sm-2 col-form-label">{{ this.role + '_Status' | translate }}</label>
+            <div class="col-sm-10 d-flex align-items-center">
+              <ejs-switch  [onLabel]="'Active' | translate " [offLabel]="'Inactive' | translate " (change)="changeStatus($event)" [checked]="model.status == 1"></ejs-switch>
+
+            </div>
+          </div>
+
+           <div class="form-group row">
+            <label for="memberNO" class="col-sm-2 col-form-label">{{ this.role + '_NO' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10">
+              <input type="text"  class="form-control" [(ngModel)]="model.memberNo" id="memberNO" [placeholder]="'Enter a ' + this.role + ' NO' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="memberName" class="col-sm-2 col-form-label">{{ this.role + '_Name' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" [(ngModel)]="model.memberName" id="memberName" [placeholder]="'Enter a ' + this.role + ' name' | translate">
+            </div>
+          </div>
+
+          <fieldset class="form-group">
+            <div class="row">
+              <label for="memberSex" class="col-sm-2 col-form-label">{{ this.role + '_Sex' | translate }}</label>
+              <div class="col-sm-10 d-flex align-items-center">
+                <ng-container
+                 *ngFor="let item of sexData; let i =index">
+                  <div class="pretty p-default p-round p-thick">
+                    <input type="radio" name="radio1"  [value]="item.value" [checked]="i==0">
+                    <div class="state">
+                        <label>{{item.name}}</label>
+                    </div>
+                </div>
+                  
+              </ng-container>
+              </div>
+            </div>
+          </fieldset>
+
+        
+
+          <div class="form-group row">
+            <label for="memberMobile" class="col-sm-2 col-form-label">{{ this.role + '_MOBILE' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="memberMobile" [(ngModel)]="model.memberMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="memberUid" class="col-sm-2 col-form-label">{{ this.role + '_UID' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="memberUid" [(ngModel)]="model.uid" [placeholder]="'Enter a ' + this.role + ' uid' | translate">
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="memberPassword" class="col-sm-2 col-form-label">{{ this.role + '_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10 ">
+             <div class="password">
+              <input [type]="inputType" class="form-control" id="memberPassword" [(ngModel)]="model.upwd" [placeholder]="'Enter a pwd' | translate">
+              <span class="eye" (click)="togglePassword()">
+                <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
+                <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
+               </span>
+             </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="model.id == 0">
+            <label for="memberRePassword" class="col-sm-2 col-form-label">{{ this.role + '_Re_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10 ">
+             <div class="password">
+              <input [type]="inputTypeRePw" (change)="changeRepassword($event)" class="form-control" id="memberRePassword" [(ngModel)]="model.reupwd" [placeholder]="'Enter a re pwd' | translate">
+              <span class="eye" (click)="toggleRePassword()">
+                <i class="fa fa-eye" *ngIf="inputTypeRePw==='password'" ></i>
+                <i class="fa fa-eye-slash" *ngIf="inputTypeRePw==='text'" ></i>
+               </span>
+             </div>
+             <small *ngIf="model.upwd != model.reupwd && model.id === 0" class="form-text text-danger">{{'The uid and re uid are not match' | translate}}</small>
+
+            </div>
+          </div>
+        
+          <div class="form-group row">
+            <label for="memberBirthday" class="col-sm-2 col-form-label">{{ 'Member_Birthday' | translate }}</label>
+            <div class="col-sm-10">
+              <ejs-datepicker
+              locale="en-US"
+              format="yyyy/MM/dd"
+              id="memberBirthday"
+              [(ngModel)]="model.memberBirthday"
+            ></ejs-datepicker>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="email" class="col-sm-2 col-form-label">{{ 'Member_Email' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" id="email" [(ngModel)]="model.memberEmail" [placeholder]="'Enter a email' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="carName" class="col-sm-2 col-form-label">{{ 'Member_CarName' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="carName" [(ngModel)]="model.carName" [placeholder]="'Enter a car name' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="carNumber" class="col-sm-2 col-form-label">{{ 'CarNumber' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="carNumber" [(ngModel)]="model.carNumber" [placeholder]="'Enter a car name' | translate">
+            </div>
+          </div>
+          
+          <div class="form-group row">
+            <label for="carVIN" class="col-sm-2 col-form-label">{{ 'carVIN' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="carVIN" [(ngModel)]="model.carVIN" [placeholder]="'Enter a car VIN' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="idCardCheck" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+              <div class="pretty p-default p-fill">
+                <input id="idCardCheck" type="checkbox" name="roleType" [value]="model.idCardCheck" (change)="checkedIdCardCheck($event)" [checked]="model.idCardCheck">
+                <div class="state">
+                    <label>{{ 'IdCardCheck' | translate }}</label>
+                </div>
+            </div>
+            </div>
+          </div>
+
+          
+        <div class="form-group row">
+          <label for="" class="col-sm-2 col-form-label"></label>
+         
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="col-lg-6 col-12">
+                <div class="control-section control_wrapper">
+                  <div class='imagepreview'>
+                      <div id='dropArea' style='height: auto'>
+                          <span id='dropimage'> {{ 'Drop image (JPG, PNG) files here or' | translate}} <a href="" id='browse'><u>{{ 'Browse' | translate}}</u></a> </span>
+                          <ejs-uploader #previewupload id='previewfileupload' 
+                          (success)="actionCompleteIdCard1($event)"
+                          [asyncSettings]='path' [multiple]="false" [showFileList]="false"
+                              [dropArea]='dropElement' [allowedExtensions]='allowExtensions'
+                              >
+                          </ejs-uploader>
+                            <div class="yes" *ngIf="model.idCard1Path">
+                              <img  [src]="apiHost + model.idCard1Path" class="preview1 it" />
+                              <input type="button" value="x" class="btn-rmv1 rmv"  (click)="removeIdCard1Path()"  />
+                            </div>
+                      </div>
+                  </div>
+                  
+              </div>
+              </div>
+              <div class="col-lg-6 col-12">
+                <div class="control-section control_wrapper">
+                  <div class='imagepreview'>
+                      <div id='dropArea2' style='height: auto'>
+                          <span id='dropimage2'> {{ 'Drop image (JPG, PNG) files here or' | translate}} <a href="" id='browse2'><u>{{ 'Browse' | translate}}</u></a> </span>
+                          <ejs-uploader #previewupload2 id='previewfileupload2' 
+                          [asyncSettings]='path2' [multiple]="false"
+                          (success)="actionCompleteIdCard2($event)"
+                           [showFileList]="false"
+                              [dropArea]='dropElement2' [allowedExtensions]='allowExtensions'
+                              >
+                          </ejs-uploader>
+                          <div class="yes" *ngIf="model.idCard2Path">
+                            <img  [src]="apiHost + model.idCard2Path" class="preview1 it" />
+                            <input type="button" value="x" class="btn-rmv1 rmv"  (click)="removeIdCard2Path()"  />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+                    
+        <div class="form-group row">
+          <label for="carLicenseCheck" class="col-sm-2 col-form-label"></label>
+          <div class="col-sm-10">
+            <div class="pretty p-default p-fill">
+              <input type="checkbox" name="roleType" [value]="model.carLicenseCheck" (change)="checkedLicense($event)" [checked]="model.carLicenseCheck">
+              <div class="state">
+                  <label>{{ 'Car license check' | translate }}</label>
+              </div>
+          </div>
+          </div>
+        </div>
+
+
+        <!-- Car lisence -->
+
+        <div class="form-group row">
+          <label for="" class="col-sm-2 col-form-label"></label>
+         
+          <div class="col-sm-10">
+            <div class="row">
+              <div class="col-12 col-sm-12 col-lg-6">
+                <div class="control-section control_wrapper">
+                  <div class='imagepreview'>
+                      <div id='dropArea3' style='height: auto'>
+                          <span id='dropimage3'> {{ 'Drop image (JPG, PNG) files here or' | translate}} <a href="" id='browse3'><u>{{ 'Browse' | translate}}</u></a> </span>
+                          <ejs-uploader #previewupload3 id='previewfileupload3' 
+                          (success)="actionCompleteCarLicense1($event)"
+                          [asyncSettings]='path3' [multiple]="false" [showFileList]="false"
+                              [dropArea]='dropElement3' [allowedExtensions]='allowExtensions'
+                              >
+                          </ejs-uploader>
+                            <div class="yes" *ngIf="model.carLicensePath">
+                              <img  [src]="apiHost + model.carLicensePath" class="preview1 it" />
+                              <input type="button" value="x" class="btn-rmv1 rmv"  (click)="removeCarLicensePath()"  />
+                            </div>
+                      </div>
+                  </div>
+                  
+              </div>
+              </div>
+              <div class="col-12 col-sm-12 col-lg-6"></div>
+            </div>
+
+            <div class="row mt-2">
+
+              <div class="col-lg-6 col-sm-12 col-12">
+                <div class="control-section control_wrapper">
+                  <div class='imagepreview'>
+                      <div id='dropArea4' style='height: auto'>
+                          <span id='dropimage4'> {{ 'Drop image (JPG, PNG) files here or' | translate}} <a href="" id='browse4'><u>{{ 'Browse' | translate}}</u></a> </span>
+                          <ejs-uploader #previewupload4 id='previewfileupload4' 
+                          [asyncSettings]='path4' [multiple]="false"
+                          (success)="actionCompleteCarLicense2($event)"
+                           [showFileList]="false"
+                              [dropArea]='dropElement4' [allowedExtensions]='allowExtensions'
+                              >
+                          </ejs-uploader>
+                          <div class="yes" *ngIf="model.carLicense2Path">
+                            <img  [src]="apiHost + model.carLicense2Path" class="preview1 it" />
+                            <input type="button" value="x" class="btn-rmv1 rmv"  (click)="removeCarLicense2Path()"  />
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-12 col-sm-12 col-lg-6"></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+          <div class="form-group row">
+            <label for="memberComment" class="col-sm-2 col-form-label">{{ this.role + '_Comment' | translate }}</label>
+            <div class="col-sm-10">
+              <textarea
+              class="form-control"
+              [(ngModel)]="model.comment"
+              cols="4"
+              rows="4"
+            ></textarea>
+
+            <div class="mr-auto" *ngIf="model.id > 0">
+              <p>
+                <span class='mr-2'> <span class='my-font-weight-bold'>{{ 'Create by' | translate}}</span> : {{audit?.createBy}}</span>
+                <span><span class='my-font-weight-bold'>{{ 'Create date time' | translate}}</span> : {{audit?.createDate}}</span>
+              </p>
+             
+            </div>
+
+            </div>
+          </div>
+          
+          
+          <div class="form-group row" *ngIf="model.id > 0">
+            <label for="contactTel" class="col-sm-2 col-form-label">{{ '' | translate }}</label>
+            <div class="col-sm-10">
+            <label class="">{{ 'Audit_Logs' | translate }}</label>
+              
+<ejs-grid
+#grid
+id="grid"
+[dataSource]="auditLogsData$"
+[allowPaging]="false"
+[enableInfiniteScrolling]="true"
+[allowResizing]="true"
+[allowSorting]="true"
+gridLines="Both"
+[locale]="locale"
+[query]="auditLogsQuery"
+[allowExcelExport]="true"
+height="300"
+>
+
+<ng-template #pagerTemplate let-data>
+  <pre
+  class="page-text"
+  [translate]="pageText"
+  [translateParams]="{ items: grid.pageSettings.totalRecordsCount }"
+  > </pre>
+ <div class="d-flex justify-content-center">
+  <ngb-pagination
+  [collectionSize]="grid.pageSettings.totalRecordsCount"
+  [(page)]="grid.pageSettings.currentPage"
+  [pageSize]="grid.pageSettings.pageSize"
+  [maxSize]="5"
+  [rotate]="true"
+  [ellipses]="false"
+  [boundaryLinks]="true"
+>
+
+<ng-template ngbPaginationFirst><i class="fa fa-step-backward"></i></ng-template>
+<ng-template ngbPaginationLast><i class="fa fa-step-forward"></i></ng-template>
+<ng-template ngbPaginationPrevious><i class="fa fa-caret-left"></i></ng-template>
+<ng-template ngbPaginationNext><i class="fa fa-caret-right"></i></ng-template>
+<ng-template ngbPaginationEllipsis>...</ng-template>
+<ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+
+</ngb-pagination>
+ </div>
+  </ng-template>
+
+<e-columns>
+  
+
+<e-column
+field="actionTypeName"
+width="120"
+textAlign="Left"
+headerTextAlign="Center"
+headerText="{{ 'ActionType' | translate }}"
+>
+
+<ng-template #template let-data>
+  {{ data.actionTypeName | translate }}
+</ng-template>
+
+</e-column>
+
+
+  <e-column
+  field="createDate"
+  editType="datetime"
+  format="yyyy-MM-dd HH:mm:ss"
+  textAlign="Left"
+headerTextAlign="Center"
+  headerText="{{ 'Create_Date' | translate }}"
+>
+</e-column>
+
+<e-column
+field="accountName"
+width="120"
+textAlign="Left"
+headerTextAlign="Center"
+headerText="{{ 'UID' | translate }}"
+>
+</e-column>
+
+
+</e-columns>
+</ejs-grid>
+            </div>
+          </div>
+
+          
+      </div>
+    
+    </div>
+  </div>
+</div>
+
