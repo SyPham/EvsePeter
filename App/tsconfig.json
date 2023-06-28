@@ -3,8 +3,8 @@
   "compilerOptions": {
     "paths": {
       "@pigfarm-core": [
-        "projects/pigfarm-core/src/public-api.ts",
-        "dist/pigfarm-core/*"
+        "dist/pigfarm-core/*",
+        "dist/pigfarm-core"
       ],
       "ngx-org-chart": [
         "projects/ngx-org-chart/*",
@@ -15,7 +15,6 @@
         "projects/ngx-org-chart/*",
         "dist/ngx-org-chart/*"
       ]
-    
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -38,6 +37,6 @@
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "enableIvy": true
+    "enableIvy": false
   }
 }

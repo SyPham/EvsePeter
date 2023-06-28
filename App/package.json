@@ -7,7 +7,7 @@
     "build:lib2": "ng build --project @pigfarm-core --configuration production && yarn run scss:bundle",
     "scss:bundle": "scss-bundle -e ./projects/ngx-org-chart/src/_theming.scss -o ./dist/ngx-org-chart/_theming.scss",
     "lint": "node --max_old_space_size=8192 --harmony node_modules/@angular/cli/bin/ng lint",
-    "start": "ng serve --open --host localhost --port 1000 --disable-host-check",
+    "start": "ng serve --open --host localhost --port 1000 --disable-host-check ",
     "pro": "ng serve --open --host localhost --port 1005 --disable-host-check",
     "dev": "ng serve --port 1000 --disable-host-check",
     "build": "ng build --prod --no-aot --build-optimizer false",
@@ -16,7 +16,8 @@
     "e2e": "ng e2e",
     "prod-post-build": "npm run prod && npm run post-build",
     "post-build": "node ./build/post-build.js",
-    "prod": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --prod  --aot --build-optimizer --common-chunk --vendor-chunk --optimization --output-hashing=all"
+    "prod": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --prod  --aot --build-optimizer --common-chunk --vendor-chunk --optimization --output-hashing=all",
+    "serve": "node --max_old_space_size=32384 ./node_modules/@angular/cli/bin/ng serve --open --host localhost --port 1000 --disable-host-check"
   },
   "private": true,
   "dependencies": {

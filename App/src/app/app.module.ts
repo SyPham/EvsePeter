@@ -123,7 +123,6 @@ import { ReportLineChartComponent } from './views/pig-farm/report/report-chart/r
 import { ReportPieChartComponent } from './views/pig-farm/report/report-chart/report-pie-chart/report-pie-chart.component';
 import { AccumulationChartAllModule, CategoryService, ChartAllModule, ChartModule, ColumnSeriesService, LegendService } from '@syncfusion/ej2-angular-charts';
 import { DashboardService } from './_core/_service/dashboard.service';
-import { PigfarmCoreModule } from '@pigfarm-core';
 import { environment } from 'src/environments/environment';
 import { AutoLogoutService } from './_core/_service/apply-orders/auto-log-off.service';
 import { NavbarComponent } from './views/layout/navbar/navbar.component';
@@ -138,6 +137,7 @@ import { News2Component } from './views/evse/news/news.component';
 import { GoogleMapComponent } from './views/evse/google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
 import { EvseModule } from './views/evse/evse.module';
+import { PigfarmCoreModule } from '@pigfarm-core';
 
 let lang = localStorage.getItem('lang');
 if (!lang) {

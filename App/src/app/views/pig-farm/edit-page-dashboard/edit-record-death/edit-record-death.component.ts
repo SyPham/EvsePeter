@@ -8,10 +8,7 @@ import {
   Predicate,
 } from "@syncfusion/ej2-data";
 import { ActivatedRoute, Route, Router } from "@angular/router";
-import {
-  MessageConstants,
-  StatusConstants,
-} from "projects/pigfarm-core/src/_core/_constants";
+
 import { AlertifyService, BaseComponent } from "herr-core";
 import { TranslateService } from "@ngx-translate/core";
 import { DatePipe } from "@angular/common";
@@ -29,7 +26,7 @@ import { L10n, setCulture } from "@syncfusion/ej2-base";
 export class EditRecordDeathComponent extends BaseComponent implements OnInit {
   model: any = {};
   baseUrl = environment.apiUrl;
-  statusConts = new StatusConstants();
+  statusConts = {} as any;
 
   roomGuid: any;
   penGuid: any;
