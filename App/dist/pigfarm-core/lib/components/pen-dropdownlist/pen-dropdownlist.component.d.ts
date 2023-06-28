@@ -4,6 +4,7 @@ import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { TranslateService } from '@ngx-translate/core';
 import { Predicate } from '@syncfusion/ej2-angular-grids';
 import { PigfarmCoreService } from '../../../services/pigfarm-core.service';
+import * as ɵngcc0 from '@angular/core';
 export declare class PenDropdownlistComponent implements OnInit, OnChanges {
     private baseUrl;
     trans: TranslateService;
@@ -37,4 +38,8 @@ export declare class PenDropdownlistComponent implements OnInit, OnChanges {
     onChange(args: any): void;
     onNgModelChange(value: any): void;
     onblur(e: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<PenDropdownlistComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<PenDropdownlistComponent, "app-pen-dropdownlist", never, { "id": "id"; "placeholder": "placeholder"; "roomGuid": "roomGuid"; "disabled": "disabled"; "popupWidth": "popupWidth"; "enabledLoad": "enabledLoad"; "selectedValue": "selectedValue"; "predicate": "predicate"; }, { "change": "change"; "ngModelChange": "ngModelChange"; "selectedValueChange": "selectedValueChange"; "selectedNameChange": "selectedNameChange"; "onblurChange": "onblur"; }, never, never>;
 }
+
+//# sourceMappingURL=pen-dropdownlist.component.d.ts.map

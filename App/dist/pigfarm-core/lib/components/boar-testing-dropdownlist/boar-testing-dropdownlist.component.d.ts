@@ -2,6 +2,7 @@ import { DataManager, Query } from '@syncfusion/ej2-data';
 import { OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { TranslateService } from '@ngx-translate/core';
+import * as ɵngcc0 from '@angular/core';
 export declare class BoarTestingDropdownlistComponent implements OnInit, OnChanges {
     private baseUrl;
     trans: TranslateService;
@@ -26,4 +27,8 @@ export declare class BoarTestingDropdownlistComponent implements OnInit, OnChang
     ngOnChanges(changes: SimpleChanges): void;
     onChange(args: any): void;
     onNgModelChange(value: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<BoarTestingDropdownlistComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<BoarTestingDropdownlistComponent, "app-boar-testing-dropdownlist", never, { "id": "id"; "placeholder": "placeholder"; "disabled": "disabled"; "selectedValue": "selectedValue"; }, { "change": "change"; "ngModelChange": "ngModelChange"; "selectedValueChange": "selectedValueChange"; }, never, never>;
 }
+
+//# sourceMappingURL=boar-testing-dropdownlist.component.d.ts.map

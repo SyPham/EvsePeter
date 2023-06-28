@@ -2,6 +2,7 @@ import { OnInit, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertifyService } from '../../../services/alertify.service';
 import { PigfarmCoreService } from '../../../services/pigfarm-core.service';
+import * as ɵngcc0 from '@angular/core';
 export declare class MultiPigGridComponent implements OnInit, OnChanges {
     private baseUrl;
     private service;
@@ -53,4 +54,8 @@ export declare class MultiPigGridComponent implements OnInit, OnChanges {
     onChangeChecked(e: any, data: any): void;
     toggle(checked: any, pigGuid: any): void;
     loadDataByRoom(): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<MultiPigGridComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<MultiPigGridComponent, "app-multi-pig-grid", never, { "height": "height"; "type": "type"; "recordGuid": "recordGuid"; "penGuid": "penGuid"; "checked": "checked"; "pigData": "pigData"; }, { "onCheckedChange": "onCheckedChange"; }, never, never>;
 }
+
+//# sourceMappingURL=multi-pig-grid.component.d.ts.map

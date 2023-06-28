@@ -3,6 +3,7 @@ import { UploaderComponent, SelectedEventArgs, FileInfo, RemovingEventArgs } fro
 import { AlertifyService } from "../../../services/alertify.service";
 import { HttpClient } from "@angular/common/http";
 import { TranslateService } from "@ngx-translate/core";
+import * as ɵngcc0 from '@angular/core';
 export declare class UploadMultiDocumentComponent implements OnInit {
     private baseUrl;
     private alertify;
@@ -61,4 +62,8 @@ export declare class UploadMultiDocumentComponent implements OnInit {
     readURL(li: HTMLElement, args: any): void;
     onFileRemove(args: RemovingEventArgs): void;
     constructor(baseUrl: any, alertify: AlertifyService, cd: ChangeDetectorRef, http: HttpClient, translate: TranslateService);
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<UploadMultiDocumentComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<UploadMultiDocumentComponent, "app-upload-multi-document", never, { "allowedExtensions": "allowedExtensions"; "multiple": "multiple"; "autoUpload": "autoUpload"; "enabled": "enabled"; "files": "files"; "path": "path"; "id": "id"; "service": "service"; "controlerName": "controlerName"; }, {}, never, never>;
 }
+
+//# sourceMappingURL=upload-multi-document.component.d.ts.map

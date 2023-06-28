@@ -3,6 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { GridComponent } from "@syncfusion/ej2-angular-grids";
 import { Subscription } from "rxjs";
 import { PigfarmCoreService } from '../../../services';
+import * as ɵngcc0 from '@angular/core';
 export declare class SelectedpigGridComponent implements OnInit, AfterViewInit, OnDestroy {
     private baseUrl;
     private trans;
@@ -101,4 +102,8 @@ export declare class SelectedpigGridComponent implements OnInit, AfterViewInit, 
     average: (nums: any, length: any) => number;
     total: (nums: any) => any;
     caculator(): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<SelectedpigGridComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<SelectedpigGridComponent, "app-selectedpig-grid", never, { "pigName": "pigName"; "selectedPigDataSource": "selectedPigDataSource"; "recordNextDataSource": "recordNextDataSource"; "recordNext2DataSource": "recordNext2DataSource"; "visibleNextRoom": "visibleNextRoom"; "visibleNextPen": "visibleNextPen"; "visibleNext2": "visibleNext2"; "visibleButton": "visibleButton"; "visibleNext": "visibleNext"; "visibleAmount": "visibleAmount"; "visibleDisease": "visibleDisease"; "visibleWeight": "visibleWeight"; "visibleValue": "visibleValue"; "visiblePigSex": "visiblePigSex"; "visibleSourceGuid": "visibleSourceGuid"; "visibleSource1Guid": "visibleSource1Guid"; "visibleSource2Guid": "visibleSource2Guid"; "visibleSource3Guid": "visibleSource3Guid"; "visibleSemenConcentration": "visibleSemenConcentration"; "visibleSemenVolume": "visibleSemenVolume"; "visibleMalformationRate": "visibleMalformationRate"; "visiblePig": "visiblePig"; "visibleRfid": "visibleRfid"; "valueLabel": "valueLabel"; "pigLabel": "pigLabel"; "next1Label": "next1Label"; "next2Label": "next2Label"; "totalAmount": "totalAmount"; "totalWeight": "totalWeight"; "avgWeight": "avgWeight"; "femaleTotalWeight": "femaleTotalWeight"; "maleTotalWeight": "maleTotalWeight"; "maleAvgWeight": "maleAvgWeight"; "avgAmount": "avgAmount"; "femaleAvgWeight": "femaleAvgWeight"; "femaleTotalSelected": "femaleTotalSelected"; "maleTotalSelected": "maleTotalSelected"; "codeType": "codeType"; "codeType2": "codeType2"; }, { "avgWeightChange": "avgWeightChange"; "totalWeightChange": "totalWeightChange"; "avgAmountChange": "avgAmountChange"; "totalAmountChange": "totalAmountChange"; "selectedPigDataSourceChange": "selectedPigDataSourceChange"; "maleAvgWeightChange": "maleAvgWeightChange"; "maleTotalWeightChange": "maleTotalWeightChange"; "maleTotalSelectedChange": "maleTotalSelectedChange"; "femaleAvgWeightChange": "femaleAvgWeightChange"; "femaleTotalWeightChange": "femaleTotalWeightChange"; "femaleTotalSelectedChange": "femaleTotalSelectedChange"; }, never, never>;
 }
+
+//# sourceMappingURL=selectedpig-grid.component.d.ts.map

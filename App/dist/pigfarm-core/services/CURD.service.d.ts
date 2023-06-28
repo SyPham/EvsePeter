@@ -4,6 +4,7 @@ import { MessageConstants } from "../_core/_constants";
 import { UtilitiesService } from "../services";
 import { BaseService } from "./base.service";
 import { OperationResult } from "../_core/models/application-user";
+import * as ɵngcc0 from '@angular/core';
 export interface ICURDService<T> {
     getAll(): Observable<T[]>;
     getById(id: any): Observable<T>;
@@ -43,4 +44,8 @@ export declare class CURDService<T> extends BaseService implements ICURDService<
         pigs: any[];
     }): Observable<import("@angular/common/http").HttpResponse<Blob>>;
     downloadBlob(data: any, fileName: any, mimeType: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<CURDService<any>, never>;
+    static ɵprov: ɵngcc0.ɵɵInjectableDef<CURDService<any>>;
 }
+
+//# sourceMappingURL=CURD.service.d.ts.map

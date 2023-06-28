@@ -2,6 +2,7 @@ import { DataManager, Query } from '@syncfusion/ej2-data';
 import { OnInit, EventEmitter, OnChanges, SimpleChanges, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { TranslateService } from '@ngx-translate/core';
+import * as ɵngcc0 from '@angular/core';
 export declare class BarnDropdownlistComponent implements OnInit, OnChanges, AfterViewChecked {
     private baseUrl;
     private cd;
@@ -32,4 +33,8 @@ export declare class BarnDropdownlistComponent implements OnInit, OnChanges, Aft
     onChange(args: any): void;
     onNgModelChange(value: any): void;
     onblur(e: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<BarnDropdownlistComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<BarnDropdownlistComponent, "app-barn-dropdownlist", never, { "id": "id"; "placeholder": "placeholder"; "disabled": "disabled"; "autoload": "autoload"; "selectedValue": "selectedValue"; "areaGuid": "areaGuid"; }, { "change": "change"; "ngModelChange": "ngModelChange"; "selectedValueChange": "selectedValueChange"; "onblurChange": "onblur"; }, never, never>;
 }
+
+//# sourceMappingURL=barn-dropdownlist.component.d.ts.map

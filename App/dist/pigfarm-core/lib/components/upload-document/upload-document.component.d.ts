@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { SelectedEventArgs, RemovingEventArgs, UploaderComponent } from "@syncfusion/ej2-angular-inputs";
 import { EmitType } from "@syncfusion/ej2-base";
 import { AlertifyService } from "../../../services/alertify.service";
+import * as ɵngcc0 from '@angular/core';
 export declare class UploadDocumentComponent implements OnInit, AfterViewInit, OnChanges {
     private baseUrl;
     private alertify;
@@ -58,4 +59,8 @@ export declare class UploadDocumentComponent implements OnInit, AfterViewInit, O
     onUploadSuccess: EmitType<Object>;
     remove(): void;
     download(): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<UploadDocumentComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<UploadDocumentComponent, "app-upload-document", never, { "allowedExtensions": "allowedExtensions"; "multiple": "multiple"; "autoUpload": "autoUpload"; "enabled": "enabled"; "files": "files"; "path": "path"; "id": "id"; "service": "service"; "controlerName": "controlerName"; }, {}, never, never>;
 }
+
+//# sourceMappingURL=upload-document.component.d.ts.map

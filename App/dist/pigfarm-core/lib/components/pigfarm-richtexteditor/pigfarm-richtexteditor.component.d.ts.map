@@ -1,0 +1,1 @@
+{"version":3,"file":"pigfarm-richtexteditor.component.d.ts","sources":["pigfarm-richtexteditor.component.d.ts"],"names":[],"mappings":"AAAA;;AACA;AACA;AACA;;;AACA","sourcesContent":["import { OnInit } from '@angular/core';\r\nexport declare class PigfarmRichtexteditorComponent implements OnInit {\r\n    constructor();\r\n    ngOnInit(): void;\r\n}\r\n"]}

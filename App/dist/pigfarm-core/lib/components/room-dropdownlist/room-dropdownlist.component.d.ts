@@ -3,6 +3,7 @@ import { OnInit, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef, Afte
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { TranslateService } from '@ngx-translate/core';
 import { PigfarmCoreService } from '../../../services';
+import * as ɵngcc0 from '@angular/core';
 export declare class RoomDropdownlistComponent implements OnInit, OnChanges, AfterViewChecked {
     private baseUrl;
     trans: TranslateService;
@@ -36,4 +37,8 @@ export declare class RoomDropdownlistComponent implements OnInit, OnChanges, Aft
     onChange(args: any): void;
     onNgModelChange(value: any): void;
     onblur(e: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<RoomDropdownlistComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<RoomDropdownlistComponent, "app-room-dropdownlist", never, { "id": "id"; "placeholder": "placeholder"; "disabled": "disabled"; "autoload": "autoload"; "selectedValue": "selectedValue"; "barnGuid": "barnGuid"; "makeOrderGuid": "makeOrderGuid"; }, { "change": "change"; "ngModelChange": "ngModelChange"; "selectedValueChange": "selectedValueChange"; "onblurChange": "onblur"; }, never, never>;
 }
+
+//# sourceMappingURL=room-dropdownlist.component.d.ts.map

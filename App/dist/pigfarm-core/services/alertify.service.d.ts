@@ -1,4 +1,5 @@
 import { TranslateService } from '@ngx-translate/core';
+import * as ɵngcc0 from '@angular/core';
 export declare class AlertifyService {
     private trans;
     $swal: any;
@@ -20,4 +21,7 @@ export declare class AlertifyService {
     warning(message: string, noToast?: boolean): void;
     message(message: string, noToast?: boolean): void;
     messagePreventClosed(message: string, okCallback: () => void): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<AlertifyService, never>;
 }
+
+//# sourceMappingURL=alertify.service.d.ts.map

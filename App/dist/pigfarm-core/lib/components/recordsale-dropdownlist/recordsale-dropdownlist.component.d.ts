@@ -3,6 +3,7 @@ import { OnInit, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef, Afte
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { TranslateService } from '@ngx-translate/core';
 import { PigfarmCoreService } from '../../../services';
+import * as ɵngcc0 from '@angular/core';
 export declare class RecordsaleDropdownlistComponent implements OnInit, OnChanges, AfterViewChecked {
     private baseUrl;
     trans: TranslateService;
@@ -24,4 +25,8 @@ export declare class RecordsaleDropdownlistComponent implements OnInit, OnChange
     ngOnInit(): void;
     ngOnChanges(changes: SimpleChanges): void;
     onChange(args: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<RecordsaleDropdownlistComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<RecordsaleDropdownlistComponent, "app-recordsale-dropdownlist", never, { "id": "id"; "selectedValue": "selectedValue"; "placeholder": "placeholder"; "disabled": "disabled"; }, { "change": "change"; "selectedValueChange": "selectedValueChange"; }, never, never>;
 }
+
+//# sourceMappingURL=recordsale-dropdownlist.component.d.ts.map

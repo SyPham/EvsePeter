@@ -4,6 +4,7 @@ import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { TranslateService } from '@ngx-translate/core';
 import { PigfarmCoreService } from '../../../services';
 import { Subscription } from 'rxjs';
+import * as ɵngcc0 from '@angular/core';
 export declare class MakeorderDropdownlistComponent implements OnInit, OnChanges, AfterViewChecked, OnDestroy {
     private baseUrl;
     trans: TranslateService;
@@ -31,4 +32,8 @@ export declare class MakeorderDropdownlistComponent implements OnInit, OnChanges
     loadDataByPigType(): void;
     ngOnChanges(changes: SimpleChanges): void;
     onChange(args: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<MakeorderDropdownlistComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<MakeorderDropdownlistComponent, "app-makeorder-dropdownlist", never, { "id": "id"; "selectedValue": "selectedValue"; "placeholder": "placeholder"; "pigType": "pigType"; "disabled": "disabled"; "popupWidth": "popupWidth"; }, { "change": "change"; "selectedValueChange": "selectedValueChange"; }, never, never>;
 }
+
+//# sourceMappingURL=makeorder-dropdownlist.component.d.ts.map

@@ -2,6 +2,7 @@ import { DataManager, Query } from '@syncfusion/ej2-data';
 import { OnInit, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { DropDownListComponent } from '@syncfusion/ej2-angular-dropdowns';
 import { TranslateService } from '@ngx-translate/core';
+import * as ɵngcc0 from '@angular/core';
 export declare class Record2PenComponent implements OnInit, OnChanges {
     private baseUrl;
     trans: TranslateService;
@@ -29,4 +30,8 @@ export declare class Record2PenComponent implements OnInit, OnChanges {
     onChange(args: any): void;
     onNgModelChange(value: any): void;
     onblur(e: any): void;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<Record2PenComponent, never>;
+    static ɵcmp: ɵngcc0.ɵɵComponentDefWithMeta<Record2PenComponent, "app-record2-pen", never, { "id": "id"; "placeholder": "placeholder"; "roomGuid": "roomGuid"; "disabled": "disabled"; "selectedValue": "selectedValue"; "data": "data"; "query": "query"; }, { "change": "change"; "ngModelChange": "ngModelChange"; "selectedValueChange": "selectedValueChange"; "onblurChange": "onblur"; }, never, never>;
 }
+
+//# sourceMappingURL=record2-pen.component.d.ts.map

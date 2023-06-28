@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { OperationResult } from "../_core/models/application-user";
+import * as ɵngcc0 from '@angular/core';
 export declare class PigfarmCoreService {
     private http;
     private base;
@@ -21,4 +22,7 @@ export declare class PigfarmCoreService {
     getRoomsByFarmGuid(farmGuid: any, barnGuid: any, makeOrderGuid: any): Observable<any>;
     getBreeding2SowInByBreedingGuid(breedingGuid: any): Observable<any>;
     protected handleError(errorResponse: any): Observable<never>;
+    static ɵfac: ɵngcc0.ɵɵFactoryDef<PigfarmCoreService, never>;
 }
+
+//# sourceMappingURL=pigfarm-core.service.d.ts.map
