@@ -19,6 +19,7 @@ import { H2CouponManagementComponent } from './h2-coupon-management/h2-coupon-ma
 import { H5ContractManagementComponent } from './h5-contract-management/h5-contract-management.component';
 import { H6CarModelComponent } from './h6-car-model/h6-car-model.component';
 import { H7MessageManagementComponent } from './h7-message-management/h7-message-management.component';
+import { H2CouponManagementActionComponent } from './h2-coupon-management/h2-coupon-management-action/h2-coupon-management-action.component';
 
 interface Environment {
   production: boolean;
@@ -48,16 +49,15 @@ interface Environment {
   ],
   declarations: [						
     H1ElectricityPriceComponent,
+    H2CouponManagementComponent,
+    H2CouponManagementActionComponent,
     H3HelpCenterQuestionsComponent,
     H4PrivacyPolicyComponent,
+    H5ContractManagementComponent,
+    H6CarModelComponent,
+    H7MessageManagementComponent,
+    H5ContractManagementComponent,
     H8MessagePushManagementComponent,
-      H1ElectricityPriceComponent,
-      H2CouponManagementComponent,
-      H5ContractManagementComponent,
-      H6CarModelComponent,
-      H7MessageManagementComponent,
-      H2CouponManagementComponent,
-      H5ContractManagementComponent,
    ]
 })
 export class HAppModule {
