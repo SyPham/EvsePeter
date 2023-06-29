@@ -29,6 +29,10 @@
         public const string ElectricianErrorReport_Status = "ElectricianError_Status";
         public const string ElectricianErrorReport_ViewError = "Electrician_ViewError";
 
-        
+        public const string CouponManagement_Status = "Coupon_Status";
+        public const string CouponManagement_DiscountType = "Discount_Type";
+
+
+
     }
 }

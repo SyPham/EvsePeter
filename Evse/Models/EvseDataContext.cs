@@ -25,6 +25,9 @@ namespace Evse.Data
         {
             _contextAccessor = contextAccessor;
         }
+          public virtual DbSet<CouponManagement> CouponManagements { get; set; }
+        public virtual DbSet<ElectricityPrice> ElectricityPrices { get; set; }
+
         public virtual DbSet<AccountContract> AccountContracts { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<Account2> Account2s { get; set; }
@@ -88,6 +91,110 @@ namespace Evse.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+              modelBuilder.Entity<CouponManagement>(entity =>
+            {
+                entity.ToTable("CouponManagement");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("COMMENT")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.CouponCode)
+                    .HasColumnName("Coupon_Code")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DiscountType)
+                    .HasColumnName("Discount_Type")
+                    .HasMaxLength(40);
+
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasMaxLength(40)
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("STATUS")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.UpdateBy)
+                    .HasColumnName("UPDATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.UpdateDate)
+                    .HasColumnName("UPDATE_DATE")
+                    .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<ElectricityPrice>(entity =>
+            {
+                entity.ToTable("ElectricityPrice");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("COMMENT")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.DeleteBy)
+                    .HasColumnName("DELETE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.DeleteDate)
+                    .HasColumnName("DELETE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasMaxLength(40)
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.OffPeakTime).HasMaxLength(50);
+
+                entity.Property(e => e.OffPeakTimePrice).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.PeakTime).HasMaxLength(50);
+
+                entity.Property(e => e.PeakTimePrice).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("STATUS")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.UpdateBy)
+                    .HasColumnName("UPDATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.UpdateDate)
+                    .HasColumnName("UPDATE_DATE")
+                    .HasColumnType("datetime");
+            });
+
              modelBuilder.Entity<StoredProcedure>(entity =>
             {
                 entity.ToTable("StoredProcedures");

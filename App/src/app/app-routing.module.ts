@@ -82,7 +82,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./views/evse/evse.module').then(m => m.EvseModule)
       },
-      
+      {
+        path: 'h-app',
+        loadChildren: () =>
+          import('./views/evse/h-app/h-app.module').then(m => m.HAppModule)
+      },
       {
         path: '',
         loadChildren: () =>

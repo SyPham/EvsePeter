@@ -138,6 +138,7 @@ import { News2Component } from './views/evse/news/news.component';
 import { GoogleMapComponent } from './views/evse/google-map/google-map.component';
 import { AgmCoreModule } from '@agm/core';
 import { EvseModule } from './views/evse/evse.module';
+import { HAppModule } from './views/evse/h-app/h-app.module';
 
 let lang = localStorage.getItem('lang');
 if (!lang) {
@@ -195,6 +196,7 @@ if (!lang) {
     AccumulationChartAllModule,
     SwiperModule,
     EvseModule,
+    HAppModule,
     PigfarmCoreModule.forRoot(environment.apiUrl),
     AgmCoreModule.forRoot({
       apiKey: "AIzaSyAi9VYgdZUeOo2Wngl_5ho1H4_5clWGFTU"

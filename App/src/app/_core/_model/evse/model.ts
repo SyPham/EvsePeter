@@ -1,3 +1,35 @@
+export interface CouponManagement {
+    id: number;
+    couponCode: string;
+    discountType: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    status: string;
+    statusName: string;
+    discountTypeName: string;
+    guid: string;
+    discountPrice: number | null;
+    discountPercentage: number | null;
+}
+export interface ElectricityPrice {
+    id: number;
+    peakTime: string;
+    peakTimePrice: number | null;
+    offPeakTime: string;
+    offPeakTimePrice: number | null;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    deleteDate: string | null;
+    deleteBy: number | null;
+    status: number | null;
+    guid: string;
+}
 export interface AccountContract {
     id: number;
     accountGuid: string;

@@ -1,0 +1,196 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <button
+        type="submit"
+        [disabled]="
+        !model.couponCode
+        "
+        (click)="save()"
+        class="btn btn-success"
+      >
+        {{ "SAVE" | translate }}
+      </button>
+      </div>
+      <div class="card-body">
+          <div class="d-flex justify-content-center" *ngIf="loading == 1">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+           </div>
+
+           <div class="form-group row">
+            <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
+            <div class="col-sm-10">
+              <span *ngIf="model.id > 0">{{model.id}}</span>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="CouponCode" class="col-sm-2 col-form-label">{{ 'CouponManagement_Code' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10">
+              <input type="text"  class="form-control" [(ngModel)]="model.couponCode" id="CouponCode" [placeholder]="'Enter a coupon code' | translate">
+            </div>
+          </div>
+
+         
+           <div class="form-group row">
+            <label for="memberNO" class="col-sm-2 col-form-label">{{ 'CouponManagement_Status' | translate }}</label>
+            <div class="col-sm-10 d-flex align-items-center">
+              <ejs-switch  [onLabel]="'Active' | translate " [offLabel]="'Inactive' | translate " (change)="changeStatus($event)" [checked]="model.status == '1'"></ejs-switch>
+
+            </div>
+          </div>
+
+          <fieldset class="form-group">
+            <div class="row">
+              <label for="discountType" class="col-sm-2 col-form-label">{{ 'Discount_Type' | translate }}</label>
+              <div class="col-sm-10 d-flex align-items-center">
+                <div class="d-flex align-items-start flex-column">
+                  <div class="mb-2">
+                    <ng-container
+                      *ngFor="let item of discountData; let i =index">
+                        <div class="pretty p-default p-round p-thick" style="width: 170px;">
+                          <input type="radio" name="discountType" [value]="item.guid" (change)="checkedDiscountType($event)" [checked]="checked(item,i)">
+                          <div class="state">
+                              <label>{{item.name  | translate}}</label>
+                          </div>
+                      </div>
+                        
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+
+          <div class="form-group row">
+            <label for="discountPrice" class="col-sm-2 col-form-label">{{ 'Discount_Price' | translate }} </label>
+            <div class="col-sm-10 d-flex justify-content-start align-items-center">
+              <input type="number" style="width: 120px;" [disabled]="model.discountType ===  'DiscountPercentage'" class="form-control" [(ngModel)]="model.discountPrice" id="discountPrice"  placeholder="$">
+            <span class="ml-1">{{ 'Discount_Price_Unit' | translate }} </span>
+
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="discountPercentage" class="col-sm-2 col-form-label">{{ 'Discount_Percentage' | translate }} </label>
+            <div class="col-sm-10 d-flex justify-content-start align-items-center">
+              <input type="number" style="width: 120px;" [disabled]="model.discountType ===  'DiscountPrice'"  class="form-control" [(ngModel)]="model.discountPercentage" id="discountPercentage" placeholder="$">
+            <span class="ml-1">% </span>
+          </div>
+          </div>
+
+          <div class="row">
+            <div class="col-2"></div>
+            <div class="col-10">
+              <div class="mr-auto" *ngIf="model.id > 0">
+                <p>
+                  <span class='mr-2'> <span class='my-font-weight-bold'>{{ 'Create by' | translate}}</span> : {{audit?.createBy}}</span>
+                  <span><span class='my-font-weight-bold'>{{ 'Create date time' | translate}}</span> : {{audit?.createDate}}</span>
+                </p>
+               
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group row" *ngIf="model.id > 0">
+            <label for="contactTel" class="col-sm-2 col-form-label">{{ '' | translate }}</label>
+            <div class="col-sm-10">
+            <label class="">{{ 'Audit_Logs' | translate }}</label>
+              
+<ejs-grid
+#grid
+id="grid"
+[dataSource]="auditLogsData$"
+[allowPaging]="false"
+[enableInfiniteScrolling]="true"
+[allowResizing]="true"
+[allowSorting]="true"
+gridLines="Both"
+[locale]="locale"
+[query]="auditLogsQuery"
+[allowExcelExport]="true"
+height="300"
+>
+
+<ng-template #pagerTemplate let-data>
+  <pre
+  class="page-text"
+  [translate]="pageText"
+  [translateParams]="{ items: grid.pageSettings.totalRecordsCount }"
+  > </pre>
+ <div class="d-flex justify-content-center">
+  <ngb-pagination
+  [collectionSize]="grid.pageSettings.totalRecordsCount"
+  [(page)]="grid.pageSettings.currentPage"
+  [pageSize]="grid.pageSettings.pageSize"
+  [maxSize]="5"
+  [rotate]="true"
+  [ellipses]="false"
+  [boundaryLinks]="true"
+>
+
+<ng-template ngbPaginationFirst><i class="fa fa-step-backward"></i></ng-template>
+<ng-template ngbPaginationLast><i class="fa fa-step-forward"></i></ng-template>
+<ng-template ngbPaginationPrevious><i class="fa fa-caret-left"></i></ng-template>
+<ng-template ngbPaginationNext><i class="fa fa-caret-right"></i></ng-template>
+<ng-template ngbPaginationEllipsis>...</ng-template>
+<ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+
+</ngb-pagination>
+ </div>
+  </ng-template>
+
+<e-columns>
+  
+
+<e-column
+field="actionTypeName"
+width="120"
+textAlign="Left"
+headerTextAlign="Center"
+headerText="{{ 'ActionType' | translate }}"
+>
+
+<ng-template #template let-data>
+  {{ data.actionTypeName | translate }}
+</ng-template>
+
+</e-column>
+
+
+  <e-column
+  field="createDate"
+  editType="datetime"
+  format="yyyy-MM-dd HH:mm:ss"
+  textAlign="Left"
+headerTextAlign="Center"
+  headerText="{{ 'Create_Date' | translate }}"
+>
+</e-column>
+
+<e-column
+field="accountName"
+width="120"
+textAlign="Left"
+headerTextAlign="Center"
+headerText="{{ 'UID' | translate }}"
+>
+</e-column>
+
+
+</e-columns>
+</ejs-grid>
+            </div>
+          </div>
+
+          
+      </div>
+    
+    </div>
+  </div>
+</div>
+

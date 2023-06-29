@@ -145,7 +145,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
         this.authService.getLanguages(this.lang),
       ])),
       tap(([functions, languages]) => {
-        localStorage.setItem("functions", JSON.stringify(functions))
+       localStorage.setItem("functions", JSON.stringify(functions))
         localStorage.setItem("languages", JSON.stringify(languages))
         const check = this.checkLocalRole();
         if (check ) {
@@ -225,8 +225,8 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       const lang = localStorage.getItem('lang');
 
-      const functions = await this.authService.getPermissions(data.user.id,lang).toPromise();
-      localStorage.setItem("functions", JSON.stringify(functions));
+      // const functions = await this.authService.getPermissions(data.user.id,lang).toPromise();
+      // localStorage.setItem("functions", JSON.stringify(functions));
 
       const languages = await this.authService.getLanguages(lang).toPromise();
       localStorage.setItem('languages', JSON.stringify(languages));

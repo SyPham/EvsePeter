@@ -15,11 +15,11 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[ElectricianErrorReport]",
+         "Name": "[dbo].[CouponManagement]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[EngineerErrorReport]",
+         "Name": "[dbo].[ElectricityPrice]",
          "ObjectType": 0
       }
    ],

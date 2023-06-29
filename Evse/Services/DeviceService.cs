@@ -67,13 +67,13 @@ IRepositoryBase<Site> repoSite)
         public override async Task<object> GetDataDropdownlist(DataManager data)
         {
             var datasource = (from a in _repo.FindAll(x => x.Status == 1)
-                              select new
+                              select new 
                               {
 
                                   Id = a.Id,
                                   Guid = a.Guid,
-                                  DeviceNo= a.DeviceNo,
                                   SiteGuid = a.SiteGuid,
+                                  DeviceNo= a.DeviceNo,
                                   DeviceName = a.DeviceName,
                                   Name = $"{a.DeviceNo} - {a.DeviceName}",
                                   Status = a.Status,

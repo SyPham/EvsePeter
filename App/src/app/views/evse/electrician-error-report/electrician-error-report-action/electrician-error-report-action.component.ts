@@ -50,18 +50,11 @@ export class ElectricianErrorReportActionComponent implements OnInit {
   fields: object = { text: 'groupName', value: 'guid' };
   employeeData: any[];
   farmData: any;
-  permissionData: [] = [];
   electricianErrorReportGroupFields: object = { text: 'groupName', value: 'guid' };
   electricianErrorReportGroupData;
   apiHost = environment.apiUrl.replace('/api/', '');
   noImage = ImagePathConstants.NO_IMAGE;
-  public onFiltering: any = (e: FilteringEventArgs) => {
-    let query = new Query();
-    //frame the query based on search string with filter type.
-    query = (e.text != "") ? query.where("name", "contains ", e.text, true) : query;
-    //pass the filter data source, filter query to updateData method.
-    e.updateData(this.permissionData, query);
-  };
+
 id: any;
   audit: ElectricianErrorReport;
   alert = {
@@ -110,6 +103,7 @@ id: any;
   this.xAccountService.getById(this.currentUser.id).subscribe(x=> {
     this.lastLoginDate = x.lastLoginDate;
   })
+  this.loadSites();
   this.codeType();
   this.auditLogs();
   this.uploadConfig();
@@ -131,15 +125,11 @@ id: any;
      
     } else {
       this.model = model;
+      this.deviceGuid = this.model.deviceGuid
+      this.loadDevices(this.model.errorSite)
     }
   });
  
-  this.path = {
-    saveUrl: environment.apiUrl+ `ElectricianErrorReport/Save?id=${this.model.id}&type=1` ,
-    removeUrl: environment.apiUrl+ `ElectricianErrorReport/Remove?id=${this.model.id}&type=1`
-};
-
-
     this.getAudit(this.id);
   }
 
@@ -165,15 +155,7 @@ id: any;
     });
 
 }
-  imagePath(path) {
-    if (path !== null && this.utilityService.checkValidImage(path)) {
-      if (this.utilityService.checkExistHost(path)) {
-        return path;
-      }
-      return this.apiHost + path;
-    }
-    return this.noImage;
-  }
+
   reset() {
     this.id = null;
     this.model = <ElectricianErrorReport>{};
@@ -200,26 +182,49 @@ id: any;
   }
   dataSourceCodeTypeViewError
   dataSourceCodeTypeStatus
+  dataSourceDevice
   queryViewError
+  queryDevice
   queryStatus
+  queryErrorSite
+  dataSourceErrorSite
+  
+  public onFilteringErrorSite: any = (e: FilteringEventArgs) => {
+    let query = new Query();
+    //frame the query based on search string with filter type.
+    query = (e.text != "") ? query.where("siteName", "contains ", e.text, true).where("siteName", "contains ", e.text, true) : query;
+    //pass the filter data source, filter query to updateData method.
+    e.updateData(this.dataSourceErrorSite, query);
+  };
+  public onFilteringDevice: any = (e: FilteringEventArgs) => {
+    let query = new Query();
+    //frame the query based on search string with filter type.
+    query = (e.text != "") ? query.where("deviceName", "contains ", e.text, true).where("deviceNo", "contains ", e.text, true) : query;
+    //pass the filter data source, filter query to updateData method.
+    e.updateData(this.dataSourceDevice, query);
+  };
   public onFilteringViewError: any = (e: FilteringEventArgs) => {
     let query = new Query();
     //frame the query based on search string with filter type.
     query = (e.text != "") ? query.where("name", "contains ", e.text, true) : query;
     //pass the filter data source, filter query to updateData method.
-    e.updateData(this.permissionData, query);
+    e.updateData(this.dataSourceCodeTypeViewError, query);
   };
   public onFilteringStatus: any = (e: FilteringEventArgs) => {
     let query = new Query();
     //frame the query based on search string with filter type.
     query = (e.text != "") ? query.where("name", "contains ", e.text, true) : query;
     //pass the filter data source, filter query to updateData method.
-    e.updateData(this.permissionData, query);
+    e.updateData(this.dataSourceCodeTypeStatus, query);
   };
   @ViewChild('codeTypeViewError')
   public dropDownListViewError: DropDownListComponent;
   @ViewChild('codeTypeStatus')
   public dropDownListStatus: DropDownListComponent;
+
+  @ViewChild('deviceDrop')
+  public dropDownListDevice: DropDownListComponent;
+
   loadCodeTypeViewError() {
     this.queryViewError = new Query()
     .addParams("lang", localStorage.getItem('lang'));
@@ -230,11 +235,47 @@ id: any;
     });
 
   }
+  deviceGuid
   loadCodeTypeStatus() {
     this.queryStatus = new Query()
     .addParams("lang", localStorage.getItem('lang'));
     this.dataSourceCodeTypeStatus = new DataManager({
       url: `${environment.apiUrl}CodeType/GetDataDropdownlist?lang=${localStorage.getItem('lang')}&codeType=ElectricianError_Status`,
+      adaptor: new UrlAdaptor,
+      crossDomain: true,
+    });
+  }
+  onChangeSite(e) {
+    
+    if (e.isInteracted) {
+      this.dropDownListDevice.value = null;
+      this.deviceGuid = null;
+      this.model.deviceGuid = null;
+      this.loadDevices(this.model.errorSite);
+    }
+  
+  }
+  onChangeDevice(deviceGuid) {
+    this.model.deviceGuid = deviceGuid
+  }
+  actionComplete(e) {
+    if (this.deviceGuid) {
+      this.dropDownListDevice.value = this.deviceGuid
+    }
+  }
+  loadDevices(errorSite) {
+    this.queryDevice = new Query()
+    .where("siteGuid", 'equal', errorSite);
+    this.dataSourceDevice= new DataManager({
+      url: `${environment.apiUrl}Device/GetDataDropdownlist`,
+      adaptor: new UrlAdaptor,
+      crossDomain: true,
+    });
+  }
+  loadSites() {
+    this.queryErrorSite = new Query();
+    this.dataSourceErrorSite= new DataManager({
+      url: `${environment.apiUrl}Site/GetDataDropdownlist`,
       adaptor: new UrlAdaptor,
       crossDomain: true,
     });

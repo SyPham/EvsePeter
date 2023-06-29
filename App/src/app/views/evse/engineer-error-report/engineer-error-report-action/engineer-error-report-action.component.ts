@@ -49,18 +49,12 @@ export class EngineerErrorReportActionComponent implements OnInit {
   fields: object = { text: 'groupName', value: 'guid' };
   employeeData: any[];
   farmData: any;
-  permissionData: [] = [];
+
   engineerErrorReportGroupFields: object = { text: 'groupName', value: 'guid' };
   engineerErrorReportGroupData;
   apiHost = environment.apiUrl.replace('/api/', '');
   noImage = ImagePathConstants.NO_IMAGE;
-  public onFiltering: any = (e: FilteringEventArgs) => {
-    let query = new Query();
-    //frame the query based on search string with filter type.
-    query = (e.text != "") ? query.where("name", "contains ", e.text, true) : query;
-    //pass the filter data source, filter query to updateData method.
-    e.updateData(this.permissionData, query);
-  };
+
 id: any;
   audit: EngineerErrorReport;
   alert = {
@@ -109,6 +103,7 @@ id: any;
   this.xAccountService.getById(this.currentUser.id).subscribe(x=> {
     this.lastLoginDate = x.lastLoginDate;
   })
+  this.loadSites();
   this.codeType();
   this.auditLogs();
   this.uploadConfig();
@@ -130,6 +125,8 @@ id: any;
      
     } else {
       this.model = model;
+      this.deviceGuid = this.model.deviceGuid
+      this.loadDevices(this.model.errorSite)
     }
   });
  
@@ -199,26 +196,47 @@ id: any;
   }
   dataSourceCodeTypeViewError
   dataSourceCodeTypeStatus
+  dataSourceDevice
   queryViewError
+  queryDevice
   queryStatus
+  queryErrorSite
+  dataSourceErrorSite
+  public onFilteringErrorSite: any = (e: FilteringEventArgs) => {
+    let query = new Query();
+    //frame the query based on search string with filter type.
+    query = (e.text != "") ? query.where("siteName", "contains ", e.text, true).where("siteName", "contains ", e.text, true) : query;
+    //pass the filter data source, filter query to updateData method.
+    e.updateData(this.dataSourceErrorSite, query);
+  };
+  public onFilteringDevice: any = (e: FilteringEventArgs) => {
+    let query = new Query();
+    //frame the query based on search string with filter type.
+    query = (e.text != "") ? query.where("deviceName", "contains ", e.text, true).where("deviceNo", "contains ", e.text, true) : query;
+    //pass the filter data source, filter query to updateData method.
+    e.updateData(this.dataSourceDevice, query);
+  };
   public onFilteringViewError: any = (e: FilteringEventArgs) => {
     let query = new Query();
     //frame the query based on search string with filter type.
     query = (e.text != "") ? query.where("name", "contains ", e.text, true) : query;
     //pass the filter data source, filter query to updateData method.
-    e.updateData(this.permissionData, query);
+    e.updateData(this.dataSourceCodeTypeViewError, query);
   };
   public onFilteringStatus: any = (e: FilteringEventArgs) => {
     let query = new Query();
     //frame the query based on search string with filter type.
     query = (e.text != "") ? query.where("name", "contains ", e.text, true) : query;
     //pass the filter data source, filter query to updateData method.
-    e.updateData(this.permissionData, query);
+    e.updateData(this.dataSourceCodeTypeStatus, query);
   };
   @ViewChild('codeTypeViewError')
   public dropDownListViewError: DropDownListComponent;
   @ViewChild('codeTypeStatus')
   public dropDownListStatus: DropDownListComponent;
+  @ViewChild('deviceDrop')
+  public dropDownListDevice: DropDownListComponent;
+
   loadCodeTypeViewError() {
     this.queryViewError = new Query()
     .addParams("lang", localStorage.getItem('lang'));
@@ -229,11 +247,47 @@ id: any;
     });
 
   }
+  deviceGuid
   loadCodeTypeStatus() {
     this.queryStatus = new Query()
     .addParams("lang", localStorage.getItem('lang'));
     this.dataSourceCodeTypeStatus = new DataManager({
       url: `${environment.apiUrl}CodeType/GetDataDropdownlist?lang=${localStorage.getItem('lang')}&codeType=EngineerError_Status`,
+      adaptor: new UrlAdaptor,
+      crossDomain: true,
+    });
+  }
+  onChangeSite(e) {
+    
+    if (e.isInteracted) {
+      this.dropDownListDevice.value = null;
+      this.deviceGuid = null;
+      this.model.deviceGuid = null;
+      this.loadDevices(this.model.errorSite);
+    }
+  
+  }
+  onChangeDevice(deviceGuid) {
+    this.model.deviceGuid = deviceGuid
+  }
+  actionComplete(e) {
+    if (this.deviceGuid) {
+      this.dropDownListDevice.value = this.deviceGuid
+    }
+  }
+  loadDevices(errorSite) {
+    this.queryDevice = new Query()
+    .where("siteGuid", 'equal', errorSite);
+    this.dataSourceDevice= new DataManager({
+      url: `${environment.apiUrl}Device/GetDataDropdownlist`,
+      adaptor: new UrlAdaptor,
+      crossDomain: true,
+    });
+  }
+  loadSites() {
+    this.queryErrorSite = new Query();
+    this.dataSourceErrorSite= new DataManager({
+      url: `${environment.apiUrl}Site/GetDataDropdownlist`,
       adaptor: new UrlAdaptor,
       crossDomain: true,
     });

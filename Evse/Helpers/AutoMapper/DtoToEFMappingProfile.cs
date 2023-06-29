@@ -67,6 +67,8 @@ namespace Evse.Helpers.AutoMapper
             CreateMap<ReportConfigDto, ReportConfig>();
             CreateMap<ReportExportParams, ReportParams>();
             CreateMap<ReportConfigDto, ReportConfig>();
+            CreateMap<CouponManagementDto, CouponManagement>();
+            CreateMap<ElectricityPriceDto, ElectricityPrice>();
 
 
         }

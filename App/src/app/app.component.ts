@@ -14,6 +14,7 @@ import {
   UrlAdaptor,
   Predicate,
 } from "@syncfusion/ej2-data";
+import { AuthService } from './_core/_service/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
     private versionCheckService: VersionCheckService,
     private title:Title,
     private translate:TranslateService,
-    private accountService: XAccountService,
+    private authService: AuthService,
     private alertify: AlertifyService
     ) {
   }
@@ -36,9 +37,20 @@ export class AppComponent implements OnInit {
     // this.translate.get(this.titleKey).subscribe(name=>{
     //   this.title.setTitle(name);
     // });
+   
+
+   this.loadPermissions();
    this.loadTitleData();
     this.versionCheckService.initVersionCheck(environment.versionCheckURL);
 
+  }
+  loadPermissions() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.authService.getPermissions(user.guid,localStorage.getItem('lang')).subscribe(functions => {
+        localStorage.setItem("functions", JSON.stringify(functions));
+      });
+    }
   }
   loadTitleData() {
     let query = new Query();
