@@ -18,11 +18,11 @@ declare let window:any;
 declare let $: any;
 
 @Component({
-  selector: 'app-h2-discount-code-management',
-  templateUrl: './h2-discount-code-management.component.html',
-  styleUrls: ['./h2-discount-code-management.component.scss']
+  selector: 'app-h2-coupon-management',
+  templateUrl: './h2-coupon-management.component.html',
+  styleUrls: ['./h2-coupon-management.component.scss']
 })
-export class H2DiscountCodeManagementComponent extends BaseComponent implements OnInit {
+export class H2CouponManagementComponent extends BaseComponent implements OnInit {
   data: DataManager;
   modalReference: NgbModalRef;
   active = "Detail"

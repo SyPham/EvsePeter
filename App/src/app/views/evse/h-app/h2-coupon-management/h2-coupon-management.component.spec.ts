@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { H6ElectricityPriceManagementComponent } from './h6-electricity-price-management.component';
+import { H2CouponManagementComponent } from './h2-coupon-management.component';
 
-describe('H6ElectricityPriceManagementComponent', () => {
-  let component: H6ElectricityPriceManagementComponent;
-  let fixture: ComponentFixture<H6ElectricityPriceManagementComponent>;
+describe('H2CouponManagementComponent', () => {
+  let component: H2CouponManagementComponent;
+  let fixture: ComponentFixture<H2CouponManagementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ H6ElectricityPriceManagementComponent ]
+      declarations: [ H2CouponManagementComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(H6ElectricityPriceManagementComponent);
+    fixture = TestBed.createComponent(H2CouponManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

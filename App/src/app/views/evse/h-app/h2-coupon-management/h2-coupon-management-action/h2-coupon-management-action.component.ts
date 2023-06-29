@@ -23,11 +23,11 @@ declare let $: any;
 
 
 @Component({
-  selector: 'app-h2-discount-code-management-action',
-  templateUrl: './h2-discount-code-management-action.component.html',
-  styleUrls: ['./h2-discount-code-management-action.component.css']
+  selector: 'app-h2-coupon-management-action',
+  templateUrl: './h2-coupon-management-action.component.html',
+  styleUrls: ['./h2-coupon-management-action.component.scss']
 })
-export class H2DiscountCodeManagementActionComponent implements OnInit {
+export class H2CouponManagementActionComponent  implements OnInit {
 
   loading
   model: CouponManagement = <CouponManagement>{};

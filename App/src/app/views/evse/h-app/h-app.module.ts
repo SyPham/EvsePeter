@@ -11,15 +11,14 @@ import { DatePickerAllModule } from '@syncfusion/ej2-angular-calendars';
 import { SharedModule } from 'src/app/_core/commons/shared.module';
 import { PigfarmCoreModule } from '@pigfarm-core';
 import { environment } from 'src/environments/environment';
-import { H1SoftwareUpdateComponent } from './h1-software-update/h1-software-update.component';
-import { H2DiscountCodeManagementComponent } from './h2-discount-code-management/h2-discount-code-management.component';
 import { H3HelpCenterQuestionsComponent } from './h3-help-center-questions/h3-help-center-questions.component';
 import { H4PrivacyPolicyComponent } from './h4-privacy-policy/h4-privacy-policy.component';
-import { H5ContractConntentManagementComponent } from './h5-contract-conntent-management/h5-contract-conntent-management.component';
-import { H6ElectricityPriceManagementComponent } from './h6-electricity-price-management/h6-electricity-price-management.component';
-import { H7CardModelManagementComponent } from './h7-card-model-management/h7-card-model-management.component';
 import { H8MessagePushManagementComponent } from './h8-message-push-management/h8-message-push-management.component';
-import { H2DiscountCodeManagementActionComponent } from './h2-discount-code-management/h2-discount-code-management-action/h2-discount-code-management-action.component';
+import { H1ElectricityPriceComponent } from './h1-electricity-price/h1-electricity-price.component';
+import { H2CouponManagementComponent } from './h2-coupon-management/h2-coupon-management.component';
+import { H5ContractManagementComponent } from './h5-contract-management/h5-contract-management.component';
+import { H6CarModelComponent } from './h6-car-model/h6-car-model.component';
+import { H7MessageManagementComponent } from './h7-message-management/h7-message-management.component';
 
 interface Environment {
   production: boolean;
@@ -47,18 +46,19 @@ interface Environment {
   exports: [
 
   ],
-  declarations: [
-    H1SoftwareUpdateComponent,
-    H2DiscountCodeManagementComponent,
+  declarations: [						
+    H1ElectricityPriceComponent,
     H3HelpCenterQuestionsComponent,
     H4PrivacyPolicyComponent,
-    H5ContractConntentManagementComponent,
-    H6ElectricityPriceManagementComponent,
-    H7CardModelManagementComponent,
     H8MessagePushManagementComponent,
-    H2DiscountCodeManagementActionComponent
-
-  ]
+      H1ElectricityPriceComponent,
+      H2CouponManagementComponent,
+      H5ContractManagementComponent,
+      H6CarModelComponent,
+      H7MessageManagementComponent,
+      H2CouponManagementComponent,
+      H5ContractManagementComponent,
+   ]
 })
 export class HAppModule {
 }

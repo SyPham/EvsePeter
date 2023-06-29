@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { H2DiscountCodeManagementActionComponent } from './h2-discount-code-management-action.component';
+import { H5ContractManagementComponent } from './h5-contract-management.component';
 
-describe('H2DiscountCodeManagementActionComponent', () => {
-  let component: H2DiscountCodeManagementActionComponent;
-  let fixture: ComponentFixture<H2DiscountCodeManagementActionComponent>;
+describe('H5ContractManagementComponent', () => {
+  let component: H5ContractManagementComponent;
+  let fixture: ComponentFixture<H5ContractManagementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ H2DiscountCodeManagementActionComponent ]
+      declarations: [ H5ContractManagementComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(H2DiscountCodeManagementActionComponent);
+    fixture = TestBed.createComponent(H5ContractManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

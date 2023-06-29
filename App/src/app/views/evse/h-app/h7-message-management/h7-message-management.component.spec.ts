@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { H5ContractConntentManagementComponent } from './h5-contract-conntent-management.component';
+import { H7MessageManagementComponent } from './h7-message-management.component';
 
-describe('H5ContractConntentManagementComponent', () => {
-  let component: H5ContractConntentManagementComponent;
-  let fixture: ComponentFixture<H5ContractConntentManagementComponent>;
+describe('H7MessageManagementComponent', () => {
+  let component: H7MessageManagementComponent;
+  let fixture: ComponentFixture<H7MessageManagementComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ H5ContractConntentManagementComponent ]
+      declarations: [ H7MessageManagementComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(H5ContractConntentManagementComponent);
+    fixture = TestBed.createComponent(H7MessageManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
