@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <button
+        type="submit"
+        [disabled]="
+        !model.questionType
+        "
+        (click)="save()"
+        class="btn btn-success"
+      >
+        {{ "SAVE" | translate }}
+      </button>
+      </div>
+      <div class="card-body">
+          <div class="d-flex justify-content-center" *ngIf="loading == 1">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+           </div>
+
+           <div class="form-group row">
+            <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
+            <div class="col-sm-10">
+              <span *ngIf="model.id > 0">{{model.id}}</span>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="questionType" class="col-sm-2 col-form-label">{{ 'Question_Type' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10">
+              <ejs-dropdownlist
+                id="questionType"
+                [(value)]="model.questionType"
+                (filtering)="onFilteringQuestion($event)"
+                [allowFiltering]="true"
+                #questionTypeDrop
+                [placeholder]="'Choose a question type' | translate"
+                [dataSource]="dataSourceQuestion"
+                [fields]="{ text: 'name', value: 'guid' }"
+                [query]="queryQuestion"
+              >
+              </ejs-dropdownlist>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="memberNO" class="col-sm-2 col-form-label">{{ 'HelpCenter_Status' | translate }}</label>
+            <div class="col-sm-10 d-flex align-items-center">
+              <ejs-switch  [onLabel]="getStatusText('1')" [offLabel]="getStatusText('0')" (change)="changeStatus($event)" [checked]="model.status == '1'"></ejs-switch>
+
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="questionDescript" class="col-sm-2 col-form-label">{{ 'Question_Descript' | translate }} </label>
+            <div class="col-sm-10">
+              <ejs-richtexteditor  [toolbarSettings]='tools' saveInterval='1' [showCharCount]='true' maxLength='5000' #questionDescript id='questionDescript'  [(value)]='model.questionDescript'>
+        
+              </ejs-richtexteditor>
+            </div>
+          </div>
+   
+          <div class="form-group row">
+            <label for="answerDescript" class="col-sm-2 col-form-label">{{ 'Answer_Descript' | translate }} </label>
+            <div class="col-sm-10">
+              <ejs-richtexteditor  [toolbarSettings]='tools' saveInterval='1' [showCharCount]='true' maxLength='5000' #answerDescript id='answerDescript'  [(value)]='model.answerDescript'>
+        
+              </ejs-richtexteditor>
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="col-2"></div>
+            <div class="col-10">
+              <div class="mr-auto" *ngIf="model.id > 0">
+                <p>
+                  <span class='mr-2'> <span class='my-font-weight-bold'>{{ 'Create by' | translate}}</span> : {{audit?.createBy}}</span>
+                  <span><span class='my-font-weight-bold'>{{ 'Create date time' | translate}}</span> : {{audit?.createDate}}</span>
+                </p>
+               
+              </div>
+            </div>
+          </div>
+          
+          
+      </div>
+    
+    </div>
+  </div>
+</div>
+

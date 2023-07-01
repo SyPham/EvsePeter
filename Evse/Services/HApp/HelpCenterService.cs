@@ -19,18 +19,18 @@ using Microsoft.AspNetCore.Hosting;
 using NetUtility;
 using System.IO;
 
-namespace Evse.Services
+namespace Evse.Services.HApp
 {
-    public interface ICouponManagementService : IServiceBase<CouponManagement, CouponManagementDto>
+    public interface IHelpCenterService : IServiceBase<HelpCenter, HelpCenterDto>
     {
         Task<object> LoadData(DataManager data, string lang);
         Task<object> GetByGuid(string guid);
         Task<object> GetAudit(object id);
 
     }
-    public class CouponManagementService : ServiceBase<CouponManagement, CouponManagementDto>, ICouponManagementService, IScopeService
+    public class HelpCenterService : ServiceBase<HelpCenter, HelpCenterDto>, IHelpCenterService, IScopeService
     {
-        private readonly IRepositoryBase<CouponManagement> _repo;
+        private readonly IRepositoryBase<HelpCenter> _repo;
         private readonly IRepositoryBase<Bank> _repoBank;
         private readonly IRepositoryBase<User2Bank> _repoUser2Bank;
         private readonly IRepositoryBase<CodeType> _repoCodeType;
@@ -40,8 +40,8 @@ namespace Evse.Services
         private readonly MapperConfiguration _configMapper;
         private readonly IEvseLoggerService _logger;
         private readonly IWebHostEnvironment _currentEnvironment;
-        public CouponManagementService(
-            IRepositoryBase<CouponManagement> repo,
+        public HelpCenterService(
+            IRepositoryBase<HelpCenter> repo,
             IRepositoryBase<CodeType> repoCodeType,
             IRepositoryBase<XAccount> repoXAccount,
             IUnitOfWork unitOfWork,
@@ -73,17 +73,16 @@ IRepositoryBase<Bank> repoBank)
         public async Task<object> LoadData(DataManager data, string lang)
         {
             var datasource = (from a in _repo.FindAll()
-                              join b in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.CouponManagement_Status && x.Status == "Y") on a.Status equals b.CodeNo into ast
-                              from t in ast.DefaultIfEmpty()
-                              join b in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.CouponManagement_DiscountType && x.Status == "Y") on a.DiscountType equals b.CodeNo into ab
-                              from d in ab.DefaultIfEmpty()
-                              select new CouponManagementDto
+                              join b in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.HelpCenter_Status && x.Status == "Y") on a.Status equals b.CodeNo into ast
+                              from d in ast.DefaultIfEmpty()
+                              join b in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.HelpCenter_QuestionType && x.Status == "Y") on a.QuestionType equals b.CodeNo into ab
+                              from t in ab.DefaultIfEmpty()
+                              select new HelpCenterDto
                               {
                                   Id = a.Id,
-                                 CouponCode =a.CouponCode,
-                                 DiscountType =a.DiscountType,
-                                 DiscountPrice =a.DiscountPrice,
-                                 DiscountPercentage =a.DiscountPercentage,
+                                  QuestionDescript = a.QuestionDescript,
+                                  AnswerDescript = a.AnswerDescript,
+                                  QuestionType = a.QuestionType,
 
                                   Comment = a.Comment,
                                   CreateDate = a.CreateDate,
@@ -92,7 +91,7 @@ IRepositoryBase<Bank> repoBank)
                                   UpdateBy = a.UpdateBy,
                                   Status = a.Status,
                                   Guid = a.Guid,
-                                  DiscountTypeName = t == null ? "" : lang == Languages.EN ? t.CodeNameEn ?? t.CodeName : lang == Languages.VI ? t.CodeNameVn ?? t.CodeName : lang == Languages.CN ? t.CodeNameCn ?? t.CodeName : t.CodeName,
+                                  QuestionTypeName = t == null ? "" : lang == Languages.EN ? t.CodeNameEn ?? t.CodeName : lang == Languages.VI ? t.CodeNameVn ?? t.CodeName : lang == Languages.CN ? t.CodeNameCn ?? t.CodeName : t.CodeName,
                                   StatusName = d == null ? "" : lang == Languages.EN ? d.CodeNameEn ?? d.CodeName : lang == Languages.VI ? d.CodeNameVn ?? d.CodeName : lang == Languages.CN ? d.CodeNameCn ?? d.CodeName : d.CodeName,
 
                               }).OrderByDescending(x => x.Id).AsQueryable();
@@ -104,7 +103,7 @@ IRepositoryBase<Bank> repoBank)
                 datasource = QueryableDataOperations.PerformSorting(datasource, data.Sorted);
             if (data.Search != null)
                 datasource = QueryableDataOperations.PerformSearching(datasource, data.Search);
-           var count = await datasource.CountAsync();
+            var count = await datasource.CountAsync();
             if (data.Skip >= 0)//for paging
                 datasource = QueryableDataOperations.PerformSkip(datasource, data.Skip);
             if (data.Take > 0)//for paging
@@ -116,17 +115,17 @@ IRepositoryBase<Bank> repoBank)
             };
         }
 
-        public override async Task<List<CouponManagementDto>> GetAllAsync()
+        public override async Task<List<HelpCenterDto>> GetAllAsync()
         {
-            var query = _repo.FindAll().ProjectTo<CouponManagementDto>(_configMapper);
+            var query = _repo.FindAll().ProjectTo<HelpCenterDto>(_configMapper);
 
             var data = await query.ToListAsync();
             return data;
 
         }
-        public override async Task<OperationResult> AddAsync(CouponManagementDto model)
+        public override async Task<OperationResult> AddAsync(HelpCenterDto model)
         {
-            var item = _mapper.Map<CouponManagement>(model);
+            var item = _mapper.Map<HelpCenter>(model);
             _repo.Add(item);
             try
             {
@@ -203,8 +202,8 @@ IRepositoryBase<Bank> repoBank)
             };
         }
 
-     
 
-     
+
+
     }
 }

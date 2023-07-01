@@ -1,29 +1,41 @@
-
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { DropDownListComponent, FilteringEventArgs } from '@syncfusion/ej2-angular-dropdowns';
-import { Query } from '@syncfusion/ej2-data';
+import { AccountTypeService } from 'src/app/_core/_service/account-type.service';
+import { EmployeeService } from 'src/app/_core/_service/employee.service';
+import { FarmService } from 'src/app/_core/_service/farms';
+import { DataManager, Query, UrlAdaptor, Predicate } from '@syncfusion/ej2-data';
 import { environment } from 'src/environments/environment';
 import { ImagePathConstants, MessageConstants } from 'src/app/_core/_constants';
 import { AlertifyService, UtilitiesService } from '@pigfarm-core';
-import { PrivacyPolicy } from 'src/app/_core/_model/evse/model';
-import { PrivacyPolicyService } from 'src/app/_core/_service/evse/privacy-policy.service';
+import { HelpCenter } from 'src/app/_core/_model/evse/model';
+import { XAccountService } from 'src/app/_core/_service/xaccount.service';
+import { EmitType, detach, Browser, createElement, isNullOrUndefined, EventHandler } from '@syncfusion/ej2-base';
+import { FileInfo, RemovingEventArgs, SelectedEventArgs, UploaderComponent } from '@syncfusion/ej2-angular-inputs';
+import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
+import { HelpCenterService } from 'src/app/_core/_service/evse/help-center.service';
 import { ToolbarModule } from '@syncfusion/ej2-angular-navigations';
 import { ToolbarType } from '@syncfusion/ej2-richtexteditor';
+declare let $: any;
+
 @Component({
-  selector: 'app-h4-privacy-policy',
-  templateUrl: './h4-privacy-policy.component.html',
-  styleUrls: ['./h4-privacy-policy.component.scss']
+  selector: 'app-h3-help-center-questions-action',
+  templateUrl: './h3-help-center-questions-action.component.html',
+  styleUrls: ['./h3-help-center-questions-action.component.css']
 })
-export class H4PrivacyPolicyComponent implements OnInit {
+export class H3HelpCenterQuestionsActionComponent implements OnInit {
 
   loading
-  model: PrivacyPolicy = <PrivacyPolicy>{};
+  model: HelpCenter = <HelpCenter>{};
+
   apiHost = environment.apiUrl.replace('/api/', '');
+  noImage = ImagePathConstants.NO_IMAGE;
+  @ViewChild("questionTypeDrop") questionTypeDrop: DropDownListComponent
 id: any;
+  audit: HelpCenter;
   alert = {
     updateMessage: this.translate.instant(MessageConstants.UPDATE_MESSAGE),
     updateTitle: this.translate.instant(MessageConstants.UPDATE_TITLE),
@@ -43,6 +55,16 @@ id: any;
     yes_message: this.translate.instant(MessageConstants.YES_MSG),
     no_message: this.translate.instant(MessageConstants.NO_MSG),
   };
+
+  public onFilteringQuestion: any = (e: FilteringEventArgs) => {
+    let query = new Query();
+    //frame the query based on search string with filter type.
+    query = (e.text != "") ? query.where("name", "contains ", e.text, true) : query;
+    //pass the filter data source, filter query to updateData method.
+    e.updateData(this.dataSourceQuestion, query);
+  };
+  queryQuestion
+  dataSourceQuestion
   public tools: ToolbarModule = {
     type: ToolbarType.Expand,
     enableFloating :false,
@@ -52,13 +74,24 @@ id: any;
         'Outdent', 'Indent', '|', 'ClearFormat',
         'SourceCode', 'FullScreen', '|', 'Undo', 'Redo']
 };
-
+  loadQuestions() {
+    this.queryQuestion = new Query();
+    this.dataSourceQuestion= new DataManager({
+      url: `${environment.apiUrl}CodeType/GetDataDropdownlist?lang=${localStorage.getItem('lang')}&codeType=Question_Type`,
+      adaptor: new UrlAdaptor,
+      crossDomain: true,
+    });
+  }
   constructor(
-    private service: PrivacyPolicyService,
+    private service: HelpCenterService,
+    private serviceXAccount: XAccountService,
+    private serviceEmployee: EmployeeService,
     public modalService: NgbModal,
+    private serviceFarm: FarmService,
     private alertify: AlertifyService,
     private utilityService: UtilitiesService,
     private datePipe: DatePipe,
+     private config: NgbTooltipConfig,
     public translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
@@ -66,35 +99,77 @@ id: any;
   ) { 
 
   }
+  changeStatus(e) {
+    if (e.checked) {
+      this.model.status = "1"
+    } else {
+      this.model.status = "0"
+    }
+
+  }
   ngOnInit() {
-  
+  this.id = +this.route.snapshot.params['id'];
+  if ( this.id === 0) {
+    this.reset()
+
+  } else {
   this.loadDetail().subscribe(model => {
     if (model == null) {
-    this.reset();
+      this.alertify.errorConfirm("", this.translate.instant("Not found record"), () => {
+        this.router.navigateByUrl("/")
+        return;
+      })
      
-    } else {
-      this.id = model['id'];
-      this.model = model;
     }
+    this.model = model;
    
   });
   
-  }
-
   
+  this.getAudit(this.id);
+  }
+   this.codeType();
+   this.loadQuestions();
+   
+
+  }
  
   loadDetail() {
-   return this.service.getFirst()
+   return this.service.getById(this.id)
   }
 
+  getAudit(id) {
+    this.service.getAudit(id).subscribe(data => {
+      this.audit = data;
+    });
+
+}
+  imagePath(path) {
+    if (path !== null && this.utilityService.checkValidImage(path)) {
+      if (this.utilityService.checkExistHost(path)) {
+        return path;
+      }
+      return this.apiHost + path;
+    }
+    return this.noImage;
+  }
   reset() {
     this.id = null;
-    this.model = <PrivacyPolicy>{};
+    this.model = <HelpCenter>{};
     this.model.id = 0;
     this.model.status = "1";
    
   }
-  
+  contactRel = ''
+ 
+
+
+
+
+
+  back() {
+      this.router.navigateByUrl("/h-app/h3")
+  }
   create() {
   
     this.alertify.confirm4(
@@ -107,6 +182,7 @@ id: any;
            (res) => {
              if (res.success === true) {
                this.alertify.success(this.alert.created_ok_msg);
+               this.back();
  
              } else {
                this.translate.get(res.message).subscribe((data: string) => {
@@ -137,6 +213,7 @@ id: any;
            (res) => {
              if (res.success === true) {
                this.alertify.success(this.alert.updated_ok_msg);
+               this.back();
  
              } else {
                this.alertify.warning(res.message, true);
@@ -177,7 +254,46 @@ id: any;
     }
     return model;
   }
+
+  checked(item, i) {
+    if (this.model.questionType) {
+      return item.guid === this.model.questionType
+
+    } else {
+      return item.guid == "DiscountPrice"
+    }
+  }
+  checkedDiscountType(e) {
+    if (e.target.checked) {
+      this.model.questionType = e.target.defaultValue
+    }
+  }
+  query;
+  questionData
+  statusData = []
+  codeType() {
+    this.query = new Query()
+    let data = new DataManager({
+      url: `${environment.apiUrl}CodeType/GetDataDropdownlist?lang=${localStorage.getItem('lang')}&codeType=HelpCenter_Status`,
+      adaptor: new UrlAdaptor,
+      crossDomain: true,
+    });
+    data.executeQuery(this.query.sortBy('guid')).then((x: any)=> {
+      this.statusData = x.result;
+    })
+  
+  }
+  getStatusText(value) {
+    if (this.statusData.length === 0 && value == "0") {
+      return this.translate.instant("Inactive")
+    }
+    if (this.statusData.length === 0 && value == "1") {
+      return this.translate.instant("Active")
+    }
+    return this.statusData.filter(x=> x.guid == value)[0]?.name
+  }
   locale = localStorage.getItem('lang');
+  pageText = 'Total Records Count {{items}} items'
   
 
   

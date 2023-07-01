@@ -10,6 +10,8 @@ import { H2CouponManagementActionComponent } from './h2-coupon-management/h2-cou
 import { H7MessageManagementComponent } from './h7-message-management/h7-message-management.component';
 import { H6CarModelComponent } from './h6-car-model/h6-car-model.component';
 import { H5ContractManagementComponent } from './h5-contract-management/h5-contract-management.component';
+import { H3HelpCenterQuestionsActionComponent } from './h3-help-center-questions/h3-help-center-questions-action/h3-help-center-questions-action.component';
+import { H7MessageManagementActionComponent } from './h7-message-management/h7-message-management-action/h7-message-management-action.component';
 const routes: Routes = [
   {
     path: 'h1',
@@ -54,6 +56,16 @@ const routes: Routes = [
   // canActivate: [AuthGuard]
   },
   {
+    path: 'h3/action/:id',
+    component: H3HelpCenterQuestionsActionComponent,
+    data: {
+      title: 'H3 Help Center Questions Action',
+      breadcrumb: 'H3 Help Center Questions Action',
+      functionCode: 'H3'
+    },
+  // canActivate: [AuthGuard]
+  },
+  {
     path: 'h4',
     component: H4PrivacyPolicyComponent,
     data: {
@@ -89,6 +101,16 @@ const routes: Routes = [
     data: {
       title: 'H7 Message Management',
       breadcrumb: 'H7 Message Management',
+      functionCode: 'H7'
+    },
+  // canActivate: [AuthGuard]
+  },
+  {
+    path: 'h7/action/:id',
+    component: H7MessageManagementActionComponent,
+    data: {
+      title: 'H7 Message Management Action',
+      breadcrumb: 'H7 Message Management Action',
       functionCode: 'H7'
     },
   // canActivate: [AuthGuard]

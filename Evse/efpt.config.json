@@ -15,11 +15,19 @@
    "SelectedToBeGenerated": 0,
    "Tables": [
       {
-         "Name": "[dbo].[CouponManagement]",
+         "Name": "[dbo].[ContractManagement]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[ElectricityPrice]",
+         "Name": "[dbo].[HelpCenter]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[MessageManagement]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[PrivacyPolicy]",
          "ObjectType": 0
       }
    ],

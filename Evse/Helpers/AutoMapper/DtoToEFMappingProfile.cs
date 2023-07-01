@@ -70,6 +70,11 @@ namespace Evse.Helpers.AutoMapper
             CreateMap<CouponManagementDto, CouponManagement>();
             CreateMap<ElectricityPriceDto, ElectricityPrice>();
 
+            CreateMap<HelpCenter, HelpCenterDto>();
+            CreateMap<PrivacyPolicy, PrivacyPolicyDto>();
+            CreateMap<ContractManagement, ContractManagementDto>();
+            CreateMap<MessageManagement, MessageManagementDto>();
+
 
         }
     }

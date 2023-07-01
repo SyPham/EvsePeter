@@ -1,40 +1,40 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Evse.DTO;
 using Evse.Helpers;
-using Evse.Services;
 using Syncfusion.JavaScript;
 using System.Threading.Tasks;
+using Evse.Services.HApp;
 
-namespace Evse.Controllers
+namespace Evse.Controllers.HApp
 {
-    public class CouponManagementController : ApiControllerBase
+    public class PrivacyPolicyController : ApiControllerBase
     {
-        private readonly ICouponManagementService _service;
+        private readonly IPrivacyPolicyService _service;
 
-        public CouponManagementController(ICouponManagementService service)
+        public PrivacyPolicyController(IPrivacyPolicyService service)
         {
             _service = service;
         }
-      
+
 
         [HttpGet]
         public async Task<ActionResult> GetAllAsync()
         {
             return Ok(await _service.GetAllAsync());
         }
-       
+
         [HttpPost]
-        public async Task<ActionResult> AddAsync([FromBody] CouponManagementDto model)
+        public async Task<ActionResult> AddAsync([FromBody] PrivacyPolicyDto model)
         {
             return StatusCodeResult(await _service.AddAsync(model));
         }
 
         [HttpPut]
-        public async Task<ActionResult> UpdateAsync([FromBody] CouponManagementDto model)
+        public async Task<ActionResult> UpdateAsync([FromBody] PrivacyPolicyDto model)
         {
             return StatusCodeResult(await _service.UpdateAsync(model));
         }
-       
+
         [HttpDelete]
         public async Task<ActionResult> DeleteAsync(decimal id)
         {
@@ -45,6 +45,11 @@ namespace Evse.Controllers
         public async Task<ActionResult> GetByIDAsync(decimal id)
         {
             return Ok(await _service.GetByIDAsync(id));
+        }
+        [HttpGet]
+        public async Task<ActionResult> GetFirst()
+        {
+            return Ok(await _service.GetFirst());
         }
 
         [HttpGet]
@@ -69,7 +74,7 @@ namespace Evse.Controllers
         {
             return Ok(await _service.GetAudit(id));
         }
-           [HttpPost]
+        [HttpPost]
         public async Task<ActionResult> GetDataDropdownlist([FromBody] DataManager request)
         {
 

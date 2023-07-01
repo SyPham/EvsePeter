@@ -25,7 +25,12 @@ namespace Evse.Data
         {
             _contextAccessor = contextAccessor;
         }
-          public virtual DbSet<CouponManagement> CouponManagements { get; set; }
+        public virtual DbSet<ContractManagement> ContractManagements { get; set; }
+        public virtual DbSet<HelpCenter> HelpCenters { get; set; }
+        public virtual DbSet<MessageManagement> MessageManagements { get; set; }
+        public virtual DbSet<PrivacyPolicy> PrivacyPolicies { get; set; }
+
+        public virtual DbSet<CouponManagement> CouponManagements { get; set; }
         public virtual DbSet<ElectricityPrice> ElectricityPrices { get; set; }
 
         public virtual DbSet<AccountContract> AccountContracts { get; set; }
@@ -3704,6 +3709,198 @@ namespace Evse.Data
                     .HasMaxLength(200);
 
                 entity.Property(e => e.Page).HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<ContractManagement>(entity =>
+            {
+                entity.ToTable("ContractManagement");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("COMMENT")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.ContractDescript)
+                    .HasColumnName("Contract_Descript")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasMaxLength(40)
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("STATUS")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.UpdateBy)
+                    .HasColumnName("UPDATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.UpdateDate)
+                    .HasColumnName("UPDATE_DATE")
+                    .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<HelpCenter>(entity =>
+            {
+                entity.ToTable("HelpCenter");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.AnswerDescript)
+                    .HasColumnName("Answer_Descript")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("COMMENT")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasMaxLength(40)
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.QuestionDescript)
+                    .HasColumnName("Question_Descript")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.QuestionType)
+                    .HasColumnName("Question_Type")
+                    .HasMaxLength(40);
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("STATUS")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.UpdateBy)
+                    .HasColumnName("UPDATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.UpdateDate)
+                    .HasColumnName("UPDATE_DATE")
+                    .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<MessageManagement>(entity =>
+            {
+                entity.ToTable("MessageManagement");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("COMMENT")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasMaxLength(40)
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.MessageContent)
+                    .HasColumnName("Message_Content")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.MessageTitle)
+                    .HasColumnName("Message_Title")
+                    .HasMaxLength(200);
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("STATUS")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.UpdateBy)
+                    .HasColumnName("UPDATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.UpdateDate)
+                    .HasColumnName("UPDATE_DATE")
+                    .HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<PrivacyPolicy>(entity =>
+            {
+                entity.ToTable("PrivacyPolicy");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("ID")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+
+                entity.Property(e => e.Comment)
+                    .HasColumnName("COMMENT")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.CreateBy)
+                    .HasColumnName("CREATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnName("CREATE_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.Guid)
+                    .HasColumnName("GUID")
+                    .HasMaxLength(40)
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.PrivacyDescript)
+                    .HasColumnName("Privacy_Descript")
+                    .HasColumnType("ntext");
+
+                entity.Property(e => e.Status)
+                    .HasColumnName("STATUS")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.UpdateBy)
+                    .HasColumnName("UPDATE_BY")
+                    .HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.UpdateDate)
+                    .HasColumnName("UPDATE_DATE")
+                    .HasColumnType("datetime");
             });
 
             OnModelCreatingPartial(modelBuilder);

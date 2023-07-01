@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Evse.DTO;
 using Evse.Helpers;
-using Evse.Services;
 using Syncfusion.JavaScript;
 using System.Threading.Tasks;
+using Evse.Services.HApp;
 
-namespace Evse.Controllers
+namespace Evse.Controllers.HApp
 {
     public class ElectricityPriceController : ApiControllerBase
     {
@@ -15,14 +15,14 @@ namespace Evse.Controllers
         {
             _service = service;
         }
-      
+
 
         [HttpGet]
         public async Task<ActionResult> GetAllAsync()
         {
             return Ok(await _service.GetAllAsync());
         }
-       
+
         [HttpPost]
         public async Task<ActionResult> AddAsync([FromBody] ElectricityPriceDto model)
         {
@@ -34,7 +34,7 @@ namespace Evse.Controllers
         {
             return StatusCodeResult(await _service.UpdateAsync(model));
         }
-       
+
         [HttpDelete]
         public async Task<ActionResult> DeleteAsync(decimal id)
         {
@@ -69,12 +69,17 @@ namespace Evse.Controllers
         {
             return Ok(await _service.GetAudit(id));
         }
-           [HttpPost]
+        [HttpPost]
         public async Task<ActionResult> GetDataDropdownlist([FromBody] DataManager request)
         {
 
             var data = await _service.GetDataDropdownlist(request);
             return Ok(data);
+        }
+        [HttpGet]
+        public async Task<ActionResult> GetFirst()
+        {
+            return Ok(await _service.GetFirst());
         }
     }
 }

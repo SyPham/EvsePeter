@@ -19,13 +19,15 @@ using Microsoft.AspNetCore.Hosting;
 using NetUtility;
 using System.IO;
 
-namespace Evse.Services
+namespace Evse.Services.HApp
 {
     public interface IElectricityPriceService : IServiceBase<ElectricityPrice, ElectricityPriceDto>
     {
         Task<object> LoadData(DataManager data, string lang);
         Task<object> GetByGuid(string guid);
         Task<object> GetAudit(object id);
+        Task<ElectricityPriceDto> GetFirst();
+
 
     }
     public class ElectricityPriceService : ServiceBase<ElectricityPrice, ElectricityPriceDto>, IElectricityPriceService, IScopeService
@@ -94,16 +96,16 @@ IRepositoryBase<Bank> repoBank)
 
 
             if (data.Where != null) // for filtering
-                datasource = QueryableDataOperations.PerformWhereFilter(datasource, data.Where, data.Where[0].Condition);
+                datasource = datasource.PerformWhereFilter(data.Where, data.Where[0].Condition);
             if (data.Sorted != null)//for sorting
-                datasource = QueryableDataOperations.PerformSorting(datasource, data.Sorted);
+                datasource = datasource.PerformSorting(data.Sorted);
             if (data.Search != null)
                 datasource = QueryableDataOperations.PerformSearching(datasource, data.Search);
-           var count = await datasource.CountAsync();
+            var count = await datasource.CountAsync();
             if (data.Skip >= 0)//for paging
-                datasource = QueryableDataOperations.PerformSkip(datasource, data.Skip);
+                datasource = datasource.PerformSkip(data.Skip);
             if (data.Take > 0)//for paging
-                datasource = QueryableDataOperations.PerformTake(datasource, data.Take);
+                datasource = datasource.PerformTake(data.Take);
             return new
             {
                 Result = await datasource.ToListAsync(),
@@ -200,8 +202,16 @@ IRepositoryBase<Bank> repoBank)
             };
         }
 
-     
+        public async Task<ElectricityPriceDto> GetFirst()
+        {
+            var query = _repo.FindAll().ProjectTo<ElectricityPriceDto>(_configMapper);
 
-     
+            var data = await query.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+            return data;
+
+        }
+
+
+
     }
 }

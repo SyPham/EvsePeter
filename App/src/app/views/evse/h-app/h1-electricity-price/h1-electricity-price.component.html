@@ -1,3 +1,68 @@
-<p>
-  h1-electricity-price works!
-</p>
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      
+      <div class="card-body">
+          <div class="d-flex justify-content-center" *ngIf="loading == 1">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+           </div>
+
+           <div class="form-group row">
+            <label for="start" class="col-sm-2 col-form-label">{{ 'PeakTime' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span> </label>
+            <div class="col-sm-10 d-flex justify-content-start align-items-center">
+              <input type="text" style="width: 120px;" class="form-control" [(ngModel)]="peakTimeStart" id="start" [placeholder]="'Enter start' | translate">
+              <div class="mx-2"> ~ </div>
+              <input type="text" style="width: 120px;"  class="form-control" [(ngModel)]="peakTimeEnd" id="end" [placeholder]="'Enter end' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="start" class="col-sm-2 col-form-label">{{ 'PeakTime_Price' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span> </label>
+            <div class="col-sm-10 d-flex justify-content-start align-items-center">
+              <input type="text" style="width: 185px;" class="form-control" [(ngModel)]="model.peakTimePrice" id="peakTimePrice" [placeholder]="'Enter peak time price' | translate">
+              <div class="mx-2">{{ 'Price_Code' | translate }}</div>
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="offPeakTime" class="col-sm-2 col-form-label">{{ 'OffPeakTime' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span> </label>
+            <div class="col-sm-10 d-flex justify-content-start align-items-center">
+              <input type="text" style="width: 120px;" class="form-control" [(ngModel)]="offPeakTimeStart" id="offPeakTimeStart" [placeholder]="'Enter start' | translate">
+              <div class="mx-2"> ~ </div>
+              <input type="text" style="width: 120px;"  class="form-control" [(ngModel)]="offPeakTimeEnd" id="offPeakTimeEnd" [placeholder]="'Enter end' | translate">
+            </div>
+          </div>
+   
+          <div class="form-group row">
+            <label for="OffPeakTime_Price" class="col-sm-2 col-form-label">{{ 'OffPeakTime_Price' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span> </label>
+            <div class="col-sm-10 d-flex justify-content-start align-items-center">
+              <input type="text" style="width: 185px;" class="form-control" [(ngModel)]="model.offPeakTimePrice" id="offPeakTimePrice" [placeholder]="'Enter off peak time price' | translate">
+              <div class="mx-2">{{ 'Price_Code' | translate }}</div>
+            </div>
+          </div>
+          
+      </div>
+      <div class="card-footer d-flex justify-content-start">
+          <button
+          type="submit"
+          [disabled]="
+          !peakTimeStart  ||
+          !peakTimeEnd ||
+          !offPeakTimeStart ||
+          !offPeakTimeEnd ||
+          !model.offPeakTimePrice||
+          !model.peakTimePrice 
+          "
+          (click)="save()"
+          class="btn btn-success"
+        >
+          {{ "SAVE" | translate }}
+        </button>
+        </div>
+    </div>
+  </div>
+</div>
+

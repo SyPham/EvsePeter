@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        
+        <div class="card-body">
+            <div class="d-flex justify-content-center" *ngIf="loading == 1">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+             </div>
+  
+            <div class="form-group row">
+              <label for="privacyDescript" class="col-sm-2 col-form-label">{{ 'Privacy_Descript' | translate }} </label>
+              <div class="col-sm-10">
+                <ejs-richtexteditor  [toolbarSettings]='tools' saveInterval='1' [showCharCount]='true' maxLength='5000' #questionDescript id='privacyDescript'  [(value)]='model.privacyDescript'>
+          
+                </ejs-richtexteditor>
+              </div>
+            </div>
+     
+            
+        </div>
+        <div class="card-footer d-flex justify-content-end">
+            <button
+            type="submit"
+            [disabled]="
+            !model.privacyDescript
+            "
+            (click)="save()"
+            class="btn btn-success"
+          >
+            {{ "SAVE" | translate }}
+          </button>
+          </div>
+      </div>
+    </div>
+  </div>
+  
+  

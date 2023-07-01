@@ -31,7 +31,12 @@
 
         public const string CouponManagement_Status = "Coupon_Status";
         public const string CouponManagement_DiscountType = "Discount_Type";
-
+        public const string PrivacyPolicy_Status = "PrivacyPolicy_Status";
+        public const string HelpCenter_QuestionType = "Question_Type";
+        public const string HelpCenter_Status = "HelpCenter_Status";
+        public const string ContractManagement_Status = "ContractMgmt_Status";
+        public const string MessageManagement_Status = "MessageMgmt_Status";
+        
 
 
     }

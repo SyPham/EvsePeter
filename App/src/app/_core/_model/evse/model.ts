@@ -1,3 +1,57 @@
+
+
+export interface MessageManagement {
+    id: number;
+    messageTitle: string;
+    messageContent: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    status: string;
+    statusName: string;
+    guid: string;
+}
+export interface PrivacyPolicy {
+    id: number;
+    privacyDescript: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    status: string;
+    statusName: string;
+    guid: string;
+}
+export interface HelpCenter {
+    id: number;
+    questionDescript: string;
+    answerDescript: string;
+    questionType: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    status: string;
+    statusName: string;
+    guid: string;
+    questionTypeName: string;
+}
+export interface ContractManagement {
+    id: number;
+    contractDescript: string;
+    comment: string;
+    createDate: string | null;
+    createBy: number | null;
+    updateDate: string | null;
+    updateBy: number | null;
+    status: string;
+    statusName: string;
+    guid: string;
+}
 export interface CouponManagement {
     id: number;
     couponCode: string;
