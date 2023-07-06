@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <button
+        type="submit"
+        [disabled]="
+          !model.siteName
+        "
+        (click)="save()"
+        class="btn btn-success"
+      >
+        {{ "SAVE" | translate }}
+      </button>
+      </div>
+      <div class="card-body">
+          <div class="d-flex justify-content-center" *ngIf="loading == 1">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+           </div>
+
+           <div class="form-group row">
+            <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
+            <div class="col-sm-10">
+              <span *ngIf="model.id > 0">{{model.id}}</span>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="siteStatus" class="col-sm-2 col-form-label">{{ 'Site_Status' | translate }}</label>
+            <div class="col-sm-10">
+              <span >{{model.statusName}}</span>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="siteName" class="col-sm-2 col-form-label">{{ 'Site_Name' | translate }}</label>
+            <div class="col-sm-10">
+              <span >{{model.siteName}}</span>
+            </div>
+          </div>
+
+          
+          <div class="form-group row">
+            <label for="siteAddress" class="col-sm-2 col-form-label">{{ 'Site_Address' | translate }}</label>
+            <div class="col-sm-10">
+              <span >{{model.siteAddress}}</span>
+            </div>
+          </div>
+    
+          <div class="form-group row">
+            <label for="timeRange" class="col-sm-2 col-form-label">{{ 'Time_Range' | translate }}</label>
+            <div class="col-sm-10">
+              <span >10:00 ~ 22:00</span>
+            </div>
+          </div>
+
+      </div>
+    
+    </div>
+  </div>
+</div>
+

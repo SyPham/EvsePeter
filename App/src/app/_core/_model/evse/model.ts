@@ -141,6 +141,18 @@ export interface Site {
     latitude: any;
     landlordGuid: any;
     countyGuid: any;
+    area: any;
+    reupwd: any;
+    upwd: any;
+    startTime: any;
+    endTime: any;
+    mobile: any;
+    idCard: any;
+    contactName: any;
+    contactRel: any;
+    contactTel: any;
+    landLordGuid: any;
+    statusName: any;
 }
 export interface ParkingLot {
     id: number;

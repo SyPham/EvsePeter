@@ -30,6 +30,9 @@ import { EngineerErrorReportComponent } from './engineer-error-report/engineer-e
 import { ElectricianErrorReportComponent } from './electrician-error-report/electrician-error-report.component';
 import { EngineerErrorReportActionComponent } from './engineer-error-report/engineer-error-report-action/engineer-error-report-action.component';
 import { ElectricianErrorReportActionComponent } from './electrician-error-report/electrician-error-report-action/electrician-error-report-action.component';
+import { Sitev2Component } from './sitev2/sitev2.component';
+import { Sitev2ActionComponent } from './sitev2/sitev2-action/sitev2-action.component';
+import { Sitev2DetailComponent } from './sitev2/sitev2-detail/sitev2-detail.component';
 
 const routes: Routes = [
   {
@@ -69,6 +72,36 @@ const routes: Routes = [
       title: 'Site2',
       breadcrumb: 'Site2',
       functionCode: 'Site2'
+    },
+   canActivate: [AuthGuard]
+  },
+  {
+    path: 'evse/sitev2',
+    component: Sitev2Component,
+    data: {
+      title: 'Site',
+      breadcrumb: 'Site',
+      functionCode: 'Site'
+    },
+   canActivate: [AuthGuard]
+  },
+  {
+    path: 'evse/sitev2/action/:id',
+    component: Sitev2ActionComponent,
+    data: {
+      title: 'Site Action',
+      breadcrumb: 'Site Action',
+      functionCode: 'Site'
+    },
+   canActivate: [AuthGuard]
+  },
+  {
+    path: 'evse/sitev2/detail/:id',
+    component: Sitev2DetailComponent,
+    data: {
+      title: 'Site Detail',
+      breadcrumb: 'Site Detail',
+      functionCode: 'Site'
     },
    canActivate: [AuthGuard]
   },

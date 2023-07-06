@@ -29,6 +29,7 @@ namespace Evse.Models
         public string Latitude { get; set; }
         public string LandlordGuid { get; set; }
         public string CountyGuid { get; set; }
+        public string Area { get; set; }
         
     }
 }

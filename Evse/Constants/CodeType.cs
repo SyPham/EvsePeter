@@ -37,6 +37,8 @@
         public const string ContractManagement_Status = "ContractMgmt_Status";
         public const string MessageManagement_Status = "MessageMgmt_Status";
         
+        public const string Site_Status = "Site_Status";
+        public const string Site_Area = "Site_Area";
 
 
     }

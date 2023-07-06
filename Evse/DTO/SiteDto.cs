@@ -33,6 +33,9 @@ namespace Evse.DTO
         public string Latitude { get; set; }
         public string LandlordGuid { get; set; }
         public string CountyGuid { get; set; }
+        public string Area { get; set; }
+        public string AreaName { get; set; }
+        public string StatusName { get; set; }
         
         public List<IFormFile> File { get; set; }
     }

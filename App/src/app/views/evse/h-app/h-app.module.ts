@@ -51,7 +51,7 @@ interface Environment {
   exports: [
 
   ],
-  declarations: [						
+  declarations: [							
     H1ElectricityPriceComponent,
     H2CouponManagementComponent,
     H2CouponManagementActionComponent,
@@ -63,7 +63,7 @@ interface Environment {
     H7MessageManagementComponent,
     H7MessageManagementActionComponent,
     H5ContractManagementComponent,
-    H8MessagePushManagementComponent,
+    H8MessagePushManagementComponent
    ]
 })
 export class HAppModule {

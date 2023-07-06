@@ -1,0 +1,305 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <button
+        type="submit"
+        [disabled]="
+          !model.siteName
+        "
+        (click)="save()"
+        class="btn btn-success"
+      >
+        {{ "SAVE" | translate }}
+      </button>
+      </div>
+      <div class="card-body">
+          <div class="d-flex justify-content-center" *ngIf="loading == 1">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+           </div>
+
+           <div class="form-group row">
+            <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
+            <div class="col-sm-10">
+              <span *ngIf="model.id > 0">{{model.id}}</span>
+            </div>
+          </div>
+
+           <div class="form-group row">
+            <label for="status" class="col-sm-2 col-form-label">{{ 'Site_Status' | translate }}</label>
+            <div class="col-sm-10 d-flex align-items-center">
+              <ejs-switch id="status" [onLabel]="'Active' | translate " [offLabel]="'Inactive' | translate " (change)="changeStatus($event)" [checked]="model.status == 1"></ejs-switch>
+
+            </div>
+          </div>
+
+          
+          <fieldset class="form-group">
+            <div class="row">
+              <label for="status" class="col-sm-2 col-form-label">{{ 'Site_Status' | translate }}</label>
+              <div class="col-sm-10 d-flex align-items-center">
+                <ng-container
+                 *ngFor="let item of statusData; let i =index">
+                  <div class="pretty p-default p-round p-thick">
+                    <input type="radio" name="radio1"  [value]="item.value" [checked]="i==0">
+                    <div class="state">
+                        <label>{{item.name}}</label>
+                    </div>
+                </div>
+                  
+              </ng-container>
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="form-group row">
+              <label for="area" class="col-sm-2 col-form-label">{{ 'Site_Area' | translate }} </label>
+              <div class="col-sm-10">
+                <ejs-dropdownlist id="area" [(ngModel)]="model.area" [dataSource]="areaData" [allowFiltering]="true" [showClearButton]="true"
+              [placeholder]="'Choice a area' | translate" [fields]="{text: 'name', value: 'guid'}"></ejs-dropdownlist>
+              </div>
+           
+          </div>
+
+          <div class="form-group row">
+            <label for="siteName" class="col-sm-2 col-form-label">{{ 'Site_Name' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" [(ngModel)]="model.siteName" id="siteName" [placeholder]="'Enter a ' + this.role + ' name' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="siteAddress" class="col-sm-2 col-form-label">{{ 'Site_Address' | translate }} </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" [(ngModel)]="model.siteAddress" id="siteAddress" [placeholder]="'Enter a site address' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="timeRange" class="col-sm-2 col-form-label">{{ 'Time Range' | translate }}</label>
+            <div class="col-sm-10 d-flex justify-content-start align-items-center">
+              <ejs-timepicker
+              locale="en-US"
+              id="startTime"
+              format="HH:mm"
+              width="100"
+              [enableMask]="true"
+              [(ngModel)]="model.startTime"
+            ></ejs-timepicker>
+            <div class="mx-2">~</div>
+            <ejs-timepicker
+            locale="en-US"
+              stype="width:100px"
+              [enableMask]="true"
+              format="HH:mm"
+              width="100"
+              id="endTime"
+            [(ngModel)]="model.endTime"
+          ></ejs-timepicker>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="area" class="col-sm-2 col-form-label">{{ 'LandLord_Name' | translate }} </label>
+            <div class="col-sm-10">
+              <ejs-dropdownlist id="landLord" [(ngModel)]="model.landLordGuid" [dataSource]="landlordData" [allowFiltering]="true" [showClearButton]="true"
+            [placeholder]="'Choice a landLord name' | translate" [fields]="{text: 'landLordName', value: 'guid'}"></ejs-dropdownlist>
+            </div>
+         
+        </div>
+
+          <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">{{ 'Name' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="name" >
+            </div>
+          </div>
+          
+          <fieldset class="form-group">
+            <div class="row">
+              <label for="Sex" class="col-sm-2 col-form-label">{{ 'Sex' | translate }}</label>
+              <div class="col-sm-10 d-flex align-items-center">
+                
+                  <div class="pretty p-default p-curve p-thick">
+                    <input type="radio" name="sex"  [checked]="true">
+                    <div class="state">
+                        <label>{{'Male' | translate}}</label>
+                    </div>
+                </div>
+
+                <div class="pretty p-default p-curve p-thick">
+                  <input type="radio" name="sex"  >
+                  <div class="state">
+                      <label>{{'Female' | translate}}</label>
+                  </div>
+              </div>
+                  
+              </div>
+            </div>
+          </fieldset>
+
+
+          <div class="form-group row">
+            <label for="idCard" class="col-sm-2 col-form-label">{{ 'Site_idCard' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="idCard" [(ngModel)]="model.idCard" [placeholder]="'Enter a idCard' | translate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="siteMobile" class="col-sm-2 col-form-label">{{ 'Site_MOBILE' | translate }}</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="siteMobile" [(ngModel)]="model.mobile" [placeholder]="'Enter a mobile' | translate">
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <label for="sitePassword" class="col-sm-2 col-form-label">{{ 'Site_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10 ">
+             <div class="password">
+              <input [type]="inputType" class="form-control" id="sitePassword" [(ngModel)]="model.upwd" [placeholder]="'Enter a pwd' | translate">
+              <span class="eye" (click)="togglePassword()">
+                <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
+                <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
+               </span>
+             </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="model.id == 0">
+            <label for="siteRePassword" class="col-sm-2 col-form-label">{{ 'Site_Re_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <div class="col-sm-10 ">
+             <div class="password">
+              <input [type]="inputTypeRePw" (change)="changeRepassword($event)" class="form-control" id="siteRePassword" [(ngModel)]="model.reupwd" [placeholder]="'Enter a re pwd' | translate">
+              <span class="eye" (click)="toggleRePassword()">
+                <i class="fa fa-eye" *ngIf="inputTypeRePw==='password'" ></i>
+                <i class="fa fa-eye-slash" *ngIf="inputTypeRePw==='text'" ></i>
+               </span>
+             </div>
+             <small *ngIf="model.upwd != model.reupwd && model.id === 0" class="form-text text-danger">{{'The uid and re uid are not match' | translate}}</small>
+
+            </div>
+          </div>
+        
+          <div class="form-group row">
+            <label for="contactName" class="col-sm-2 col-form-label">{{ 'Contact_Name' | translate }} </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" [(ngModel)]="model.contactName" id="contactName" [placeholder]="'Enter a contactName' | translate">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="contactRel" class="col-sm-2 col-form-label">{{ 'Contact_Rel' | translate }} </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" [(ngModel)]="model.contactRel" id="contactRel" [placeholder]="'Enter a contactRel' | translate">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="contactTel" class="col-sm-2 col-form-label">{{ 'Contact_Tel' | translate }} </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" [(ngModel)]="model.contactTel" id="contactTel" [placeholder]="'Enter a contactTel' | translate">
+            </div>
+          </div>
+    
+
+          
+          <div class="form-group row" *ngIf="model.id > 0">
+            <label for="contactTel" class="col-sm-2 col-form-label">{{ '' | translate }}</label>
+            <div class="col-sm-10">
+            <label class="">{{ 'Audit_Logs' | translate }}</label>
+              
+<ejs-grid
+#grid
+id="grid"
+[dataSource]="auditLogsData$"
+[allowPaging]="false"
+[enableInfiniteScrolling]="true"
+[allowResizing]="true"
+[allowSorting]="true"
+gridLines="Both"
+[locale]="locale"
+[query]="auditLogsQuery"
+[allowExcelExport]="true"
+height="300"
+>
+
+<ng-template #pagerTemplate let-data>
+  <pre
+  class="page-text"
+  [translate]="pageText"
+  [translateParams]="{ items: grid.pageSettings.totalRecordsCount }"
+  > </pre>
+ <div class="d-flex justify-content-center">
+  <ngb-pagination
+  [collectionSize]="grid.pageSettings.totalRecordsCount"
+  [(page)]="grid.pageSettings.currentPage"
+  [pageSize]="grid.pageSettings.pageSize"
+  [maxSize]="5"
+  [rotate]="true"
+  [ellipses]="false"
+  [boundaryLinks]="true"
+>
+
+<ng-template ngbPaginationFirst><i class="fa fa-step-backward"></i></ng-template>
+<ng-template ngbPaginationLast><i class="fa fa-step-forward"></i></ng-template>
+<ng-template ngbPaginationPrevious><i class="fa fa-caret-left"></i></ng-template>
+<ng-template ngbPaginationNext><i class="fa fa-caret-right"></i></ng-template>
+<ng-template ngbPaginationEllipsis>...</ng-template>
+<ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+
+</ngb-pagination>
+ </div>
+  </ng-template>
+
+<e-columns>
+  
+
+<e-column
+field="actionTypeName"
+width="120"
+textAlign="Left"
+headerTextAlign="Center"
+headerText="{{ 'ActionType' | translate }}"
+>
+
+<ng-template #template let-data>
+  {{ data.actionTypeName | translate }}
+</ng-template>
+
+</e-column>
+
+
+  <e-column
+  field="createDate"
+  editType="datetime"
+  format="yyyy-MM-dd HH:mm:ss"
+  textAlign="Left"
+headerTextAlign="Center"
+  headerText="{{ 'Create_Date' | translate }}"
+>
+</e-column>
+
+<e-column
+field="accountName"
+width="120"
+textAlign="Left"
+headerTextAlign="Center"
+headerText="{{ 'UID' | translate }}"
+>
+</e-column>
+
+
+</e-columns>
+</ejs-grid>
+            </div>
+          </div>
+
+          
+      </div>
+    
+    </div>
+  </div>
+</div>
+

@@ -11,7 +11,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { EvseRoutingModule } from './evse-routing.module';
 
 import { NgbModule, NgbTooltipConfig } from '@ng-bootstrap/ng-bootstrap';
-import { DatePickerAllModule } from '@syncfusion/ej2-angular-calendars';
+import { DatePickerAllModule, TimePickerModule } from '@syncfusion/ej2-angular-calendars';
 
 import { ChartModule } from '@syncfusion/ej2-angular-charts';
 
@@ -71,6 +71,9 @@ import { ElectricianErrorReportComponent } from './electrician-error-report/elec
 import { EngineerErrorReportComponent } from './engineer-error-report/engineer-error-report.component';
 import { EngineerErrorReportActionComponent } from './engineer-error-report/engineer-error-report-action/engineer-error-report-action.component';
 import { ElectricianErrorReportActionComponent } from './electrician-error-report/electrician-error-report-action/electrician-error-report-action.component';
+import { Sitev2ActionComponent } from './sitev2/sitev2-action/sitev2-action.component';
+import { Sitev2Component } from './sitev2/sitev2.component';
+import { Sitev2DetailComponent } from './sitev2/sitev2-detail/sitev2-detail.component';
 
 interface Environment {
   production: boolean;
@@ -101,6 +104,7 @@ const mapOptions:  LazyMapsAPILoaderConfigLiteral = {
     MaskedTextBoxModule ,
     QRCodeGeneratorAllModule ,
     UploaderModule,
+    TimePickerModule,
     PigfarmCoreModule.forRoot(environment.apiUrl)
   ],
   exports: [
@@ -157,6 +161,9 @@ const mapOptions:  LazyMapsAPILoaderConfigLiteral = {
     EngineerErrorReportComponent,
     EngineerErrorReportActionComponent,
     ElectricianErrorReportActionComponent,
+    Sitev2Component,
+    Sitev2ActionComponent,
+    Sitev2DetailComponent
 
   ]
 })

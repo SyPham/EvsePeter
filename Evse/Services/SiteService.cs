@@ -80,6 +80,7 @@ IWebHostEnvironment currentEnvironment)
                                   SiteAddress = a.SiteAddress,
                                   SiteLocation = a.SiteLocation,
                                   SitePhoto = a.SitePhoto,
+                                  Area = a.Area,
 
                                   Comment = a.Comment,
                                   CreateDate = a.CreateDate,
@@ -120,10 +121,20 @@ IWebHostEnvironment currentEnvironment)
         public async Task<object> LoadData(DataManager data, string lang)
         {
             var datasource = (from a in _repo.FindAll(x => x.Status == StatusConstants.Default)
+
+                              join s in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Status && x.Status == "Y") on a.Status equals Convert.ToDecimal(s.CodeNo) into ab2
+                              from t2 in ab2.DefaultIfEmpty()
+
+                             join ar in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Area && x.Status == "Y") on a.Area equals ar.CodeNo into area
+                              from t3 in area.DefaultIfEmpty()
+
                               join b in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Type && x.Status == "Y") on a.Type equals b.CodeNo into ab
                               from t in ab.DefaultIfEmpty()
                               join c in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Location && x.Status == "Y") on a.SiteLocation equals c.CodeNo into ac
                               from l in ac.DefaultIfEmpty()
+                           
+                              
+
                               select new SiteDto
                               {
                                   Id = a.Id,
@@ -135,6 +146,7 @@ IWebHostEnvironment currentEnvironment)
                                   SiteAddress = a.SiteAddress,
                                   SiteLocation = a.SiteLocation,
                                   SitePhoto = a.SitePhoto,
+                                  Area = a.Area,
 
                                   Comment = a.Comment,
                                   CreateDate = a.CreateDate,
@@ -151,6 +163,8 @@ IWebHostEnvironment currentEnvironment)
                                   CountyGuid = a.CountyGuid,
                                   TypeName = t == null ? "" : lang == Languages.EN ? t.CodeNameEn ?? t.CodeName : lang == Languages.VI ? t.CodeNameVn ?? t.CodeName : lang == Languages.CN ? t.CodeNameCn ?? t.CodeName : t.CodeName,
                                   SiteLocationName = l == null ? "" : lang == Languages.EN ? l.CodeNameEn ?? l.CodeName : lang == Languages.VI ? l.CodeNameVn ?? l.CodeName : lang == Languages.CN ? l.CodeNameCn ?? l.CodeName : l.CodeName,
+                                  StatusName = t2 == null ? "" : lang == Languages.EN ? t2.CodeNameEn ?? t2.CodeName : lang == Languages.VI ? t2.CodeNameVn ?? t2.CodeName : lang == Languages.CN ? t2.CodeNameCn ?? t2.CodeName : t2.CodeName,
+                                  AreaName = t3 == null ? "" : lang == Languages.EN ? t3.CodeNameEn ?? t3.CodeName : lang == Languages.VI ? t3.CodeNameVn ?? t3.CodeName : lang == Languages.CN ? t3.CodeNameCn ?? t3.CodeName : t3.CodeName,
                               }).OrderByDescending(x => x.Id).AsQueryable();
 
             var count = await datasource.CountAsync();
@@ -189,6 +203,7 @@ IWebHostEnvironment currentEnvironment)
                                   SiteAddress = a.SiteAddress,
                                   SiteLocation = a.SiteLocation,
                                   SitePhoto = a.SitePhoto,
+                                //   Area = a.Area,
 
                                   Comment = a.Comment,
                                   CreateDate = a.CreateDate,

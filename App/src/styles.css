@@ -24,7 +24,11 @@
 /* @import '../pretty-checkbox/src/pretty-checkbox.scss'; */
 /* @import '~pretty-checkbox/src/pretty-checkbox.scss'; */
 /* @import "~@ng-select/ng-select/themes/default.theme.css"; */
+#area .e-input-group {
+  box-shadow: 0 !important;
+  padding:3px !important;
 
+}
 .status-2 {
   background-color: rgb(190, 255, 202);
 
