@@ -57,7 +57,7 @@
           <div class="form-group row">
               <label for="area" class="col-sm-2 col-form-label">{{ 'Site_Area' | translate }} </label>
               <div class="col-sm-10">
-                <ejs-dropdownlist id="area" [(ngModel)]="model.area" [dataSource]="areaData" [allowFiltering]="true" [showClearButton]="true"
+                <ejs-dropdownlist id="area"  [(ngModel)]="model.area" [dataSource]="areaData" [allowFiltering]="false" [showClearButton]="true"
               [placeholder]="'Choice a area' | translate" [fields]="{text: 'name', value: 'guid'}"></ejs-dropdownlist>
               </div>
            
@@ -66,7 +66,7 @@
           <div class="form-group row">
             <label for="siteName" class="col-sm-2 col-form-label">{{ 'Site_Name' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" [(ngModel)]="model.siteName" id="siteName" [placeholder]="'Enter a ' + this.role + ' name' | translate">
+              <input type="text" class="form-control" [(ngModel)]="model.siteName" id="siteName" [placeholder]="'Enter a site name' | translate">
             </div>
           </div>
 
@@ -104,7 +104,7 @@
           <div class="form-group row">
             <label for="area" class="col-sm-2 col-form-label">{{ 'LandLord_Name' | translate }} </label>
             <div class="col-sm-10">
-              <ejs-dropdownlist id="landLord" [(ngModel)]="model.landLordGuid" [dataSource]="landlordData" [allowFiltering]="true" [showClearButton]="true"
+              <ejs-dropdownlist id="landLord" [(ngModel)]="model.landlordGuid" [dataSource]="landlordData" [allowFiltering]="false" [showClearButton]="true"
             [placeholder]="'Choice a landLord name' | translate" [fields]="{text: 'landLordName', value: 'guid'}"></ejs-dropdownlist>
             </div>
          
@@ -113,7 +113,7 @@
           <div class="form-group row">
             <label for="name" class="col-sm-2 col-form-label">{{ 'Name' | translate }}</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="name" >
+              <input type="text"  [(ngModel)]="model.name" class="form-control" id="name" >
             </div>
           </div>
           
@@ -144,14 +144,14 @@
           <div class="form-group row">
             <label for="idCard" class="col-sm-2 col-form-label">{{ 'Site_idCard' | translate }}</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="idCard" [(ngModel)]="model.idCard" [placeholder]="'Enter a idCard' | translate">
+              <input type="text" maxlength="200" class="form-control" id="idCard" [(ngModel)]="model.idCard" [placeholder]="'Enter a idCard' | translate">
             </div>
           </div>
 
           <div class="form-group row">
             <label for="siteMobile" class="col-sm-2 col-form-label">{{ 'Site_MOBILE' | translate }}</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="siteMobile" [(ngModel)]="model.mobile" [placeholder]="'Enter a mobile' | translate">
+              <input type="text" maxlength="20" class="form-control" id="siteMobile" [(ngModel)]="model.mobile" [placeholder]="'Enter a mobile' | translate">
             </div>
           </div>
 
@@ -160,7 +160,7 @@
             <label for="sitePassword" class="col-sm-2 col-form-label">{{ 'Site_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10 ">
              <div class="password">
-              <input [type]="inputType" class="form-control" id="sitePassword" [(ngModel)]="model.upwd" [placeholder]="'Enter a pwd' | translate">
+              <input [type]="inputType" maxlength="200" class="form-control" id="sitePassword" [(ngModel)]="model.upwd" [placeholder]="'Enter a pwd' | translate">
               <span class="eye" (click)="togglePassword()">
                 <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
                 <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
@@ -173,7 +173,7 @@
             <label for="siteRePassword" class="col-sm-2 col-form-label">{{ 'Site_Re_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10 ">
              <div class="password">
-              <input [type]="inputTypeRePw" (change)="changeRepassword($event)" class="form-control" id="siteRePassword" [(ngModel)]="model.reupwd" [placeholder]="'Enter a re pwd' | translate">
+              <input [type]="inputTypeRePw" maxlength="200" (change)="changeRepassword($event)" class="form-control" id="siteRePassword" [(ngModel)]="model.reupwd" [placeholder]="'Enter a re pwd' | translate">
               <span class="eye" (click)="toggleRePassword()">
                 <i class="fa fa-eye" *ngIf="inputTypeRePw==='password'" ></i>
                 <i class="fa fa-eye-slash" *ngIf="inputTypeRePw==='text'" ></i>
@@ -187,19 +187,19 @@
           <div class="form-group row">
             <label for="contactName" class="col-sm-2 col-form-label">{{ 'Contact_Name' | translate }} </label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" [(ngModel)]="model.contactName" id="contactName" [placeholder]="'Enter a contactName' | translate">
+              <input type="text" maxlength="200" class="form-control" [(ngModel)]="model.contactName" id="contactName" [placeholder]="'Enter a contactName' | translate">
             </div>
           </div>
           <div class="form-group row">
             <label for="contactRel" class="col-sm-2 col-form-label">{{ 'Contact_Rel' | translate }} </label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" [(ngModel)]="model.contactRel" id="contactRel" [placeholder]="'Enter a contactRel' | translate">
+              <input type="text" maxlength="200" class="form-control" [(ngModel)]="model.contactRel" id="contactRel" [placeholder]="'Enter a contactRel' | translate">
             </div>
           </div>
           <div class="form-group row">
             <label for="contactTel" class="col-sm-2 col-form-label">{{ 'Contact_Tel' | translate }} </label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" [(ngModel)]="model.contactTel" id="contactTel" [placeholder]="'Enter a contactTel' | translate">
+              <input type="text" maxlength="200" class="form-control" [(ngModel)]="model.contactTel" id="contactTel" [placeholder]="'Enter a contactTel' | translate">
             </div>
           </div>
     

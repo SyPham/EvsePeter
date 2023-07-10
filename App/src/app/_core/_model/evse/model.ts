@@ -151,8 +151,8 @@ export interface Site {
     contactName: any;
     contactRel: any;
     contactTel: any;
-    landLordGuid: any;
     statusName: any;
+    name: any;
 }
 export interface ParkingLot {
     id: number;

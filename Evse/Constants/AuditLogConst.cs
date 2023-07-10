@@ -11,6 +11,7 @@ namespace Evse.Constants
         {
             public static string XAccount = "XAccount";
             public static string Member = "Member";
+            public static string Site = "Site";
         }
         public class ActionType
         {

@@ -65,6 +65,7 @@ export class Sitev2Component extends BaseComponent implements OnInit {
     }
     lastLoginDate
   ngOnInit() {
+    console.log(this.currentUser)
     this.loadCounty();
     this.xAccountService.getById(this.currentUser.id).subscribe(x=> {
       this.lastLoginDate = x.lastLoginDate;
@@ -360,7 +361,7 @@ export class Sitev2Component extends BaseComponent implements OnInit {
   
   }
   fnView(data) {
-    let link = `/evse/sitev2/detail/${0}`;
+    let link = `/evse/sitev2/detail/${data.id}`;
     this.router.navigateByUrl(link)
   }
   fnDelete(data) {

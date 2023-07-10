@@ -350,7 +350,9 @@ id: any;
   pageText = 'Total Records Count {{items}} items'
 
   auditLogs() {
-    this.auditLogsQuery = new Query().where("recordId", 'equal', this.id);
+    this.auditLogsQuery = new Query()
+    .where("recordId", 'equal', this.id)
+    .where("tableName", 'equal', 'XAccount');
     this.auditLogsData$ = new DataManager({
       url: `${environment.apiUrl}AuditLog/LoadData?lang=${localStorage.getItem('lang')}`,
       adaptor: new UrlAdaptor,

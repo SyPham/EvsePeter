@@ -30,6 +30,17 @@ namespace Evse.Models
         public string LandlordGuid { get; set; }
         public string CountyGuid { get; set; }
         public string Area { get; set; }
+        public string Upwd { get; set; }
+        public string ContactName { get; set; }
+        public string ContactRel { get; set; }
+        public string ContactTel { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public string IdCard { get; set; }
+        public bool? Sex { get; set; }
+        public string Name { get; set; }
+        public string Mobile { get; set; }
+
         
     }
 }

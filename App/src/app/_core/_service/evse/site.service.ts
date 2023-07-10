@@ -49,4 +49,7 @@ export class SiteService extends CURDService<Site> {
   getByGuid(guid): Observable<any> {
     return this.http.get<any>(`${this.base}Site/GetByGuid?guid=${guid}`, {});
   }
+  getByIdAndLang(id): Observable<any> {
+    return this.http.get<any>(`${this.base}Site/GetByIdAndLang?id=${id}&lang=${localStorage.getItem('lang')}`, {});
+  }
 }

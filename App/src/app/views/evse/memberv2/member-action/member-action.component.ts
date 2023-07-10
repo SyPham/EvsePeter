@@ -408,7 +408,9 @@ public path4: Object = {
   removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=4`
 };
 auditLogs() {
-  this.auditLogsQuery = new Query().where("recordId", 'equal', this.id);
+  this.auditLogsQuery = new Query()
+  .where("recordId", 'equal', this.id)
+  .where("tableName", 'equal', 'Member');
   this.auditLogsData$ = new DataManager({
     url: `${environment.apiUrl}AuditLog/LoadData?lang=${localStorage.getItem('lang')}`,
     adaptor: new UrlAdaptor,

@@ -157,9 +157,9 @@
             <ng-template #template let-data>
             
             
-          <button type="button" (click)="fnEdit(data)" class="btn btn-sm btn-success mr-2">{{ 'Edit' | translate }}</button>
+          <button type="button" (click)="fnEdit(data)" *ngIf="currentUser.groupCode ==='Admin'" class="btn btn-sm btn-success mr-2">{{ 'Edit' | translate }}</button>
           <button type="button" (click)="fnView(data)" class="btn btn-sm btn-primary mr-2">{{ 'View' | translate }}</button>
-          <button type="button" (click)="fnDelete(data)" class="btn btn-sm btn-danger">{{ 'Delete' | translate }}</button>
+          <button type="button" (click)="fnDelete(data)" *ngIf="currentUser.groupCode ==='Admin'" class="btn btn-sm btn-danger">{{ 'Delete' | translate }}</button>
       
             </ng-template>
           </e-column>

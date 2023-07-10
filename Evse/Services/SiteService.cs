@@ -25,6 +25,7 @@ namespace Evse.Services
     {
         Task<object> LoadData(DataManager data, string lang);
         Task<object> GetByGuid(string guid);
+        Task<object> GetByIdAndLang(decimal id, string lang);
         Task<object> GetAudit(object id);
         Task<object> DeleteUploadFile(decimal key);
         Task<OperationResult> AddFormAsync(SiteDto model);
@@ -41,6 +42,8 @@ namespace Evse.Services
         private readonly MapperConfiguration _configMapper;
         private readonly IEvseLoggerService _logger;
         private readonly IWebHostEnvironment _currentEnvironment;
+        private readonly IAuditLogService _auditLogService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public SiteService(
             IRepositoryBase<Site> repo,
             IRepositoryBase<CodeType> repoCodeType,
@@ -50,7 +53,9 @@ namespace Evse.Services
             MapperConfiguration configMapper,
 IEvseLoggerService logger
 ,
-IWebHostEnvironment currentEnvironment)
+IWebHostEnvironment currentEnvironment,
+IAuditLogService auditLogService,
+IHttpContextAccessor httpContextAccessor)
             : base(repo, logger, unitOfWork, mapper, configMapper)
         {
             _repo = repo;
@@ -61,8 +66,69 @@ IWebHostEnvironment currentEnvironment)
             _mapper = mapper;
             _configMapper = configMapper;
             _currentEnvironment = currentEnvironment;
+            _auditLogService = auditLogService;
+            _httpContextAccessor = httpContextAccessor;
         }
-         public override async Task<object> GetDataDropdownlist(DataManager data)
+        private IQueryable<SiteDto> Datasource(string lang) {
+             var datasource = (from a in _repo.FindAll(x => x.Status == StatusConstants.Default)
+
+                              join s in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Status && x.Status == "Y") on a.Status equals Convert.ToDecimal(s.CodeNo) into ab2
+                              from t2 in ab2.DefaultIfEmpty()
+
+                             join ar in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Area && x.Status == "Y") on a.Area equals ar.CodeNo into area
+                              from t3 in area.DefaultIfEmpty()
+
+                              join b in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Type && x.Status == "Y") on a.Type equals b.CodeNo into ab
+                              from t in ab.DefaultIfEmpty()
+                              join c in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Location && x.Status == "Y") on a.SiteLocation equals c.CodeNo into ac
+                              from l in ac.DefaultIfEmpty()
+                           
+                              
+
+                              select new SiteDto
+                              {
+                                  Id = a.Id,
+                                  Type = a.Type,
+                                  SiteNo = a.SiteNo,
+                                  SiteName = a.SiteName,
+                                  SitePrincipal = a.SitePrincipal,
+                                  SiteTel = a.SiteTel,
+                                  SiteAddress = a.SiteAddress,
+                                  SiteLocation = a.SiteLocation,
+                                  SitePhoto = a.SitePhoto,
+                                  Area = a.Area,
+                                  ContactName = a.ContactName,
+                                  ContactRel = a.ContactRel,
+                                  ContactTel = a.ContactTel,
+                                  Upwd = a.Upwd,
+                                  StartTime = a.StartTime,
+                                  EndTime = a.EndTime,
+                                  IdCard = a.IdCard,
+                                  Sex = a.Sex,
+                                  Name = a.Name,
+                                  Mobile = a.Mobile,
+
+                                  Comment = a.Comment,
+                                  CreateDate = a.CreateDate,
+                                  CreateBy = a.CreateBy,
+                                  UpdateDate = a.UpdateDate,
+                                  UpdateBy = a.UpdateBy,
+                                  DeleteDate = a.DeleteDate,
+                                  DeleteBy = a.DeleteBy,
+                                  Status = a.Status,
+                                  Guid = a.Guid,
+                                  Longitude = a.Longitude,
+                                  Latitude = a.Latitude,
+                                  LandlordGuid = a.LandlordGuid,
+                                  CountyGuid = a.CountyGuid,
+                                  TypeName = t == null ? "" : lang == Languages.EN ? t.CodeNameEn ?? t.CodeName : lang == Languages.VI ? t.CodeNameVn ?? t.CodeName : lang == Languages.CN ? t.CodeNameCn ?? t.CodeName : t.CodeName,
+                                  SiteLocationName = l == null ? "" : lang == Languages.EN ? l.CodeNameEn ?? l.CodeName : lang == Languages.VI ? l.CodeNameVn ?? l.CodeName : lang == Languages.CN ? l.CodeNameCn ?? l.CodeName : l.CodeName,
+                                  StatusName = t2 == null ? "" : lang == Languages.EN ? t2.CodeNameEn ?? t2.CodeName : lang == Languages.VI ? t2.CodeNameVn ?? t2.CodeName : lang == Languages.CN ? t2.CodeNameCn ?? t2.CodeName : t2.CodeName,
+                                  AreaName = t3 == null ? "" : lang == Languages.EN ? t3.CodeNameEn ?? t3.CodeName : lang == Languages.VI ? t3.CodeNameVn ?? t3.CodeName : lang == Languages.CN ? t3.CodeNameCn ?? t3.CodeName : t3.CodeName,
+                              }).OrderByDescending(x => x.Id).AsQueryable();
+return datasource;
+        }
+        public override async Task<object> GetDataDropdownlist(DataManager data)
         {
             var datasource = (from a in _repo.FindAll(x => x.Status == 1)
                               select new
@@ -120,52 +186,7 @@ IWebHostEnvironment currentEnvironment)
         }
         public async Task<object> LoadData(DataManager data, string lang)
         {
-            var datasource = (from a in _repo.FindAll(x => x.Status == StatusConstants.Default)
-
-                              join s in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Status && x.Status == "Y") on a.Status equals Convert.ToDecimal(s.CodeNo) into ab2
-                              from t2 in ab2.DefaultIfEmpty()
-
-                             join ar in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Area && x.Status == "Y") on a.Area equals ar.CodeNo into area
-                              from t3 in area.DefaultIfEmpty()
-
-                              join b in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Type && x.Status == "Y") on a.Type equals b.CodeNo into ab
-                              from t in ab.DefaultIfEmpty()
-                              join c in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Site_Location && x.Status == "Y") on a.SiteLocation equals c.CodeNo into ac
-                              from l in ac.DefaultIfEmpty()
-                           
-                              
-
-                              select new SiteDto
-                              {
-                                  Id = a.Id,
-                                  Type = a.Type,
-                                  SiteNo = a.SiteNo,
-                                  SiteName = a.SiteName,
-                                  SitePrincipal = a.SitePrincipal,
-                                  SiteTel = a.SiteTel,
-                                  SiteAddress = a.SiteAddress,
-                                  SiteLocation = a.SiteLocation,
-                                  SitePhoto = a.SitePhoto,
-                                  Area = a.Area,
-
-                                  Comment = a.Comment,
-                                  CreateDate = a.CreateDate,
-                                  CreateBy = a.CreateBy,
-                                  UpdateDate = a.UpdateDate,
-                                  UpdateBy = a.UpdateBy,
-                                  DeleteDate = a.DeleteDate,
-                                  DeleteBy = a.DeleteBy,
-                                  Status = a.Status,
-                                  Guid = a.Guid,
-                                  Longitude = a.Longitude,
-                                  Latitude = a.Latitude,
-                                  LandlordGuid = a.LandlordGuid,
-                                  CountyGuid = a.CountyGuid,
-                                  TypeName = t == null ? "" : lang == Languages.EN ? t.CodeNameEn ?? t.CodeName : lang == Languages.VI ? t.CodeNameVn ?? t.CodeName : lang == Languages.CN ? t.CodeNameCn ?? t.CodeName : t.CodeName,
-                                  SiteLocationName = l == null ? "" : lang == Languages.EN ? l.CodeNameEn ?? l.CodeName : lang == Languages.VI ? l.CodeNameVn ?? l.CodeName : lang == Languages.CN ? l.CodeNameCn ?? l.CodeName : l.CodeName,
-                                  StatusName = t2 == null ? "" : lang == Languages.EN ? t2.CodeNameEn ?? t2.CodeName : lang == Languages.VI ? t2.CodeNameVn ?? t2.CodeName : lang == Languages.CN ? t2.CodeNameCn ?? t2.CodeName : t2.CodeName,
-                                  AreaName = t3 == null ? "" : lang == Languages.EN ? t3.CodeNameEn ?? t3.CodeName : lang == Languages.VI ? t3.CodeNameVn ?? t3.CodeName : lang == Languages.CN ? t3.CodeNameCn ?? t3.CodeName : t3.CodeName,
-                              }).OrderByDescending(x => x.Id).AsQueryable();
+            var datasource = Datasource(lang);
 
             var count = await datasource.CountAsync();
             if (data.Where != null) // for filtering
@@ -278,6 +299,16 @@ IWebHostEnvironment currentEnvironment)
             _repo.Update(item);
             try
             {
+                 string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
+                await _auditLogService.AddAsync(new AuditLogDto
+                    {
+                        AccountId = accountId,
+                        RecordId = item.Id,
+                        ActionType = AuditLogConst.ActionType.Delete,
+                        TableName = AuditLogConst.TableName.Site,
+                        CreateDate = DateTime.Now,
+                    });
                 await _unitOfWork.SaveChangeAsync();
                 operationResult = new OperationResult
                 {
@@ -353,6 +384,16 @@ IWebHostEnvironment currentEnvironment)
                 var item = _mapper.Map<Site>(model);
                 item.Status = StatusConstants.Default;
                 _repo.Add(item);
+                 string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
+                await _auditLogService.AddAsync(new AuditLogDto
+                    {
+                        AccountId = accountId,
+                        RecordId = item.Id,
+                        ActionType = AuditLogConst.ActionType.Add,
+                        TableName = AuditLogConst.TableName.Site,
+                        CreateDate = DateTime.Now,
+                    });
                 await _unitOfWork.SaveChangeAsync();
 
                 operationResult = new OperationResult
@@ -449,6 +490,16 @@ IWebHostEnvironment currentEnvironment)
             {
 
                 _repo.Update(item);
+                  string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+                var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
+                await _auditLogService.AddAsync(new AuditLogDto
+                    {
+                        AccountId = accountId,
+                        RecordId = item.Id,
+                        ActionType = AuditLogConst.ActionType.Edit,
+                        TableName = AuditLogConst.TableName.Site,
+                        CreateDate = DateTime.Now,
+                    });
                 await _unitOfWork.SaveChangeAsync();
 
                 operationResult = new OperationResult
@@ -510,6 +561,10 @@ IWebHostEnvironment currentEnvironment)
             }
         }
 
-
+        public async Task<object> GetByIdAndLang(decimal id, string lang)
+        {
+            var datasource = Datasource(lang);
+            return await datasource.FirstOrDefaultAsync(x=> x.Id == id);
+        }
     }
 }

@@ -71,14 +71,12 @@ id: any;
 
   constructor(
     private service: SiteService,
-    private serviceXAccount: XAccountService,
     private serviceEmployee: EmployeeService,
     public modalService: NgbModal,
     private serviceFarm: FarmService,
     private alertify: AlertifyService,
     private utilityService: UtilitiesService,
     private datePipe: DatePipe,
-     private config: NgbTooltipConfig,
     public translate: TranslateService,
     private router: Router,
     private route: ActivatedRoute,
@@ -86,24 +84,24 @@ id: any;
   ) { 
 
   }
-  role = 'Site';
- async ngOnInit() {
+  ngOnInit() {
   this.id = +this.route.snapshot.params['id'];
-  this.role = this.route.snapshot.data['functionCode'];
 
   if ( this.id === 0) {
     this.reset()
 
   } else {
-  const model=  await this.loadDetail();
-  if (model == null) {
-    this.alertify.errorConfirm("", this.translate.instant("Not found record"), () => {
-      this.router.navigateByUrl("/")
-      return;
-    })
-   
-  }
-  this.model = model;
+  this.loadDetail().subscribe(model => {
+    if (model == null) {
+      this.alertify.errorConfirm("", this.translate.instant("Not found record"), () => {
+        this.router.navigateByUrl("/")
+        return;
+      })
+     
+    }
+    this.model = model;
+  });
+ 
     this.getAudit(this.id);
    this.auditLogs();
 
@@ -115,15 +113,7 @@ id: any;
    this.loadlandlord();
    
   }
- 
-  getAccountNo() {
-    if (this.model?.siteNo && this.role) {
-      this.serviceXAccount.getAccountNo(this.role, this.model.siteNo).subscribe(res=> {
-      this.model.siteNo =  res['value'];
-      })
-    }
-   
-  }
+
   inputType = 'password'
   inputTypeRePw = 'password'
   togglePassword() {
@@ -133,7 +123,7 @@ id: any;
     this.inputTypeRePw = this.inputTypeRePw === "password" ? "text": "password"
   }
   loadDetail() {
-   return this.service.getById(this.id).toPromise()
+   return this.service.getById(this.id)
   }
   loadStatusConfig() {
     let query = new Query();
@@ -204,7 +194,7 @@ id: any;
 
   }
   back() {
-      this.router.navigateByUrl("/evse/site-v2")
+      this.router.navigateByUrl("/evse/sitev2")
   }
   create() {
   
@@ -279,7 +269,7 @@ id: any;
     for (let key in model) {
       let value = model[key];
       if (value && value instanceof Date) {
-        if (key === 'createDate') {
+        if (key === 'createDate' || key === 'startTime'|| key === 'endTime') {
           model[key] = this.datePipe.transform(value, "yyyy/MM/dd HH:mm:ss");
         } else {
           model[key] = this.datePipe.transform(value, "yyyy/MM/dd");
@@ -305,18 +295,18 @@ id: any;
     });
     data.executeQuery(this.query.sortBy('guid')).then((x: any)=> {
       this.contactRelData = x.result;
-      if (this.model.id > 0 && this.contactRelData.length > 0) {
-       
-      }
     })
   }
   auditLogsQuery: Query; 
+  areaQuery: Query; 
   auditLogsData$: any; 
   locale = localStorage.getItem('lang');
   pageText = 'Total Records Count {{items}} items'
   
 auditLogs() {
-  this.auditLogsQuery = new Query().where("recordId", 'equal', this.id);
+  this.auditLogsQuery = new Query()
+  .where("recordId", 'equal', this.id)
+  .where("tableName", 'equal', "Site");
   this.auditLogsData$ = new DataManager({
     url: `${environment.apiUrl}AuditLog/LoadData?lang=${localStorage.getItem('lang')}`,
     adaptor: new UrlAdaptor,
@@ -328,16 +318,12 @@ loadArea() {
   let query = new Query();
     const accessToken = localStorage.getItem("token");
     const lang = localStorage.getItem("lang");
-    new DataManager({
+    this.areaData =   new DataManager({
       url: `${environment.apiUrl}CodeType/GetDataDropdownlist?lang=${lang}&codeType=Site_Area`,
       adaptor: new UrlAdaptor(),
       headers: [{ authorization: `Bearer ${accessToken}` }],
     })
-      .executeQuery(query)
-      .then((x: any) => {
-        console.log(x);
-        this.areaData = x.result;
-      });
+    
 }
 
 landlordData

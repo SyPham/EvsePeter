@@ -61,6 +61,11 @@ namespace Evse.Controllers
         {
             return Ok(await _service.GetByIDAsync(id));
         }
+        [HttpGet]
+        public async Task<ActionResult> GetByIdAndLang(decimal id, string lang)
+        {
+            return Ok(await _service.GetByIdAndLang(id, lang));
+        }
 
         [HttpGet]
         public async Task<ActionResult> GetWithPaginationsAsync(PaginationParams paramater)
