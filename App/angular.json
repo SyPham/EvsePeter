@@ -131,6 +131,42 @@
         }
       }
     },
+    "acv-shared": {
+      "projectType": "library",
+      "root": "projects/acv-shared",
+      "sourceRoot": "projects/acv-shared/src",
+      "prefix": "acv",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/acv-shared/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/acv-shared/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/acv-shared/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "tsConfig": "projects/acv-shared/tsconfig.spec.json",
+            "polyfills": ["zone.js", "zone.js/testing"]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["projects/acv-shared/**/*.ts", "projects/acv-shared/**/*.html"]
+          }
+        }
+      }
+    },
     "@pigfarm-core": {
       "projectType": "library",
       "root": "projects/pigfarm-core",

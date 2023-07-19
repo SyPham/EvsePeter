@@ -2,6 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
+      "@acv/acv-shared": ["projects/acv-shared/src/public-api.ts"],
+      "@acv/acv-shared/proxy": ["projects/acv-shared/proxy/public-api.ts"],
       "@pigfarm-core": [
         "dist/pigfarm-core/*",
         "dist/pigfarm-core"

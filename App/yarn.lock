@@ -2,6 +2,39 @@
 # yarn lockfile v1
 
 
+"@abp/ng.core@~7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@abp/ng.core/-/ng.core-7.3.0.tgz#12544c12dab6f94b2da88b26b282b160fffcf83f"
+  integrity sha512-XfZ7kTdURZntt+LfJ2KMJFiNe4ofWL5wk0Gekm4a2PctykE21GuO4vuWIpEOKWJL19ii4viBQYVqwv5eW5HFMQ==
+  dependencies:
+    "@abp/utils" "~7.3.0"
+    angular-oauth2-oidc "^15.0.1"
+    just-clone "^6.1.1"
+    just-compare "^2.3.0"
+    ts-toolbelt "6.15.4"
+    tslib "^2.0.0"
+
+"@abp/ng.theme.shared@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@abp/ng.theme.shared/-/ng.theme.shared-7.3.0.tgz#ae49bdd75ab50e8f54972d22c8bdf2f3b6ce1798"
+  integrity sha512-5Al2VZby1jPvAXnHVN3hJMxP0XbBPlMBoXJfX2bNwnof5PkrJoJlLGNxjIl5lZl1QOIS3z7Jigjc0J0WLLCBKw==
+  dependencies:
+    "@abp/ng.core" "~7.3.0"
+    "@fortawesome/fontawesome-free" "^5.15.4"
+    "@ng-bootstrap/ng-bootstrap" "^15.0.0"
+    "@ngx-validate/core" "^0.2.0"
+    "@popperjs/core" "~2.11.2"
+    "@swimlane/ngx-datatable" "^20.0.0"
+    bootstrap "^5.2.0"
+    tslib "^2.0.0"
+
+"@abp/utils@~7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@abp/utils/-/utils-7.3.0.tgz#ebc52d452d31ee9917847e45096ca1a00964bf49"
+  integrity sha512-+fMUDZ/gcry9wkA/c16tEhfDEue/b9IspiRDceTjUu0Frvy6DOSMDSs3wpTvhDGLSsHZYL3x64DMx/sQgN4G/g==
+  dependencies:
+    just-compare "^2.3.0"
+
 "@agm/core@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@agm/core/-/core-1.1.0.tgz#6f8dcbac068f681fe4fa9b0a0cbf660588025911"
@@ -1331,6 +1364,13 @@
   resolved "https://registry.yarnpkg.com/@lgaitan/pace-progress/-/pace-progress-1.0.7.tgz#c96fbbd9fd4cf528feed34ea0c8f9d8b3e98f0dd"
   integrity sha512-GMoTcF6WBpno7a7Iyx7M79os26d5bCDbh7YTZmXZM8YuLR3DDtwo0/CBYddStGD6QIBTieFDz4IAQiO0dAdRGw==
 
+"@ng-bootstrap/ng-bootstrap@^15.0.0":
+  version "15.1.0"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-15.1.0.tgz#d43d8a01e7b21da70af55eef2cbf614a3a81c332"
+  integrity sha512-4Z/sXYcAq22D15jtlnZV7qztuSnlSlOgO7EVp6rJ8dyGi3CPzX9PqMfetoM6K5sKQTiSW8IfsbdXCWN7rnzxWQ==
+  dependencies:
+    tslib "^2.3.0"
+
 "@ng-bootstrap/ng-bootstrap@^8.0.0":
   version "8.0.4"
   resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-8.0.4.tgz#bb88a466b2f84ff929fbb6d727b0f9a4d8f33704"
@@ -1365,6 +1405,13 @@
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@ngx-translate/http-loader/-/http-loader-6.0.0.tgz#041393ab5753f50ecf64262d624703046b8c7570"
   integrity sha512-LCekn6qCbeXWlhESCxU1rAbZz33WzDG0lI7Ig0pYC1o5YxJWrkU9y3Y4tNi+jakQ7R6YhTR2D3ox6APxDtA0wA==
+  dependencies:
+    tslib "^2.0.0"
+
+"@ngx-validate/core@^0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@ngx-validate/core/-/core-0.2.0.tgz#5b3d9bb963c2fcb5cb6d745ca2f553d411082a3f"
+  integrity sha512-04iGHPCXyFCykAyCGehxetziOt69Lhk/6yWifhC/vc8PZJ0S8m3hIn6tI63pEdVoV95+Hc1GQ1K/wMRtRD0uLQ==
   dependencies:
     tslib "^2.0.0"
 
@@ -1454,6 +1501,11 @@
     node-gyp "^7.1.0"
     read-package-json-fast "^2.0.1"
 
+"@popperjs/core@~2.11.2":
+  version "2.11.8"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
+  integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
+
 "@rollup/plugin-commonjs@^17.0.0":
   version "17.1.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-commonjs/-/plugin-commonjs-17.1.0.tgz#757ec88737dffa8aa913eb392fade2e45aef2a2d"
@@ -1539,6 +1591,13 @@
   version "5.0.15"
   resolved "https://registry.yarnpkg.com/@sweetalert2/theme-bootstrap-4/-/theme-bootstrap-4-5.0.15.tgz#bede688c13784acf73e01352e00d3e7fb8d69e01"
   integrity sha512-WsGXk67Yz3Txe3lJA4FNqQCKbQQ6yJLpVUknyGcoESVvwHm+UBBlIMHAcKuLvF+WXK9Rbq8gXhpDIU8ISoiPlQ==
+
+"@swimlane/ngx-datatable@^20.0.0":
+  version "20.1.0"
+  resolved "https://registry.yarnpkg.com/@swimlane/ngx-datatable/-/ngx-datatable-20.1.0.tgz#0f69552e6f2d0d68508165fcf9150a5f4a458253"
+  integrity sha512-oHnnx1QRNmv10l5UME13v5JP3M3GesM9K3QH6TRYo2C7UbbhY7vL5EZ4HGqcvtMMW4FOzqNOSltE++IVL99F3g==
+  dependencies:
+    tslib "^2.0.0"
 
 "@syncfusion/ej2-angular-barcode-generator@^19.4.52":
   version "19.4.52"
@@ -2436,6 +2495,13 @@ angular-mentions@^1.1.6:
   dependencies:
     tslib "^2.0.0"
 
+angular-oauth2-oidc@^15.0.1:
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/angular-oauth2-oidc/-/angular-oauth2-oidc-15.0.1.tgz#ba3bcb88e565be7ea4c635a48524963c677be2fe"
+  integrity sha512-5gpqO9QL+qFqMItYFHe8F6H5nOIEaowcNUc9iTDs3P1bfVYnoKoVAaijob53PuPTF4YwzdfwKWZi4Mq6P7GENQ==
+  dependencies:
+    tslib "^2.0.0"
+
 animate.css@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/animate.css/-/animate.css-4.1.1.tgz#614ec5a81131d7e4dc362a58143f7406abd68075"
@@ -2955,6 +3021,11 @@ bootstrap@^4.6.1:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.6.2.tgz#8e0cd61611728a5bf65a3a2b8d6ff6c77d5d7479"
   integrity sha512-51Bbp/Uxr9aTuy6ca/8FbFloBUJZLHwnhTcnjIeRn2suQWsWzcuJhGjKDB5eppVte/8oCdOL3VuwxvZDUggwGQ==
+
+bootstrap@^5.2.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-5.3.0.tgz#0718a7cc29040ee8dbf1bd652b896f3436a87c29"
+  integrity sha512-UnBV3E3v4STVNQdms6jSGO2CvOkjUMdDAVR2V5N4uCMdaIkaQjbcEAMqRimDHIs4uqBYzDAKCQwCB+97tJgHQw==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -7024,6 +7095,16 @@ jszip@^3.1.3, jszip@^3.7.1:
     readable-stream "~2.3.6"
     setimmediate "^1.0.5"
 
+just-clone@^6.1.1:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/just-clone/-/just-clone-6.2.0.tgz#a4614d9bf7e4bbdcae7f9ba904aea5ea9cae8ae5"
+  integrity sha512-1IynUYEc/HAwxhi3WDpIpxJbZpMCvvrrmZVqvj9EhpvbH8lls7HhdhiByjL7DkAaWlLIzpC0Xc/VPvy/UxLNjA==
+
+just-compare@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/just-compare/-/just-compare-2.3.0.tgz#a2adcc1d1940536263275f5a1ef1298bcacfeda7"
+  integrity sha512-6shoR7HDT+fzfL3gBahx1jZG3hWLrhPAf+l7nCwahDdT9XDtosB9kIF0ZrzUp5QY8dJWfQVr5rnsPqsbvflDzg==
+
 karma-chrome-launcher@~3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/karma-chrome-launcher/-/karma-chrome-launcher-3.1.1.tgz#baca9cc071b1562a1db241827257bfe5cab597ea"
@@ -10863,6 +10944,11 @@ ts-pnp@^1.1.6:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
+
+ts-toolbelt@6.15.4:
+  version "6.15.4"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.15.4.tgz#f7fad584e197d0f495f77b5e3ee75a8f4c4dd3da"
+  integrity sha512-Ifp2yNo4I8q5UwNARUBMnBiFpv5DEtTbCtS8RCjjLOz+PNcThbjUsPJCK3hRnz0dTygM1Fi3Mgvnt/DoKUTU2g==
 
 tslib@2.0.3:
   version "2.0.3"
