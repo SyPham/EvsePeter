@@ -20,7 +20,7 @@ node_modules/
 
 # Mono auto generated files
 mono_crash.*
-
+App/.angular/cache
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

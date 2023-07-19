@@ -2,14 +2,14 @@ import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/_core/_service/auth.service';
 import { filter } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, ActivatedRoute, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { ActionConstant } from '../_constants';
 import { AlertifyService } from '../_service/alertify.service';
 import { CookieService } from 'ngx-cookie-service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthGuard  {
   btnText: any;
   title: any;
   constructor(
