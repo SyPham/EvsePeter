@@ -21,8 +21,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Evse.Services
-{
-    public interface IReportService
+{   public interface IReportService
     {
         Byte[] ExcelExport(ExcelExportChartDto request);
         Byte[] ExcelExportPieChart(ExcelExportPieChartDto request);
@@ -203,8 +202,7 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                 reportParams.RoomGuid2 = reportParams.RoomGuid2 == null ? "" : reportParams.RoomGuid2;
                 reportParams.MakeOrderGuid1 = reportParams.MakeOrderGuid1 == null ? "" : reportParams.MakeOrderGuid1;
                 reportParams.MakeOrderGuid2 = reportParams.MakeOrderGuid2 == null ? "" : reportParams.MakeOrderGuid2;
-                // reportParams.AreaGuid = reportParams.AreaGuid == null ? "" : reportParams.AreaGuid;
-                // reportParams.BarnGuid = reportParams.BarnGuid == null ? "" : reportParams.BarnGuid;
+              
                 object parameters = new 
                 {
                     Room_GUID1 = reportParams.RoomGuid1,
@@ -217,8 +215,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                     KeyWord = reportParams.Keyword,
                     Sort1 = reportParams.Sort,
                     Sort2 = reportParams.Sort2,
-                    // Area_GUID = reportParams.AreaGuid,
-                    // Barn_GUID = reportParams.BarnGuid,
                 };
                 if (reportParams.D1.Year == 1970)
                 {
@@ -234,8 +230,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                         KeyWord = reportParams.Keyword,
                         Sort1 = reportParams.Sort,
                         Sort2 = reportParams.Sort2,
-                        // Area_GUID = reportParams.AreaGuid,
-                        // Barn_GUID = reportParams.BarnGuid,
                     };
                 }
                 if (reportParams.D2.Year == 1970)
@@ -252,8 +246,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                         KeyWord = reportParams.Keyword,
                         Sort1 = reportParams.Sort,
                         Sort2 = reportParams.Sort2,
-                        // Area_GUID = reportParams.AreaGuid,
-                        // Barn_GUID = reportParams.BarnGuid,
                     };
                 }
                 if (reportParams.D1.Year == 1970 && reportParams.D2.Year == 1970)
@@ -270,8 +262,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                         KeyWord = reportParams.Keyword,
                         Sort1 = reportParams.Sort,
                         Sort2 = reportParams.Sort2,
-                        // Area_GUID = reportParams.AreaGuid,
-                        // Barn_GUID = reportParams.BarnGuid,
                     };
                 }
                 try
@@ -306,8 +296,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                 reportParams.RoomGuid2 = reportParams.RoomGuid2 == null ? "" : reportParams.RoomGuid2;
                 reportParams.MakeOrderGuid1 = reportParams.MakeOrderGuid1 == null ? "" : reportParams.MakeOrderGuid1;
                 reportParams.MakeOrderGuid2 = reportParams.MakeOrderGuid2 == null ? "" : reportParams.MakeOrderGuid2;
-                // reportParams.AreaGuid = reportParams.AreaGuid == null ? "" : reportParams.AreaGuid;
-                // reportParams.BarnGuid = reportParams.BarnGuid == null ? "" : reportParams.BarnGuid;
                 object parameters = new 
                 {
                     Room_GUID1 = reportParams.RoomGuid1,
@@ -320,8 +308,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                     KeyWord = reportParams.Keyword,
                     Sort1 = reportParams.Sort,
                     Sort2 = reportParams.Sort2,
-                    // Area_GUID = reportParams.AreaGuid,
-                    // Barn_GUID = reportParams.BarnGuid,
                 };
                 if (reportParams.D1.Year == 1970)
                 {
@@ -337,8 +323,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                         KeyWord = reportParams.Keyword,
                         Sort1 = reportParams.Sort,
                         Sort2 = reportParams.Sort2,
-                        // Area_GUID = reportParams.AreaGuid,
-                        // Barn_GUID = reportParams.BarnGuid,
                     };
                 }
                 if (reportParams.D2.Year == 1970)
@@ -355,8 +339,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                         KeyWord = reportParams.Keyword,
                         Sort1 = reportParams.Sort,
                         Sort2 = reportParams.Sort2,
-                        // Area_GUID = reportParams.AreaGuid,
-                        // Barn_GUID = reportParams.BarnGuid,
                     };
                 }
                 if (reportParams.D1.Year == 1970 && reportParams.D2.Year == 1970)
@@ -373,8 +355,6 @@ public async Task<object> RPT_Show_Header(string farmGuid, string makerOrderGuid
                         KeyWord = reportParams.Keyword,
                         Sort1 = reportParams.Sort,
                         Sort2 = reportParams.Sort2,
-                        // Area_GUID = reportParams.AreaGuid,
-                        // Barn_GUID = reportParams.BarnGuid,
                     };
                 }
                 try

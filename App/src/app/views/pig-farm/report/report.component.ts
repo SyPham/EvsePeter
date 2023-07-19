@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, distinctUntilChanged, map } from 'rxjs/operators';
 import { ReportService } from 'src/app/_core/_service/report.service';
+import { ReportListComponent } from './report-list/report-list.component';
 
 @Component({
   selector: 'app-report',
@@ -14,6 +15,8 @@ export class ReportComponent implements OnInit, OnDestroy  {
   subscription: Subscription = new Subscription();
   kind: string;
   reportType = 'Default';
+  @ViewChild(ReportListComponent) public list: ReportListComponent;
+
   constructor(
     private service: ReportService,
     private route: ActivatedRoute,

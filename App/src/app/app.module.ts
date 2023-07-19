@@ -139,6 +139,7 @@ import { GoogleMapComponent } from './views/evse/google-map/google-map.component
 import { AgmCoreModule } from '@agm/core';
 import { EvseModule } from './views/evse/evse.module';
 import { HAppModule } from './views/evse/h-app/h-app.module';
+import { ReportHtmlComponent } from './views/pig-farm/report/report-html/report-html.component';
 
 let lang = localStorage.getItem('lang');
 if (!lang) {
@@ -174,6 +175,7 @@ if (!lang) {
     News2Component,
     NewsDetailComponent,
     GoogleMapComponent,
+    ReportHtmlComponent
 
 
   ],

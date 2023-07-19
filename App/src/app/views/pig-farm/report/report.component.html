@@ -1,5 +1,6 @@
 
 <app-report-list *ngIf="reportType === 'List'"></app-report-list>
+<app-report-html *ngIf="reportType === 'ReportHtml'"></app-report-html>
 
 <app-report-chart *ngIf="reportType === 'Chart'"
 [kind]="kind"

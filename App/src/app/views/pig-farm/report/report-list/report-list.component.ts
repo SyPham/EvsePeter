@@ -6,6 +6,7 @@ import {
   TemplateRef,
   ViewChild,
   OnDestroy,
+  ElementRef,
 } from "@angular/core";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import {
@@ -28,7 +29,7 @@ import { ReportService } from "src/app/_core/_service/report.service";
 import { distinctUntilChanged, filter, map } from "rxjs/operators";
 import { ReportConfigService } from "src/app/_core/_service/report-config.service";
 import { DataManager, Query, UrlAdaptor } from "@syncfusion/ej2-data";
-import { BaseComponent } from "herr-core";
+import { BaseComponent } from "@pigfarm-core";
 
 declare let window: any;
 
@@ -42,13 +43,13 @@ export class ReportListComponent
   extends BaseComponent
   implements OnInit, OnDestroy
 {
-  isAdmin =
-    JSON.parse(localStorage.getItem("user"))?.groupCode === "ADMIN_CANCEL";
+  @ViewChild('header') headerId: ElementRef;
+
   localLang = window.navigator.userLanguage || window.navigator.language;
   //data: DataManager;
   data = [];
   resizeSettings = { mode: "Normal" };
-
+  headerData: any;
   @ViewChild("grid") public grid: GridComponent;
   excelDownloadUrl: string;
   modalReference: NgbModalRef;
@@ -81,6 +82,12 @@ export class ReportListComponent
   roomGuid2Visibled: boolean;
   makeOrderGuid1Visibled: boolean;
   makeOrderGuid2Visibled: boolean;
+  areaGuidVisibled: boolean;
+  barnGuidVisibled: boolean;
+
+  areaGuid: string = "";
+  barnGuid: string = "";
+
   startDate: any = new Date();
   endDate: any = new Date();
   menuItem: any;
@@ -95,6 +102,13 @@ export class ReportListComponent
   @ViewChild("jsonTemplate", { static: true }) public jsonTemplate: any;
   isodsExport = false;
   formatCol = true;
+  isStartYearMonth = false;
+  isEndYearMonth = false;
+
+  isStartDate = false;
+  isEndDate = false;
+  headerValueData: any;
+
   constructor(
     public modalService: NgbModal,
     private service: ReportService,
@@ -144,17 +158,21 @@ export class ReportListComponent
           this.kind = e.snapshot.paramMap.get("kind");
           this.grid.dataSource = [];
           this.columns = [];
+          this.headerData = null;
+          this.headerValueData = []
           this.grid.columns = this.columns;
           this.grid.refreshColumns();
           if (this.kind) {
             this.getColumns();
           }
+          this.getValueHeader();
           this.loadConfig();
         })
     );
     if (this.kind) {
       this.getColumns();
       this.loadConfig();
+
     }
   }
   jsonExport() {
@@ -203,6 +221,7 @@ export class ReportListComponent
     const menuLink = `/report/${this.kind}`;
     let query = new Query();
     query.where("type", "equal", menuLink);
+    query.where("status", "equal", 1);
     const accessToken = localStorage.getItem("token");
     new DataManager({
       url: `${this.baseUrl}SystemConfig/GetDataDropdownlist`,
@@ -214,8 +233,19 @@ export class ReportListComponent
         const configData = x.result || [];
         this.makeOrderGuid1Visibled = false;
         this.makeOrderGuid2Visibled = false;
+        this.areaGuidVisibled = false;
+        this.barnGuidVisibled = false;
+
         this.roomGuid1Visibled = false;
         this.roomGuid2Visibled = false;
+        
+        this.isStartYearMonth  = false;
+        this.isEndYearMonth  = false;
+        this.isStartDate  = false;
+        this.isEndDate  = false;
+
+        this.startDate  = null;
+        this.endDate  = null;
         for (const x of configData) {
           switch (x.no) {
             case "MakeOrderGuid1":
@@ -240,11 +270,58 @@ export class ReportListComponent
                 () => (this.roomGuid2Visibled = x.value === "1" ? true : false)
               );
               break;
+              case "StartYearMonth":
+                setTimeout(
+                  () => {
+                    this.isStartYearMonth = true
+                      this.startDate = x.value == "" || x.value == null ? new Date() : x.value
+                  }
+                );
+                break;
+                case "EndYearMonth":
+                  setTimeout(
+                    () =>  {
+                      this.isEndYearMonth = true
+                      this.endDate = x.value == "" || x.value == null ? new Date() : x.value
+                    }
+                  );
+                  break;
+                  case "StartDate":
+                    setTimeout(
+                      () =>  {
+                      this.isStartDate = true
+                      this.startDate =x.value == "" || x.value == null ? new Date() : x.value
+                      }
+                    );
+                    break;
+                    case "EndDate":
+                      setTimeout(
+                        () => {
+                        this.isEndDate = true
+                        this.endDate = x.value == "" || x.value == null? new Date() : x.value
+                        }
+                      );
+                      break;
+                      case "AreaGuid":
+                        setTimeout(
+                          () =>
+                            (this.areaGuidVisibled = x.value === "1" ? true : false)
+                        );
+                        break;
+                        case "BarnGuid":
+                        setTimeout(
+                          () =>
+                            (this.barnGuidVisibled = x.value === "1" ? true : false)
+                        );
+                        break;
             default:
               this.makeOrderGuid1Visibled = false;
               this.makeOrderGuid2Visibled = false;
               this.roomGuid1Visibled = false;
               this.roomGuid2Visibled = false;
+              this.areaGuidVisibled = false;
+              this.barnGuidVisibled = false;
+   
               break;
           }
         }
@@ -259,6 +336,7 @@ export class ReportListComponent
         this.columns = columns;
         this.warningAlert = this.columns.length === 0;
         this.grid.refreshColumns();
+
       });
   }
 
@@ -319,6 +397,8 @@ export class ReportListComponent
     const roomGuid2 = this.roomGuid2 || "";
     const makeOrderGuid1 = this.makeOrderGuid1 || "";
     const makeOrderGuid2 = this.makeOrderGuid2 || "";
+    const areaGuid = this.areaGuid || "";
+    const barnGuid = this.barnGuid || "";
     const farmGuid = localStorage.getItem("farmGuid");
     const menuLink = `/report/${this.kind}`;
     this.spinner.show("default");
@@ -334,7 +414,9 @@ export class ReportListComponent
         makeOrderGuid1,
         makeOrderGuid2,
         roomGuid1,
-        roomGuid2
+        roomGuid2,
+        areaGuid,
+        barnGuid
       )
       .subscribe(
         (data) => {
@@ -380,6 +462,43 @@ export class ReportListComponent
       });
     }
   }
+
+  loadHeader() {
+    const farmGuid = localStorage.getItem('farmGuid');
+    const makeOrderGuid = this.makeOrderGuid1 || this.makeOrderGuid2;
+    const reportName = `/report/${this.kind}`;
+
+    const roomGuid1 =  this.roomGuid1 || "";
+    const roomGuid2 = this.roomGuid1 || "";
+    const makeOrderGuid1 =  this.makeOrderGuid1 || "";
+    const makeOrderGuid2 =   this.makeOrderGuid2 || "";
+    const d1 = this.datePipe.transform(
+      this.startDate || new Date(1970, 1, 1),
+      "yyyy/MM/dd"
+    );
+    const d2 = this.datePipe.transform(
+      this.endDate || new Date(1970, 1, 1),
+      "yyyy/MM/dd"
+    );
+    const keyWord = this.keyWord || "";
+    const sort = this.orderBy || "";
+    const sort2 = this.thenBy || "";
+
+    const printBy = JSON.parse(localStorage.getItem('user')).accountName;
+    this.service.RPT_Show_Header(farmGuid, makeOrderGuid,reportName, roomGuid1, roomGuid2,makeOrderGuid1,makeOrderGuid2,d1,d2,keyWord, sort, sort2, printBy).subscribe((res: any) => {
+      this.headerData = res[0];
+      this.getValueHeader();
+    });
+  }
+  getValueHeader() {
+    this.headerValueData = []
+    if (this.headerData) {
+      for (const [key, value] of Object.entries(this.headerData)) {
+        this.headerValueData.push(value)
+      }
+    }
+   
+  }
   toolbarClick(args) {
     const currentDate = this.datePipe.transform(new Date(), "yyyy.MM.dd");
     const accoutName = JSON.parse(localStorage.getItem('user')).accountName;
@@ -394,50 +513,32 @@ export class ReportListComponent
         } ${this.datePipe.transform(new Date(), "yyyyMMdd")}.xlsx`;
 
         const colSpan = this.columns.length;
+        const headerRow = Object.keys(this.headerData).length;
+        const rows = []
+        for (const [key, value] of Object.entries(this.headerData)) {
+          let row =  {
+            cells: [
+              {
+                colSpan: colSpan,
+                value: value,
+                style: {
+                  fontColor: "#000000",
+                  fontSize: key === 'Title' ? 16 : 12,
+                  hAlign: key === 'Title' ? "Center" : "Left",
+                  bold: true,
+                },
+              },
+            ],
+          };
+          rows.push(row);
+        }
+
         const excelExportProperties: ExcelExportProperties = {
           hierarchyExportMode: "All",
           fileName: fileName,
           header: {
-            headerRows: 3,
-            rows: [
-              {
-                cells: [
-                  {
-                    colSpan: colSpan,
-                    value: title,
-                    style: {
-                      fontColor: "#000000",
-                      fontSize: 18,
-                      hAlign: "Center",
-                      bold: true,
-                    },
-                  },
-                ],
-              },
-              {
-                cells: [
-                  {
-                    colSpan: 2,
-                    value: '日期: ' + currentDate,
-                    style: {
-                      fontColor: "#000000",
-                      hAlign: "Left",
-                    },
-                  },
-                  {},
-                  {},
-                  {
-                    colSpan: 2,
-                    value: '列印人員: ' + accoutName,
-                    style: {
-                      fontColor: "#000000",
-                      hAlign: "Right",
-                    },
-                  },
-                ],
-                
-              },
-            ],
+            headerRows: headerRow,
+            rows: rows
           },
         };
         this.grid.excelExport(excelExportProperties);
@@ -468,6 +569,7 @@ export class ReportListComponent
   actionComplete(args) {}
   actionBegin(args) {}
   reset() {
+    this.loadHeader();
     this.startDate = null;
     this.endDate = null;
     const d1 = this.datePipe.transform(new Date(1970, 1, 1), "yyyy/MM/dd");
@@ -489,6 +591,8 @@ export class ReportListComponent
     const menuLink = `/report/${this.kind}`;
     const farmGuid = localStorage.getItem("farmGuid");
     this.spinner.show("default");
+    const areaGuid = this.areaGuid || "";
+    const barnGuid = this.barnGuid || "";
     this.service
       .getReports(
         d1,
@@ -501,7 +605,9 @@ export class ReportListComponent
         makeOrderGuid1,
         makeOrderGuid2,
         roomGuid1,
-        roomGuid2
+        roomGuid2,
+        areaGuid,
+        barnGuid
       )
       .subscribe(
         (data) => {
@@ -516,6 +622,7 @@ export class ReportListComponent
       );
   }
   filter() {
+    this.loadHeader();
     this.loadData();
   }
   openModal(template) {

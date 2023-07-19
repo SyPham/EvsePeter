@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Evse.Controllers
 {
-    public class ReportController : ApiControllerBase
+  public class ReportController : ApiControllerBase
     {
         private readonly IReportService _service;
 

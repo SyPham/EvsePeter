@@ -28,10 +28,102 @@ export class ReportService {
     makeOrderGuid1,
     makeOrderGuid2,
     roomGuid1,
-    roomGuid2
+    roomGuid2,
+    areaGuid,
+    barnGuid
   ) {
-    const query = `d1=${d1}&d2=${d2}&keyword=${keyword}&sort=${sort}&sort2=${sort2}&menuLink=${menuLink}&farmGuid=${farmGuid}&makeOrderGuid1=${makeOrderGuid1}&makeOrderGuid2=${makeOrderGuid2}&roomGuid1=${roomGuid1}&roomGuid2=${roomGuid2}`;
+    const query = `d1=${d1}&d2=${d2}&keyword=${keyword}&sort=${sort}&sort2=${sort2}&menuLink=${menuLink}&farmGuid=${farmGuid}&makeOrderGuid1=${makeOrderGuid1}&makeOrderGuid2=${makeOrderGuid2}&roomGuid1=${roomGuid1}&roomGuid2=${roomGuid2}&areaGuid=${areaGuid}&barnGuid=${barnGuid}`;
     return this.http.get<any>(`${this.base}Report/getReports?${query}`, {});
+  }
+  getReportsHtml(
+    d1,
+    d2,
+    keyword,
+    sort,
+    sort2,
+    menuLink,
+    farmGuid,
+    makeOrderGuid1,
+    makeOrderGuid2,
+    roomGuid1,
+    roomGuid2,
+    areaGuid,
+    barnGuid
+  ) {
+    const query = `d1=${d1}&d2=${d2}&keyword=${keyword}&sort=${sort}&sort2=${sort2}&menuLink=${menuLink}&farmGuid=${farmGuid}&makeOrderGuid1=${makeOrderGuid1}&makeOrderGuid2=${makeOrderGuid2}&roomGuid1=${roomGuid1}&roomGuid2=${roomGuid2}&areaGuid=${areaGuid}&barnGuid=${barnGuid}`;
+    return this.http.get<any>(`${this.base}Report/getReportsHtml?${query}`, {});
+  }
+  exportHtmlToExcel(
+    d1,
+    d2,
+    keyword,
+    sort,
+    sort2,
+    menuLink,
+    farmGuid,
+    makeOrderGuid1,
+    makeOrderGuid2,
+    roomGuid1,
+    roomGuid2,
+    areaGuid,
+    barnGuid,
+    functionName
+  ) {
+    let request = {d1,
+      d2,
+      keyword,
+      sort,
+      sort2,
+      menuLink,
+      farmGuid,
+      makeOrderGuid1,
+      makeOrderGuid2,
+      roomGuid1,
+      roomGuid2,
+      areaGuid,
+      barnGuid,
+      functionName};
+    return this.http.post(`${this.base}Report/ExportHtmlToExcel`,   request,
+    {
+      responseType: "blob",
+      observe: "response",
+    });
+  }
+  excelExportToPdf(
+    d1,
+    d2,
+    keyword,
+    sort,
+    sort2,
+    menuLink,
+    farmGuid,
+    makeOrderGuid1,
+    makeOrderGuid2,
+    roomGuid1,
+    roomGuid2,
+    areaGuid,
+    barnGuid,
+    functionName
+  ) {
+    let request = {d1,
+      d2,
+      keyword,
+      sort,
+      sort2,
+      menuLink,
+      farmGuid,
+      makeOrderGuid1,
+      makeOrderGuid2,
+      roomGuid1,
+      roomGuid2,
+      areaGuid,
+      barnGuid,
+      functionName};
+    return this.http.post(`${this.base}Report/ExcelExportToPdf`,   request,
+    {
+      responseType: "blob",
+      observe: "response",
+    });
   }
   getReportBase(d1, d2, keyword, sort, method) {
     const query = `d1=${d1}&d2=${d2}&keyword=${keyword}&sort=${sort}`;
@@ -51,6 +143,14 @@ export class ReportService {
     const query = `menuLink=${menuLink}&lang=${lang}`;
     return this.http.get<any>(
       `${this.base}Report/GetReportChartSetting?${query}`,
+      {}
+    );
+  }
+  RPT_Show_Header(farmGuid, makeOrderGuid, reportName,  roomGuid1,  roomGuid2,  makeOrderGuid1,  makeOrderGuid2,  d1,  d2,  keyWord,  sort,  sort2,  printBy) {
+    const query = `farmGuid=${farmGuid}&makeOrderGuid=${makeOrderGuid}&reportName=${reportName}&roomGuid1=${roomGuid1}&roomGuid2=${roomGuid2}&makeOrderGuid1=${makeOrderGuid1}&makeOrderGuid2=${makeOrderGuid2}&d1=${d1}&d2=${d2}&keyWord=${keyWord}&sort=${sort}&sort2=${sort2}&printBy=${printBy}`;
+
+    return this.http.get<any>(
+      `${this.base}Report/RPT_Show_Header?${query}`,
       {}
     );
   }

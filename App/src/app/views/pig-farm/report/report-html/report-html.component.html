@@ -13,6 +13,7 @@
     >
   </h5>
 </div>
+
 <div class="card mb-2 my-box-shadow">
   <div class="card-body">
     <div class="row">
@@ -205,89 +206,52 @@
 
 <div class="col-md-12 p-0 my-box-shadow">
   <div class="card report-main-card">
-    <div class="card-body table-responsive p-0">
+    <div class="card-body table-responsive">
+      <div class="row">
+        <div class="col-12">
+          
+          <button
+          class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib"
+          type="button"
+          id="excel"
+          tabindex="-1"
+          (click)="exportHtmlToExcel()"
+          style="width: auto"
+        >
+        <i class="fa fa-file-excel mr-2" aria-hidden="true"></i>
+        <span class="e-tbar-btn-text">{{ 'Excel Export' | translate}} </span>
+        </button>
 
-      <div class="row" >
-        <div class="col-12 ml-2" *ngFor="let item of headerValueData; let i=index">
-          <span [class]=" i == 0 ? 'my-header': 'my-header2'">{{item}}</span>
-          <span *ngIf="item === ''" class="text-white">{{"N/A"}}</span>
+          <button
+          class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib"
+          type="button"
+          id="odsexport"
+          tabindex="-1"
+          (click)="excelExportToPdf()"
+          style="width: auto"
+        >
+        <i class="fa fa-file-pdf mr-2" aria-hidden="true"></i>
+        <span class="e-tbar-btn-text">{{ 'Pdf Export' | translate}} </span>
+        </button>
+
+        <!-- <button
+        class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib"
+        type="button"
+        id="json"
+        tabindex="-1"
+        style="width: auto"
+      >
+      <i class="fa fa-file-pdf mr-2" aria-hidden="true"></i>
+      <span class="e-tbar-btn-text">{{ 'Json Export' | translate}} </span>
+      </button> -->
+
         </div>
       </div>
-      <ejs-grid
-        #grid
-        id="grid"
-        [dataSource]="data"
-        [allowResizing]="true"
-        [allowPaging]="true"
-        [showColumnMenu]="false"
-        [allowSorting]="true"
-        [allowExcelExport]="true"
-        [allowPdfExport]="true"
-        [toolbar]="toolbarOptions"
-        [selectionSettings]="selectOptions"
-        gridLines="Both"
-        [showColumnChooser]='true'
-        [locale]="locale"
-        width='100%'
-        [editSettings]="editSettings"
-        [pageSettings]="pageSettings"
-        (toolbarClick)="toolbarClick($event)"
-        (actionBegin)="actionBegin($event)"
-        (actionComplete)="actionComplete($event)"
-        [resizeSettings]="resizeSettings"
-        (dataBound)="dataBound()"
-        (excelExportComplete)='excelExpComplete($event)'
-      >
-
-        <ng-template #odsTemplate let-data>
-          <button
-            class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib"
-            type="button"
-            id="grid_odsexport"
-            tabindex="-1"
-            (click)="odsExport()"
-            style="width: auto"
-          >
-            <span class="e-icon e-pdfexport e-icons e-icon-left"></span
-            ><span class="e-tbar-btn-text">{{ 'Ods Export' | translate}} </span>
-          </button>
-        </ng-template>
-
-        <ng-template #jsonTemplate let-data>
-          <button
-            class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib"
-            type="button"
-            id="grid_odsexport"
-            tabindex="-1"
-            (click)="jsonExport()"
-            style="width: auto"
-          >
-            <span class="e-btn-icon e-pdfexport e-icons e-icon-left"></span
-            ><span class="e-tbar-btn-text">{{ 'Json Export' | translate}} </span>
-          </button>
-        </ng-template>
-
-        <e-columns>
-
-          
-         
-      
-          <ng-template #template ngFor let-column [ngForOf]="columns"  let-i="index">
-
-           
-            <e-column
-             
-              [field]="column?.field"
-              [minWidth]="column?.width || ''"
-              headerTextAlign="Left"
-              [textAlign]="column.textAlign"
-              [autoFit]="column?.width === null || column?.width === '' ? true : false"
-              [headerText]="column?.headerText || column?.field"
-            >
-            </e-column>
-          </ng-template>
-        </e-columns>
-      </ejs-grid>
+     <div class="row">
+      <div class="col-12">
+        <div [innerHTML]="htmlString"></div>
+      </div>
+     </div>
     </div>
     <!-- /.card-body -->
   </div>

@@ -20,7 +20,7 @@ node_modules/
 
 # Mono auto generated files
 mono_crash.*
-
+App/.angular/cache
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -216,7 +216,7 @@ csx/
 # Microsoft Azure Emulator
 ecf/
 rcf/
-
+App/.angular/cache
 # Windows Store app package directories and files
 AppPackages/
 BundleArtifacts/
