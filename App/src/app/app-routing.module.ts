@@ -174,8 +174,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
     // enableTracing: false, // <-- debugging purposes only
-    preloadingStrategy: SelectivePreloadingStrategyService,
-    relativeLinkResolution: 'legacy'
+    preloadingStrategy: SelectivePreloadingStrategyService
 })],
   exports: [RouterModule]
 })

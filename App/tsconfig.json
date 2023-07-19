@@ -2,8 +2,12 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "@acv/acv-shared": ["projects/acv-shared/src/public-api.ts"],
-      "@acv/acv-shared/proxy": ["projects/acv-shared/proxy/public-api.ts"],
+      "@acv/acv-shared": [
+        "projects/acv-shared/src/public-api.ts"
+      ],
+      "@acv/acv-shared/proxy": [
+        "projects/acv-shared/proxy/public-api.ts"
+      ],
       "@pigfarm-core": [
         "dist/pigfarm-core/*",
         "dist/pigfarm-core"
@@ -17,7 +21,6 @@
         "projects/ngx-org-chart/*",
         "dist/ngx-org-chart/*"
       ]
-    
     },
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -26,16 +29,19 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "module": "es2020",
-    "typeRoots": ["node_modules/@types"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "moduleResolution": "node",
-    "resolveJsonModule": true, //already there
-    "allowSyntheticDefaultImports": true, // Add this line
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES2022",
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
