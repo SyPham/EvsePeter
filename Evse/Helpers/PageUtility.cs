@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Evse.Utilities.Constants;
+using Microsoft.EntityFrameworkCore;
 using NetUtility;
 using System;
 using System.Collections.Generic;
@@ -6,11 +7,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Evse.Helpers
+namespace Evse.Utilities
 {
     public static class PageUtility
     {
-        public static async Task<Pager<T>> ToPaginationAsync<T>(this IQueryable<T> query, int currentPage, int pageSize = Commons.PageSize) where T : class
+        public static async Task<Pager<TDto>> ToPaginationAsync<TDto>(this IQueryable<TDto> query, int currentPage, int pageSize = Commons.PageSize) where TDto : class
         {
             //Tính tổng số lượng record
             var count = await query.CountAsync();
@@ -20,7 +21,7 @@ namespace Evse.Helpers
 
             //Lấy ra số lượng record của trang hiện tại
             var items = await query.Skip(skip).Take(pageSize).ToListAsync();
-            return new Pager<T>(items, count, currentPage, pageSize);
+            return new Pager<TDto>(items, count, currentPage, pageSize);
         }
 
         public static string GetUrlPagination(this string url, string queryString)
@@ -60,9 +61,9 @@ namespace Evse.Helpers
         }
     }
 
-    public class Pager<T> where T : class
+    public class Pager<TDto> where TDto : class
     {
-        public Pager(List<T> result, int totalItems, int currentPage = 1, int pageSize = Commons.PageSize, int maxPages = Commons.MaxPagePagination)
+        public Pager(List<TDto> result, int totalItems, int currentPage = 1, int pageSize = Commons.PageSize, int maxPages = Commons.MaxPagePagination)
         {
             var totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
 
@@ -136,13 +137,13 @@ namespace Evse.Helpers
         public int PageFirst { get; private set; }
         public int PageLast { get; private set; }
         public List<int> Pages { get; private set; }
-        public List<T> Result { get; private set; }
+        public List<TDto> Result { get; private set; }
     }
 
-    public class PagerElastic<T> where T : class
+    public class PagerElastic<TDto> where TDto : class
     {
         public PagerElastic(
-            List<T> result,
+            List<TDto> result,
             int totalItems,
             int currentPage = 1,
             int pageSize = 10,
@@ -231,7 +232,7 @@ namespace Evse.Helpers
         public int PageFirst { get; private set; }
         public int PageLast { get; private set; }
         public List<int> Pages { get; private set; }
-        public List<T> Results { get; set; }
+        public List<TDto> Results { get; set; }
     }
 
     public class ParamaterPagination
