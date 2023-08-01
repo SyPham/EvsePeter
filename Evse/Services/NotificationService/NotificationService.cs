@@ -25,7 +25,7 @@ namespace Evse.Services
         Task UnSubscribeTokenToTopicAsync(string topicName, List<string> tokens);
     }
 
-    public class NotificationService : INotificationService
+    public class NotificationService : INotificationService, IScopeService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

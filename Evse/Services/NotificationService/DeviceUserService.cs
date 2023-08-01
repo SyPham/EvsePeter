@@ -21,7 +21,7 @@ namespace Evse.Services
         Task AddOrUpdateDeviceUserAsync(DeviceUserDto model);
     }
 
-    public class DeviceUserService : IDeviceUserService
+    public class DeviceUserService : IDeviceUserService, IScopeService
     {
         private readonly IRepositoryBase<DeviceUser> _repositoryDeviceUsers;
         private readonly INotificationService _notificationService;

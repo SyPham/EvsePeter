@@ -39,6 +39,7 @@ namespace Evse.Services
         Task<OperationResult> LoginAsync(UserForLoginDto loginDto);
         Task<OperationResult> LoginAsync(decimal ID);
         Task<OperationResult> RefreshTokenAsync(string token, string refreshToken);
+        Task<OperationResult> Register(RegisterMemberDto reset);
     }
     public class AuthMemberService : IAuthMemberService
     {
@@ -634,6 +635,30 @@ namespace Evse.Services
             };
         }
 
-      
+       public async Task<OperationResult> Register(RegisterMemberDto reset)
+        {
+            var account = await _repo.FindAll().FirstOrDefaultAsync(x => x.Uid == reset.Username);
+
+            if (account != null)
+                return new OperationResult
+                {
+                    Success = false,
+                    Data = null,
+                    Message = "Your username does exist"
+                };
+            var item = new Member();
+            item.Uid = reset.Username;
+            item.Upwd = reset.Password.ToSha512();
+            item.Status = 1;
+            _repo.Add(item);
+            await _unitOfWork.SaveChangeAsync();
+            return new OperationResult
+            {
+                Success = true,
+                StatusCode = HttpStatusCode.OK,
+                Data = account
+            };
+        }
+
     }
 }

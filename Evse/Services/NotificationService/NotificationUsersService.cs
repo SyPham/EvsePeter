@@ -28,7 +28,7 @@ namespace Evse.Services
         Task<List<NotificationUserDto>> GetNotificationUserLoginAsync(int? userReciveId, int offset, int limit);
     }
 
-    public class NotificationUserService : ServiceBase<NotificationUser, NotificationUserDto>, INotificationUserService
+    public class NotificationUserService : ServiceBase<NotificationUser, NotificationUserDto>, INotificationUserService, IScopeService
     {
         private readonly IRepositoryBase<NotificationUser> _repository;
         private readonly INotificationService _notificationService;

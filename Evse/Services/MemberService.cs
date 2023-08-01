@@ -37,7 +37,8 @@ namespace Evse.Services
         Task<OperationResult> StoreLastLocation(LastLocationDto model);
         Task<OperationResult> SaveFile(IFormFile file, decimal id, string type);
         Task<OperationResult> RemoveFile(decimal id, string type);
-
+        Task<UserAction> CheckDisplayPopupByCurrentUser();
+        Task<OperationResult> AddDisplayPopup();
     }
     public class MemberService : ServiceBase<Member, MemberDto>, IMemberService, IScopeService
     {
@@ -51,6 +52,7 @@ namespace Evse.Services
         private readonly IWebHostEnvironment _currentEnvironment;
         private readonly IAuditLogService _auditLogService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IRepositoryBase<UserAction> _repoUserAction;
         public MemberService(
             IRepositoryBase<Member> repo,
             IRepositoryBase<CodeType> repoCodeType,
@@ -62,7 +64,8 @@ IEvseLoggerService logger
 ,
 IWebHostEnvironment currentEnvironment,
 IAuditLogService auditLogService,
-IHttpContextAccessor httpContextAccessor)
+IHttpContextAccessor httpContextAccessor,
+IRepositoryBase<UserAction> repoUserAction)
             : base(repo, logger, unitOfWork, mapper, configMapper)
         {
             _repo = repo;
@@ -75,6 +78,7 @@ IHttpContextAccessor httpContextAccessor)
             _currentEnvironment = currentEnvironment;
             _auditLogService = auditLogService;
             _httpContextAccessor = httpContextAccessor;
+            _repoUserAction = repoUserAction;
         }
         public async Task<object> GetByGuid(string guid)
         {
@@ -666,25 +670,25 @@ IHttpContextAccessor httpContextAccessor)
                         {
                             if (type == "1")
                             {
-                                 avatarUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadAvatarFolder}\\{avatarUniqueFileName}");
+                                avatarUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadAvatarFolder}\\{avatarUniqueFileName}");
                                 item.IdCard1Path = $"/FileUploads/images/member/idcard/{avatarUniqueFileName}";
                             }
-                            else  if (type == "2")
+                            else if (type == "2")
                             {
-                                 avatarUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadAvatarFolder}\\{avatarUniqueFileName}");
+                                avatarUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadAvatarFolder}\\{avatarUniqueFileName}");
                                 item.IdCard2Path = $"/FileUploads/images/member/idcard/{avatarUniqueFileName}";
 
                             }
-                             else  if (type == "3")
+                            else if (type == "3")
                             {
-                            carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
-                                
+                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
+
                                 item.CarLicensePath = $"/FileUploads/images/member/carLicense/{carLicenseFileName}";
 
                             }
-                              else  if (type == "4")
+                            else if (type == "4")
                             {
-                            carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
+                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
 
                                 item.CarLicense2Path = $"/FileUploads/images/member/carLicense/{carLicenseFileName}";
 
@@ -732,7 +736,7 @@ IHttpContextAccessor httpContextAccessor)
                         var result = fileExtension.Remove($"{_currentEnvironment.WebRootPath}\\{path}");
                         if (result)
                         {
-                             if (type == "1")
+                            if (type == "1")
                             {
                                 item.IdCard1Path = string.Empty;
                             }
@@ -741,12 +745,12 @@ IHttpContextAccessor httpContextAccessor)
                                 item.IdCard2Path = string.Empty;
 
                             }
-                              else if (type == "3")
+                            else if (type == "3")
                             {
                                 item.CarLicensePath = string.Empty;
 
                             }
-                               else if (type == "4")
+                            else if (type == "4")
                             {
                                 item.CarLicense2Path = string.Empty;
 
@@ -777,6 +781,59 @@ IHttpContextAccessor httpContextAccessor)
                 return operationResult;
 
             }
+        }
+
+        public async Task<UserAction> CheckDisplayPopupByCurrentUser()
+        {
+            string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+            var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
+            var currentDate = DateTime.Now;
+            var item = await _repoUserAction.FindAll(x => x.UserId == accountId && currentDate.Date == x.DisplayDate.Date).FirstOrDefaultAsync();
+            return item;
+
+        }
+
+        public async Task<OperationResult> AddDisplayPopup()
+        {
+            string token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"];
+            var accountId = JWTExtensions.GetDecodeTokenByID(token).ToDecimal();
+            var currentDate = DateTime.Now.Date;
+            // xóa hết ngày trước đó đi rồi thêm mới ngày hiện tại
+            try
+            {
+                var removeItems = await _repoUserAction.FindAll(x => x.UserId == accountId && x.DisplayDate.Date < currentDate).ToListAsync();
+
+                var item = new UserAction
+                {
+                    UserId = accountId,
+                    DisplayDate = currentDate
+                };
+                _repoUserAction.Add(item);
+                if (removeItems.Any())
+                {
+                    _repoUserAction.RemoveMultiple(removeItems);
+
+                }
+                await _unitOfWork.SaveChangeAsync();
+                return new OperationResult
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Message = "",
+                    Success = true,
+                    Data = item
+                };
+            }
+            catch (System.Exception ex)
+            {
+                return new OperationResult
+                {
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Message = "",
+                    Success = false,
+                    Data = ex.GetMessageError()
+                };
+            }
+
         }
     }
 }

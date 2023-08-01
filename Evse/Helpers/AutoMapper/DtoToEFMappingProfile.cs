@@ -74,6 +74,7 @@ namespace Evse.Helpers.AutoMapper
             CreateMap<PrivacyPolicy, PrivacyPolicyDto>();
             CreateMap<ContractManagement, ContractManagementDto>();
             CreateMap<MessageManagement, MessageManagementDto>();
+            CreateMap<ReleaseVersionDto, ReleaseVersion>();
 
 
         }

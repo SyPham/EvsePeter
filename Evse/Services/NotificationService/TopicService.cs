@@ -5,6 +5,7 @@ using Evse.Models;
 using Evse.Services.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using NetUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Evse.Services
        
     }
 
-    public class TopicService : ServiceBase<Topic, TopicDto>, ITopicService
+    public class TopicService : ServiceBase<Topic, TopicDto>, ITopicService, IScopeService
     {
         private readonly IRepositoryBase<Topic> _repository;
         private readonly IUnitOfWork _unitOfWork;

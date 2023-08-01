@@ -9,6 +9,7 @@ using System.IO;
 using System;
 using NetUtility;
 using System.Linq;
+using Evse.Models;
 
 namespace Evse.Controllers
 {
@@ -126,6 +127,15 @@ namespace Evse.Controllers
                 return StatusCodeResult(await _service.SaveFile(uploadFile,id, type));
 
         }
-    
+         [HttpGet]
+        public async Task<IActionResult> CheckDisplayPopupByCurrentUser()
+        {
+            return Ok(await _service.CheckDisplayPopupByCurrentUser());
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddDisplayPopup()
+        {
+            return Ok(await _service.AddDisplayPopup());
+        }
     }
 }

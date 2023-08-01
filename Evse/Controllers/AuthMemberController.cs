@@ -60,6 +60,11 @@ namespace Evse.Controllers
         {
             return StatusCodeResult(await _authService.ForgotUsername(forgot.email));
         }
+         [HttpPost]
+        public async Task<IActionResult> Register(RegisterMemberDto model)
+        {
+            return StatusCodeResult(await _authService.Register(model));
+        }
         [HttpPost]
         public async Task<IActionResult> LogOutAsync()
         {
