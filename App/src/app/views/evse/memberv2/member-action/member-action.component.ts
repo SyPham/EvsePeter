@@ -218,6 +218,7 @@ this.path4 = {
     this.model.memberStatus = 1;
     this.model.status= 1;
     this.model.id = 0;
+    this.model.roleType = '03';
     this.contactRel = '';
    
   }
@@ -262,7 +263,7 @@ this.path4 = {
       .executeQuery(query)
       .then((x: any) => {
         console.log(x);
-        this.roles = x.result;
+        this.roles = x.result.filter(x=> x.guid === '03');
       });
   }
   getFarms() {
