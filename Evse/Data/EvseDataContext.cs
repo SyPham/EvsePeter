@@ -1129,12 +1129,12 @@ namespace Evse.Data
 
                 entity.Property(e => e.Latitude)
                     .HasColumnName("latitude")
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .IsFixedLength();
 
                 entity.Property(e => e.Longitude)
                     .HasColumnName("longitude")
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .IsFixedLength();
 
                 entity.Property(e => e.SigningId)
