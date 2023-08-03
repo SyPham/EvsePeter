@@ -48,6 +48,7 @@ namespace Evse.Models
         public string CarLicense2Path { get; set; }
         public string IdCard1Path { get; set; }
         public string IdCard2Path { get; set; }
+        public string PhotoPath2 { get; set; }
         
 
     }

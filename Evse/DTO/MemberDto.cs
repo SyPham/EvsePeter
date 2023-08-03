@@ -54,6 +54,8 @@ namespace Evse.DTO
         public string IdCard2Path { get; set; }
         public string CarLicensePath { get; set; }
         public string CarLicense2Path { get; set; }
+        public string PhotoPath2 { get; set; }
+
     }
     public partial class MemberProfileDto
     {
@@ -75,10 +77,21 @@ namespace Evse.DTO
 
 
     }
+public enum  MemberUploadType
+    {
+      IdCard1,
+      IdCard2,
+      CarLicense1,
+      CarLicense2,
+      PhotoPath,
+      PhotoPath2,
 
+
+    }
       public partial class MemberUploadFileDto
     {
         public IFormFile File { get; set; }
+        public MemberUploadType Type { get; set; }
         public decimal Id { get; set; }
 
 
