@@ -25,6 +25,8 @@ namespace Evse.Data
         {
             _contextAccessor = contextAccessor;
         }
+        public DbSet<ReleaseVersion> ReleaseVersion { get; set; }
+
         public virtual DbSet<ContractManagement> ContractManagements { get; set; }
         public virtual DbSet<HelpCenter> HelpCenters { get; set; }
         public virtual DbSet<MessageManagement> MessageManagements { get; set; }
@@ -93,9 +95,20 @@ namespace Evse.Data
         public virtual DbSet<ElectricianErrorReport> ElectricianErrorReports { get; set; }
         public virtual DbSet<EngineerErrorReport> EngineerErrorReports { get; set; }
         public virtual DbSet<StoredProcedure> StoredProcedures { get; set; }
+        public virtual DbSet<UserAction> UserAction { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+               modelBuilder.Entity<UserAction>(entity =>
+            {
+                entity.ToTable("UserAction");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("Id")
+                    .HasColumnType("numeric(18, 0)")
+                    .ValueGeneratedOnAdd();
+            });
+            
               modelBuilder.Entity<CouponManagement>(entity =>
             {
                 entity.ToTable("CouponManagement");

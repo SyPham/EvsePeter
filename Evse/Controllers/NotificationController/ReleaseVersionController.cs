@@ -11,12 +11,11 @@ using System.Threading.Tasks;
 
 namespace Evse.Controllers
 {
-    [AllowAnonymous]
-    public class NotificationUserController : ApiControllerBase
+    public class ReleaseVersionController : ApiControllerBase
     {
-        private readonly INotificationUserService _service;
+        private readonly IReleaseVersionService _service;
 
-        public NotificationUserController(INotificationUserService service)
+        public ReleaseVersionController(IReleaseVersionService service)
         {
             _service = service;
         }
@@ -29,45 +28,43 @@ namespace Evse.Controllers
 
         [HttpPost]
         [ValidationModel]
-        [HasPermission("PUSH-ALL-DEVICE", HasPermissionConst.CREATE)]
-
-        public async Task<IActionResult> AddAsync([FromBody] NotificationUserDto model)
+        [HasPermission("RELEASE-VERSION", HasPermissionConst.CREATE)]
+        public async Task<IActionResult> AddAsync([FromBody] ReleaseVersionDto model)
         {
              
             return StatusCodeResult(await _service.AddAsync(model));
         }
 
         [HttpPut]
-        [ValidationModel]
-        [HasPermission("PUSH-ALL-DEVICE", HasPermissionConst.UPDATE)]
-        public async Task<IActionResult> UpdateAsync([FromBody] NotificationUserDto model)
+         [ValidationModel]
+        [HasPermission("RELEASE-VERSION", HasPermissionConst.UPDATE)]
+        public async Task<IActionResult> UpdateAsync([FromBody] ReleaseVersionDto model)
         {
              
             return StatusCodeResult(await _service.UpdateAsync(model));
         }
 
         [HttpDelete]
-        [HasPermission("PUSH-ALL-DEVICE", HasPermissionConst.DELETE)]
+        [HasPermission("RELEASE-VERSION", HasPermissionConst.DELETE)]
         public async Task<ActionResult> DeleteAsync(int key)
         {
             return StatusCodeResult(await _service.DeleteAsync(key));
         }
 
         [HttpGet]
-        public async Task<ActionResult> FindByIdAsync(object id)
+        public async Task<ActionResult> FindByIdAsync(int id)
         {
             return Ok(await _service.GetByIDAsync(id));
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<ActionResult> PaginationAsync(ParamaterPagination paramater)
         {
-            return Ok(await _service.PaginationCustomAsync(paramater));
+            return Ok(await _service.PaginationAsync(paramater));
         }
 
         // [HttpGet]
-        // [HasPermission("PUSH-ALL-DEVICE", HasPermissionConst.READ)]
+        // [HasPermission("RELEASE-VERSION", HasPermissionConst.READ)]
         // public async Task<ActionResult> LoadDxoGridAsync(DataSourceLoadOptions loadOptions)
         // {
         //     return Ok(await _service.LoadDxoGridAsync(loadOptions));
@@ -81,10 +78,9 @@ namespace Evse.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult> GetNotificationUserLoginAsync(int? userReciveId, int offset, int limit)
+        public async Task<ActionResult> GetLastedVersion()
         {
-            return Ok(await _service.GetNotificationUserLoginAsync(userReciveId, offset,limit));
+            return Ok(await _service.GetLastedVersionAsync());
         }
-
     }
 }

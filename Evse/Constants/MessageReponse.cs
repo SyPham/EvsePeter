@@ -24,6 +24,7 @@ namespace Evse.Constants
         public static string Invalid = "Invalid";
         public static string ExistsCode = "ExistsCode";
         public static string ExistsName = "ExistsName";
+        public static string Existed = "Đã tồn tại";
         
         
     }

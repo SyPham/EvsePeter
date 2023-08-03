@@ -5,6 +5,7 @@ using Evse.DTO;
 using Evse.Helpers;
 using Evse.Models;
 using Evse.Services.Base;
+using Evse.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,7 @@ namespace Evse.Services
         Task<List<NotificationUserDto>> GetNotificationUserLoginAsync(int? userReciveId, int offset, int limit);
     }
 
-    public class NotificationUserService : ServiceBase<NotificationUser, NotificationUserDto>, INotificationUserService
+    public class NotificationUserService : ServiceBase<NotificationUser, NotificationUserDto>, INotificationUserService, IScopeService
     {
         private readonly IRepositoryBase<NotificationUser> _repository;
         private readonly INotificationService _notificationService;

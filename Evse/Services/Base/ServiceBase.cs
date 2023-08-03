@@ -14,6 +14,7 @@ using Evse.Constants;
 using Evse.Models;
 using Syncfusion.JavaScript;
 using Syncfusion.JavaScript.DataSources;
+using Evse.Utilities;
 
 namespace Evse.Services.Base
 {
@@ -22,7 +23,7 @@ namespace Evse.Services.Base
         Task<OperationResult> AddMobileAsync(TDto model);
         Task<OperationResult> UpdateMobileAsync(TDto model);
     }
-    public interface IServiceBase<T, TDto>
+    public interface IServiceBase<T, TDto> where TDto : class
     {
         Task<OperationResult> AddAsync(TDto model);
         Task<OperationResult> AddRangeAsync(List<TDto> model);
@@ -36,13 +37,15 @@ namespace Evse.Services.Base
         Task<List<TDto>> GetAllAsync();
 
         Task<PagedList<TDto>> GetWithPaginationsAsync(PaginationParams param);
+        Task<Pager<TDto>> PaginationAsync(ParamaterPagination paramater);
 
         Task<PagedList<TDto>> SearchAsync(PaginationParams param, object text);
         TDto GetByID(object id);
         Task<TDto> GetByIDAsync(object id);
         Task<object> GetDataDropdownlist(DataManager data);
+
     }
-    public class ServiceBase<T, TDto> : IServiceBase<T, TDto> where T : class
+    public class ServiceBase<T, TDto> : IServiceBase<T, TDto> where T : class where TDto : class
     {
         public OperationResult operationResult;
         private readonly IMapper _mapper;
@@ -161,15 +164,15 @@ namespace Evse.Services.Base
         }
         public virtual async Task<PagedList<TDto>> GetWithPaginationsAsync(PaginationParams param)
         {
-            var lists = _repo.FindAll().ProjectTo<TDto>(_configMapper).OrderByDescending(x => x.GetType().GetProperty("ID").GetValue(x));
+            var lists = _repo.FindAll().ProjectTo<TDto>(_configMapper);
             return await PagedList<TDto>.CreateAsync(lists, param.PageNumber, param.PageSize);
         }
-
+    
         public virtual async Task<PagedList<TDto>> SearchAsync(PaginationParams param, object text)
         {
             var lists = _repo.FindAll().ProjectTo<TDto>(_configMapper)
           .Where(x => x.GetType().GetProperty("Name").GetValue(x) == text)
-          .OrderByDescending(x => x.GetType().GetProperty("ID"));
+          .OrderByDescending(x => x.GetType().GetProperty("Id"));
             return await PagedList<TDto>.CreateAsync(lists, param.PageNumber, param.PageSize);
         }
 
@@ -241,6 +244,12 @@ namespace Evse.Services.Base
             if (data.Take > 0)//for paging
                 datasource = QueryableDataOperations.PerformTake(datasource, data.Take);
             return await datasource.ToListAsync();
+        }
+
+              public virtual async Task<Pager<TDto>> PaginationAsync(ParamaterPagination paramater)
+        {
+            var query = _repo.FindAll().AsNoTracking().ProjectTo<TDto>(_configMapper);
+            return await query.ToPaginationAsync(paramater.page, paramater.pageSize);
         }
     }
 }

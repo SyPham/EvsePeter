@@ -39,6 +39,7 @@ namespace Evse.Services
         Task<OperationResult> LoginAsync(UserForLoginDto loginDto);
         Task<OperationResult> LoginAsync(decimal ID);
         Task<OperationResult> RefreshTokenAsync(string token, string refreshToken);
+        Task<OperationResult> Register(RegisterMemberDto reset);
     }
     public class AuthMemberService : IAuthMemberService
     {
@@ -156,9 +157,9 @@ namespace Evse.Services
 
         }
 
-       
 
-    
+
+
 
         private async Task LogStoreProcedure(decimal accountId, string logText)
         {
@@ -214,8 +215,8 @@ namespace Evse.Services
 
         }
 
-   
-       
+
+
         public async Task LogOut()
         {
             string token = _httpContextAccessor.HttpContext.Request.Headers["AuthMemberorization"];
@@ -306,20 +307,23 @@ namespace Evse.Services
 
             return await GenerateOperationResultForUserAsync(user, "");
         }
-     public async  Task<OperationResult> ChangePassword(ChangePasswordDto reset) {
-             var account = await _repo.FindAll(x => x.Status == 1).AsNoTracking().FirstOrDefaultAsync(x => x.Id == reset.Id);
+        public async Task<OperationResult> ChangePassword(ChangePasswordDto reset)
+        {
+            var account = await _repo.FindAll(x => x.Status == 1).AsNoTracking().FirstOrDefaultAsync(x => x.Id == reset.Id);
             if (account == null)
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "Your account does not exist"
                 };
-                if (reset.Password != reset.RePassword)
+            if (reset.Password != reset.RePassword)
                 return new OperationResult
                 {
                     Success = false,
                     Data = null,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Message = "Password and Repassword are not same"
                 };
 
@@ -332,6 +336,7 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = true,
+                    StatusCode = HttpStatusCode.OK,
                     Data = account,
                     Message = "Reset password successfully"
                 };
@@ -342,11 +347,12 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "Can not change password"
                 };
             }
-       }
+        }
         public async Task<OperationResult> ResetPassword(ResetPasswordDto reset)
         {
             var validatedToken = GetPrincipalFromToken(reset.token);
@@ -369,6 +375,7 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "Your email does not exist"
                 };
@@ -381,6 +388,7 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "Your email does not exist"
                 };
@@ -396,6 +404,7 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "The account is locked!"
                 };
@@ -457,15 +466,15 @@ namespace Evse.Services
             user.Lastlogin = DateTime.Now;
             await _unitOfWork.SaveChangeAsync();
             var userResponse = _mapper.Map<UserMemberForDetailDto>(user);
-             userResponse.Mobile = user.MemberMobile;
+            userResponse.Mobile = user.MemberMobile;
             userResponse.Email = user.MemberEmail;
             userResponse.FullName = user.MemberName;
             userResponse.NickName = user.MemberName;
             userResponse.Avatar = user.PhotoPath;
-            userResponse.AccountName =user.MemberName;
-            userResponse.LastLocation =user.LastLocation;
-             userResponse.Area = "Member";
-        
+            userResponse.AccountName = user.MemberName;
+            userResponse.LastLocation = user.LastLocation;
+            userResponse.Area = "Member";
+
             LogStoreProcedure(user.Id, "LogIn").ConfigureAwait(false).GetAwaiter();
 
 #if DEBUG
@@ -494,7 +503,7 @@ namespace Evse.Services
                 }
             };
         }
-       
+
         private ClaimsPrincipal GetPrincipalFromToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -574,6 +583,7 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "Your email does not exist"
                 };
@@ -583,6 +593,7 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "Your account does not exist"
                 };
@@ -607,6 +618,7 @@ namespace Evse.Services
                 return new OperationResult
                 {
                     Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
                     Data = null,
                     Message = "Your account does not exist"
                 };
@@ -634,6 +646,46 @@ namespace Evse.Services
             };
         }
 
-      
+        public async Task<OperationResult> Register(RegisterMemberDto reset)
+        {
+             if (reset.Password.Length < 10)
+                return new OperationResult
+                {
+                    Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Data = null,
+                    Message = "The ID number must be at least 10 characters long"
+                };
+            var account = await _repo.FindAll().FirstOrDefaultAsync(x => x.Uid == reset.Username);
+
+            if (account != null)
+                return new OperationResult
+                {
+                    Success = false,
+                    StatusCode = HttpStatusCode.BadRequest,
+                    Data = null,
+                    Message = "Your mobile does exist"
+                };
+
+            var item = new Member();
+            item.Uid = reset.Username;
+            // Lấy 4 ký tự cuối
+            string password =  reset.Password[^4..];
+            item.Upwd =password.ToSha512();
+            item.Status = 1;
+            item.MemberStatus = "1";
+            item.MemberMobile = reset.Username;
+            item.MemberIdcard = reset.Password;
+            item.RoleType = "03";
+            _repo.Add(item);
+            await _unitOfWork.SaveChangeAsync();
+            return new OperationResult
+            {
+                Success = true,
+                StatusCode = HttpStatusCode.OK,
+                Data = item
+            };
+        }
+
     }
 }

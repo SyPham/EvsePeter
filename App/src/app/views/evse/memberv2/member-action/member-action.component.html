@@ -116,7 +116,7 @@
             <div class="col-sm-10 ">
              <div class="password">
               <input [type]="inputType" class="form-control" id="memberPassword" [(ngModel)]="model.upwd" [placeholder]="'Enter a pwd' | translate">
-              <span class="eye" (click)="togglePassword()">
+              <span class="eye" (click)="togglePassword()" *ngIf="model.id === 0">
                 <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
                 <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
                </span>
