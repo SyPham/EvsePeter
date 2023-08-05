@@ -39,6 +39,7 @@
         
         public const string Site_Status = "Site_Status";
         public const string Site_Area = "Site_Area";
+        public const string Car_GUID = "Car_GUID";
 
 
     }

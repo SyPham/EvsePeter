@@ -98,6 +98,8 @@ IRepositoryBase<UserAction> repoUserAction)
                               from t in ab.DefaultIfEmpty()
                               join c in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Member_Status && x.Status == "Y") on a.MemberStatus equals c.CodeNo into ac
                               from status in ac.DefaultIfEmpty()
+                                join c in _repoCodeType.FindAll(x => x.CodeType1 == CodeTypeConst.Car_GUID && x.Status == "Y") on a.CarGuid equals c.CodeNo into acar
+                              from car in acar.DefaultIfEmpty()
                               select new MemberDto
                               {
                                   Id = a.Id,
@@ -116,7 +118,8 @@ IRepositoryBase<UserAction> repoUserAction)
 
                                   MemberLine = a.MemberLine,
                                   CarGuid = a.CarGuid,
-                                  CarName = a.CarName,
+                                  CarName = car == null ? "" : lang == Languages.EN ? car.CodeNameEn ?? car.CodeName : lang == Languages.VI ? car.CodeNameVn ?? car.CodeName : lang == Languages.CN ? car.CodeNameCn ?? car.CodeName : car.CodeName,
+
                                   CarNumber = a.CarNumber,
                                   CarVIN = a.CarVIN,
                                   PaymentGuid = a.PaymentGuid,

@@ -48,7 +48,7 @@ namespace Evse.Controllers.HApp
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetWithPaginationsAsync(PaginationParams paramater)
+        public async Task<ActionResult> GetWithPaginationsAsync([FromQuery]PaginationParams paramater)
         {
             return Ok(await _service.GetWithPaginationsAsync(paramater));
         }
