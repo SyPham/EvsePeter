@@ -269,7 +269,7 @@ IRepositoryBase<UserAction> repoUserAction)
             if (data.UpdateBy.HasValue)
             {
                 var updateAudit = await _repoXAccount.FindAll(x => x.AccountId == data.UpdateBy).AsNoTracking().Select(x => new { x.Uid }).FirstOrDefaultAsync();
-                updateBy = updateBy != null ? updateAudit.Uid : "N/A";
+                updateBy = updateAudit != null ? updateAudit.Uid : "N/A";
                 updateDate = data.UpdateDate.HasValue ? data.UpdateDate.Value.ToString("yyyy/MM/dd HH:mm:ss") : "N/A";
             }
             if (data.CreateBy.HasValue)
@@ -561,7 +561,7 @@ IRepositoryBase<UserAction> repoUserAction)
                     item.MemberName = model.MemberName;
                     item.MemberBirthday = model.MemberBirthday;
                     item.MemberSex = model.MemberSex;
-                    item.CarName = model.CarName;
+                    // item.CarName = model.CarName;
                     item.CarNumber = model.CarNumber;
                     item.CarVIN = model.CarVIN;
                     item.CarGuid = model.CarGuid;
@@ -583,7 +583,7 @@ IRepositoryBase<UserAction> repoUserAction)
                     StatusCode = HttpStatusCode.OK,
                     Message = MessageReponse.UpdateSuccess,
                     Success = true,
-                    Data = model
+                    Data = item
                 };
             }
             catch (Exception ex)

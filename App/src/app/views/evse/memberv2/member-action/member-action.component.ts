@@ -121,7 +121,7 @@ id: any;
     this.reset()
 
   } else {
-  const model=  await this.loadDetail();
+  const model=  await this.getId();
   if (model == null) {
     this.alertify.errorConfirm("", this.translate.instant("Not found record"), () => {
       this.router.navigateByUrl("/")
@@ -181,6 +181,21 @@ this.path4 = {
   loadDetail() {
    return this.service.getById(this.id).toPromise()
   }
+ async getId() {
+    const accessToken = localStorage.getItem('token');
+    const lang = localStorage.getItem('lang');
+    let query = new Query().where('id','equal',this.id );
+    const x: any = await new DataManager({
+      url: `${environment.apiUrl}Member/LoadData?lang=${lang}`,
+      adaptor: new UrlAdaptor,
+      headers: [{ authorization: `Bearer ${accessToken}` }]
+    }).executeQuery(query)
+    if(x.result.result.length > 0) {
+      return x.result.result[0]
+    } else {
+      return null;
+    }
+  }
   loadSexConfig() {
     let query = new Query();
     const accessToken = localStorage.getItem("token");
@@ -196,7 +211,6 @@ this.path4 = {
         this.sexData = x.result;
       });
   }
-
   getAudit(id) {
     this.service.getAudit(id).subscribe(data => {
       this.audit = data;

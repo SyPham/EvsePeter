@@ -127,6 +127,15 @@ namespace Evse.Controllers
                 return StatusCodeResult(await _service.SaveFile(uploadFile,id, type));
 
         }
+         [HttpPost]
+        public async Task<ActionResult> SaveMobile([FromForm]IFormFile uploadFile, decimal id, string type)
+        {
+           
+                 if(uploadFile ==null)
+                uploadFile = Request.Form.Files["UploadFiles"];
+                return StatusCodeResult(await _service.SaveFile(uploadFile,id, type));
+
+        }
          [HttpGet]
         public async Task<IActionResult> CheckDisplayPopupByCurrentUser()
         {

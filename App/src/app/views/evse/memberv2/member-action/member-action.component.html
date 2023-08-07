@@ -161,7 +161,7 @@
           <div class="form-group row">
             <label for="carName" class="col-sm-2 col-form-label">{{ 'Member_CarName' | translate }}</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="carName" [(ngModel)]="model.carName" [placeholder]="'Enter a car name' | translate">
+              <input type="text" [readOnly]="true" class="form-control" id="carName" [(ngModel)]="model.carName" [placeholder]="'Enter a car name' | translate">
             </div>
           </div>
 
