@@ -19,5 +19,7 @@ namespace Evse.Models
         public decimal? Status { get; set; }
         public string Guid { get; set; }
         public bool? CanSeeAllFarm { get; set; }
+        public int? OrderBy { get; set; }
+
     }
 }

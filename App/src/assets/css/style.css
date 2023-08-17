@@ -13880,7 +13880,6 @@ html, body {
 }
 
 .backend-container {
-    background-color: #e6e6e6 !important;
     min-height: 100vh;
 }
 
@@ -13954,7 +13953,7 @@ i.fas, i.far, i.fal, i.fab {
 }
 
     .header .logo {
-        color: #fff !important;
+        color: #7a7a7a !important;
         text-align: center;
         letter-spacing: 0.063rem;
         -ms-flex-preferred-size: 100%;
@@ -13963,7 +13962,7 @@ i.fas, i.far, i.fal, i.fab {
         padding: 0;
         display: block;
         overflow: hidden;
-        background-color: #076791;
+        background-color: #fff;
         -webkit-transition: -webkit-flex-basis 0.5s ease;
         transition: -webkit-flex-basis 0.5s ease;
         -o-transition: flex-basis 0.5s ease;
@@ -14000,12 +13999,12 @@ i.fas, i.far, i.fal, i.fab {
 }
 
     .header .top-links .nav-link {
-        color: #fff;
+        color: #7a7a7a;
         padding: 0.813rem 1rem;
     }
 
         .header .top-links .nav-link:hover {
-            background-color: #2d8aaf;
+            background-color: #7a7a7a;
         }
 
     .header .top-links .spacer {
@@ -14013,7 +14012,7 @@ i.fas, i.far, i.fal, i.fab {
     }
 
 .header .sidebar-toggle {
-    color: #ffffff;
+    color: #7a7a7a;
     text-align: center;
     height: 50px;
     line-height: 50px;
@@ -14036,7 +14035,7 @@ i.fas, i.far, i.fal, i.fab {
 }
 
 .header .sidebar-toggle:hover {
-    background-color: #2d8aaf;
+    background-color: #fff;
 }
 
 .header .sidebar-toggle + .dropdown-menu.dropdown-menu-right {
@@ -17737,7 +17736,7 @@ h2.company-title {
 }
 
 .nav-bar-link:hover {
-    color: white;
+    color: #7a7a7a;
 }
 
 .info-box-container {

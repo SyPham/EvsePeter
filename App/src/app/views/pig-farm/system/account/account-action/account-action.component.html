@@ -7,6 +7,7 @@
         [disabled]="
           !model.accountName ||
           !model.accountNo ||
+          !model.accountIdcard||
           !model.uid ||
           !model.upwd ||
           !model.accountGroup ||
@@ -66,7 +67,7 @@
            <div class="form-group row">
             <label for="accountNO" class="col-sm-2 col-form-label">{{ this.role + '_NO' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll" type="text"  class="form-control" [(ngModel)]="model.accountNo" id="accountNO" [placeholder]="'Enter a ' + this.role + ' NO' | translate">
+              <input [disabled]="isDisabledAll" [maxLength]="5" type="text"  class="form-control" [(ngModel)]="model.accountNo" id="accountNO" [placeholder]="'Enter a ' + this.role + ' NO' | translate">
             </div>
           </div>
 
@@ -96,16 +97,16 @@
           </fieldset>
 
           <div class="form-group row">
-            <label for="accountIdCard" class="col-sm-2 col-form-label">{{ this.role + '_IDCARD' | translate }}</label>
+            <label for="accountIdCard" class="col-sm-2 col-form-label">{{ this.role + '_IDCARD' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll" type="text" class="form-control"[(ngModel)]="model.accountIdcard" id="accountIdCard" [placeholder]="'Enter a ' + this.role + ' IDCARD' | translate">
+              <input [disabled]="isDisabledAll"  [maxlength]="10" type="text" class="form-control"[(ngModel)]="model.accountIdcard" id="accountIdCard" [placeholder]="'Enter a ' + this.role + ' IDCARD' | translate">
             </div>
           </div>
 
           <div class="form-group row">
             <label for="accountMobile" class="col-sm-2 col-form-label">{{ this.role + '_MOBILE' | translate }}</label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll" type="text" class="form-control" id="accountMobile" [(ngModel)]="model.accountMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
+              <input [disabled]="isDisabledAll" [maxlength]="10" type="tel" class="form-control" id="accountMobile" [(ngModel)]="model.accountMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
             </div>
           </div>
 
@@ -148,7 +149,7 @@
           <div class="form-group row">
             <label for="contactName" class="col-sm-2 col-form-label">{{ 'ContactName' | translate }}</label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll" type="text" class="form-control" id="contactName" [(ngModel)]="model.contactName" [placeholder]="'Enter a contact name' | translate">
+              <input [disabled]="isDisabledAll" [maxlength]="100" type="text" class="form-control" id="contactName" [(ngModel)]="model.contactName" [placeholder]="'Enter a contact name' | translate">
             </div>
           </div>
 
@@ -193,6 +194,7 @@
               [(ngModel)]="model.comment"
               cols="4"
               rows="4"
+              [maxlength]="200"
             ></textarea>
 
             <div class="mr-auto" *ngIf="model?.accountId > 0">

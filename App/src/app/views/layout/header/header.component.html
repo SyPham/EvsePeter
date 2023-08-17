@@ -1,13 +1,12 @@
 
-<header class="navbar navbar-dark sticky-top flex-md-nowrap p-0 bg-main header">
+<header class="navbar navbar-dark sticky-top flex-md-nowrap p-0 header" style="box-shadow: 1px 1px 4px">
   <div class="navbar-brand mr-0 logo">
-    <span class="logo-lg" style="cursor: pointer;"> <a class="nav-bar-link" href="/dashboard">
-        <font style="vertical-align: inherit;">
-          <font style="vertical-align: inherit;">{{ 'EVSE 後台管理系統' | translate}}</font>
-        </font>
+    <span class="logo-lg" style="cursor: pointer;"> <a class="nav-bar-link" href="/">
+      <img width="150"  src="../../../../assets/images/logo.png" [alt]="'EVSE 後台管理系統' | translate">
+
       </a></span><span class="logo-mini">
       <font style="vertical-align: inherit;">
-        <font style="vertical-align: inherit;">{{ 'NGRS' | translate}}</font>
+        <font style="vertical-align: inherit;">{{ 'EVSE' | translate}}</font>
       </font>
     </span>
   </div>
@@ -15,8 +14,10 @@
     <div class="sidebar-toggle">
       <div><i class="fas fa-bars"></i></div>
     </div>
-
     <li class="nav-item">
+      <a class="nav-link"> {{ 'EVSE 後台管理系統' | translate}}</a>
+    </li>
+    <!-- <li class="nav-item">
       <a class="nav-link">
         <span class="font-weight-bold text-white">{{currentTime}} | </span>
 
@@ -24,7 +25,7 @@
         <span class="font-weight-bold text-white">{{downTime}}</span>
 
       </a>
-    </li>
+    </li> -->
 
     <div class="farm-select">
       
@@ -44,11 +45,16 @@
     <div class="dropdown ml-auto">
       <div class="sidebar-toggle">
 
-        <div><i class="fas fa-user-tie"></i><span>
+        <div>
+          <span>
             <font style="vertical-align: inherit;">
-              <font style="vertical-align: inherit;">{{username}} | {{nickName}}</font>
+              <font style="vertical-align: inherit;">{{'Hi' | translate}}, {{username}} | {{nickName}}</font>
             </font>
-          </span></div>
+          </span>
+          <img width="16" height="16" style="margin-left: 8px;" src="../../../../assets/icons/log-out.png" [alt]="'sign out' | translate">
+
+        </div>
+
       </div>
       <div class="dropdown-menu dropdown-menu-right navbar-dropdown" style="z-index: 1020;">
         <a class="dropdown-item my-btn" (click)="logout()">

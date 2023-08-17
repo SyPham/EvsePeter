@@ -305,7 +305,7 @@ _logger = logger;
         }
         public  async Task<object> GetAccountGroup()
         {
-            var query = _repo.FindAll(x => x.Status == 1).Select(x => new {
+            var query = _repo.FindAll(x => x.Status == 1).OrderBy(x=> x.OrderBy).Select(x => new {
                 x.Id,
                 x.GroupName,
                 x.GroupNo,

@@ -74,7 +74,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.farmGuid = localStorage.getItem("farmGuid");
     this.lang = this.capitalize(localStorage.getItem("lang"));
     this.nickName =
-      JSON.parse(localStorage.getItem("user"))?.nickName || "No Name";
+      JSON.parse(localStorage.getItem("user"))?.accountName || "No Name";
     this.username =
       JSON.parse(localStorage.getItem("user"))?.username || "Guest";
 
