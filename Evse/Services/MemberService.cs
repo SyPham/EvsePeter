@@ -662,11 +662,12 @@ IRepositoryBase<UserAction> repoUserAction)
 
                     var fileExtension = new FileExtension();
                     var avatarUniqueFileName = string.Empty;
+                    var idcardUniqueFileName = string.Empty;
                     var carLicenseFileName = string.Empty;
-                    var avatarFolderPath = "FileUploads\\images\\member\\idcard";
-                    var carLicenseFolderPath = "FileUploads\\images\\member\\carLicense";
-                    string uploadAvatarFolder = Path.Combine(_currentEnvironment.WebRootPath, avatarFolderPath);
-                    string carLicenseFolder = Path.Combine(_currentEnvironment.WebRootPath, carLicenseFolderPath);
+
+                    string uploadIdCardFolder = Path.Combine(_currentEnvironment.WebRootPath, "FileUploads\\images\\member\\idcard");
+                    string uploadAvatarFolder = Path.Combine(_currentEnvironment.WebRootPath, "FileUploads\\images\\member\\avatar");
+                    string  uploadCarLicenseFolder = Path.Combine(_currentEnvironment.WebRootPath, "FileUploads\\images\\member\\carLicense");
                     if (file != null)
                     {
                         IFormFile files = file;
@@ -674,41 +675,54 @@ IRepositoryBase<UserAction> repoUserAction)
                         {
                             if (type == "1")
                             {
-                                avatarUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadAvatarFolder}\\{avatarUniqueFileName}");
-                                item.IdCard1Path = $"/FileUploads/images/member/idcard/{avatarUniqueFileName}";
+                                if (!item.IdCard1Path.IsNullOrEmpty())
+                                    fileExtension.Remove($"{_currentEnvironment.WebRootPath}{item.IdCard1Path.Replace("/", "\\").Replace("/", "\\")}");
+                                idcardUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadIdCardFolder}\\{idcardUniqueFileName}");
+                                item.IdCard1Path = $"/FileUploads/images/member/idcard/{idcardUniqueFileName}";
                             }
                             else if (type == "2")
                             {
-                                avatarUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadAvatarFolder}\\{avatarUniqueFileName}");
-                                item.IdCard2Path = $"/FileUploads/images/member/idcard/{avatarUniqueFileName}";
+
+                                if (!item.IdCard2Path.IsNullOrEmpty())
+                                    fileExtension.Remove($"{_currentEnvironment.WebRootPath}{item.IdCard2Path.Replace("/", "\\").Replace("/", "\\")}");
+                                idcardUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadIdCardFolder}\\{idcardUniqueFileName}");
+                                item.IdCard2Path = $"/FileUploads/images/member/idcard/{idcardUniqueFileName}";
 
                             }
                             else if (type == "3")
                             {
-                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
+                                if (!item.CarLicensePath.IsNullOrEmpty())
+                                    fileExtension.Remove($"{_currentEnvironment.WebRootPath}{item.CarLicensePath.Replace("/", "\\").Replace("/", "\\")}");
+                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{uploadCarLicenseFolder}\\{carLicenseFileName}");
 
                                 item.CarLicensePath = $"/FileUploads/images/member/carLicense/{carLicenseFileName}";
 
                             }
                             else if (type == "4")
                             {
-                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
+                                if (!item.CarLicense2Path.IsNullOrEmpty())
+                                    fileExtension.Remove($"{_currentEnvironment.WebRootPath}{item.CarLicense2Path.Replace("/", "\\").Replace("/", "\\")}");
+                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{uploadCarLicenseFolder}\\{carLicenseFileName}");
 
                                 item.CarLicense2Path = $"/FileUploads/images/member/carLicense/{carLicenseFileName}";
 
                             }
                             else if (type == "5")
                             {
-                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
+                                if (!item.PhotoPath2.IsNullOrEmpty())
+                                    fileExtension.Remove($"{_currentEnvironment.WebRootPath}{item.PhotoPath2.Replace("/", "\\").Replace("/", "\\")}");
+                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{uploadCarLicenseFolder}\\{carLicenseFileName}");
 
                                 item.PhotoPath2 = $"/FileUploads/images/member/carLicense/{carLicenseFileName}";
 
                             }
                             else if (type == "6")
                             {
-                                carLicenseFileName = await fileExtension.WriteAsync(files, $"{carLicenseFolder}\\{carLicenseFileName}");
+                                if (!item.PhotoPath.IsNullOrEmpty())
+                                    fileExtension.Remove($"{_currentEnvironment.WebRootPath}{item.PhotoPath.Replace("/", "\\").Replace("/", "\\")}");
+                                avatarUniqueFileName = await fileExtension.WriteAsync(files, $"{uploadAvatarFolder}\\{avatarUniqueFileName}");
 
-                                item.PhotoPath = $"/FileUploads/images/member/carLicense/{carLicenseFileName}";
+                                item.PhotoPath = $"/FileUploads/images/member/avatar/{avatarUniqueFileName}";
 
                             }
                         }
