@@ -359,6 +359,30 @@ this.path4 = {
      );
  
    }
+   validateFields() {
+    if (!this.model.memberNo) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_NO' }), true);
+      return false;
+    }
+    if (!this.model.memberName) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_Name' }), true);
+      return false;
+    }
+   
+    if (!this.model.uid) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_UID' }), true);
+      return false;
+    }
+    if (!this.model.upwd) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_PWD' }), true);
+      return false;
+    }
+    if (this.model.upwd != this.model.reupwd && this.model.id === 0) {
+      this.alertify.error(this.translate.instant("PasswordNotMatch"), true);
+      return false;
+    }
+    return true;
+   }
    save() {
 
     if (this.model.id > 0) {

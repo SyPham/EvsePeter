@@ -99,7 +99,7 @@ _logger = logger;
                 var data2 = await query2.ToListAsync();
                 return data.Union(data2).ToList().DistinctBy(x => x.CodeNo);
 
-            }
+            } 
             return (await query.ToListAsync()).DistinctBy(x => x.CodeNo);
         }
 
@@ -107,27 +107,9 @@ _logger = logger;
         {
             try
             {
-                var ap = await _repoXAccountGroupPermission.FindAll(x => x.UpperGuid == request.Guid).ToListAsync();
-                var permissions = await _repoCodePermission.FindAll(x => request.Permissions.Contains(x.CodeNo)).Select(x => x.CodeNo).ToListAsync();
-
-                if (ap.Any())
-                {
-                    _repoXAccountGroupPermission.RemoveMultiple(ap);
-                    var xapList = new List<XAccountGroupPermission>();
-                    foreach (var item in permissions)
-                    {
-                        xapList.Add(new XAccountGroupPermission
-                        {
-                            CodeNo = item,
-                            UpperGuid = request.Guid,
-                        });
-                    }
-                    _repoXAccountGroupPermission.AddRange(xapList);
-                }
-                else
-                {
-                    var xapList = new List<XAccountGroupPermission>();
-                    foreach (var item in permissions)
+                if (request.AddPermissions.Any()) {
+                      var xapList = new List<XAccountGroupPermission>();
+                    foreach (var item in request.AddPermissions)
                     {
                         xapList.Add(new XAccountGroupPermission
                         {
@@ -136,15 +118,23 @@ _logger = logger;
                         });
                     }
                     _repoXAccountGroupPermission.AddRange(xapList);
+                await _unitOfWork.SaveChangeAsync();
+
+                }
+                if (request.RemovePermissions.Any())
+                {
+                    var removeList =await _repoXAccountGroupPermission.FindAll(x=> request.Guid == x.UpperGuid && request.RemovePermissions.Contains(x.CodeNo)).ToListAsync();
+                    _repoXAccountGroupPermission.RemoveMultiple(removeList);
+                await _unitOfWork.SaveChangeAsync();
+
                 }
 
-                await _unitOfWork.SaveChangeAsync();
                 operationResult = new OperationResult
                 {
                     StatusCode = HttpStatusCode.OK,
                     Message = MessageReponse.AddSuccess,
                     Success = true,
-                    Data = request.Permissions
+                    Data = request.AddPermissions
                 };
             }
             catch (Exception ex)
@@ -219,7 +209,7 @@ _logger = logger;
             {
                 await _unitOfWork.SaveChangeAsync();
                 model.Permissions.Guid = item.Guid;
-                var result = await SavePermission(model.Permissions);
+                var result = await StorePermission(model.Permissions);
                 if (result.Success == false) return result;
                 await _unitOfWork.SaveChangeAsync();
 
@@ -247,7 +237,7 @@ _logger = logger;
             _repo.Update(item);
             try
             {
-               var result= await SavePermission(model.Permissions);
+               var result= await StorePermission(model.Permissions);
                 if (result.Success == false) return result;
                 await _unitOfWork.SaveChangeAsync();
                 operationResult = new OperationResult

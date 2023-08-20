@@ -10,6 +10,13 @@ export interface XAccountGroup {
   updateBy: number | null;
   status: number | null;
   guid: string;
-  permissions: any;
+  permissions: {
+    addPermissions: any;
+    removePermissions: any;
+    permissions: any;
+    guid: any;
+  };
+  remarks: any;
   canSeeAllFarm: boolean | null
+ 
 }

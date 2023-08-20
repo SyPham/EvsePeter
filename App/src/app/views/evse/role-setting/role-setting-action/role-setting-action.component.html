@@ -1,0 +1,77 @@
+<div class="card" style="height:90vh">
+  <div class="card-body">
+ 
+    <div class="row mb-3">
+      <div class="col-sm-2">
+        <button type="button" (click)="save()" class="btn btn-sm btn-success">{{ 'OK to add' | translate }}</button>
+
+      </div>
+      <div class="col-sm-3 text-secondary">
+      </div>
+    </div>
+
+
+    <div class="row mb-3">
+      <div class="col-sm-2">
+        <label class="mb-0">{{'Role number' | translate}}: </label>
+      </div>
+      <div class="col-sm-3 text-secondary">
+        <input type="text" [readonly]="true" [ngModel]="item.id" class="form-control">
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-sm-2">
+        <label class="mb-0">{{'Role name' | translate}}: </label>
+      </div>
+      <div class="col-sm-6 text-secondary">
+        <input type="text" [(ngModel)]="item.groupName"  class="form-control">
+
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-sm-2">
+        <label class="mb-0">{{'Role remarks' | translate}}: </label>
+      </div>
+      <div class="col-sm-6 text-secondary">
+        <textarea rows="5" [maxLength]="200" [(ngModel)]="item.remarks" class="form-control"></textarea>
+      </div>
+    </div>
+
+
+    <div class="row mb-3">
+      <div class="col-sm-2">
+        <label class="mb-0">{{'Permission' | translate}}: </label>
+      </div>
+      <div class="col-sm-6 text-secondary">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-check" *ngFor="let item of data">
+            <div class="pretty p-default p-fill">
+              <input type="checkbox" (change)="checkedPermission($event,item)" [id]="item.name" [checked]="item.checked"  />
+              <div class="state">
+                  <label [for]="item.name">{{item.name}}</label>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div class="col-6">
+
+
+          <div class="form-check" *ngFor="let item of data2">
+            <div class="pretty p-default p-fill">
+              <input type="checkbox" (change)="checkedPermission($event,item)" [id]="item.name" [checked]="item.checked"  />
+              <div class="state">
+                  <label [for]="item.name">{{item.name}}</label>
+              </div>
+          </div>
+          
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </div>
+</div>

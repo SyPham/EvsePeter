@@ -33,6 +33,8 @@ import { ElectricianErrorReportActionComponent } from './electrician-error-repor
 import { Sitev2Component } from './sitev2/sitev2.component';
 import { Sitev2ActionComponent } from './sitev2/sitev2-action/sitev2-action.component';
 import { Sitev2DetailComponent } from './sitev2/sitev2-detail/sitev2-detail.component';
+import { RoleSettingComponent } from './role-setting/role-setting.component';
+import { RoleSettingActionComponent } from './role-setting/role-setting-action/role-setting-action.component';
 
 const routes: Routes = [
   {
@@ -206,7 +208,7 @@ const routes: Routes = [
   //canActivate: [AuthGuard]
   },
   {
-    path: 'evse/setting-role',
+    path: 'evse/setting-role-old',
     component: SettingRoleComponent,
     data: {
       title: 'Setting Role',
@@ -354,6 +356,26 @@ const routes: Routes = [
       functionCode: 'Electrician Error'
     },
   canActivate: [AuthGuard]
+  },
+  {
+    path: 'evse/setting-role',
+    component: RoleSettingComponent,
+    data: {
+      title: 'Setting Role',
+      breadcrumb: 'Setting Role',
+      functionCode: 'Setting Role'
+    },
+   canActivate: [AuthGuard]
+  },
+  {
+    path: 'evse/setting-role/action/:id',
+    component: RoleSettingActionComponent,
+    data: {
+      title: 'Setting Role Action',
+      breadcrumb: 'Setting Role Action',
+      functionCode: 'Setting Role'
+    },
+   canActivate: [AuthGuard]
   },
 ];
 @NgModule({

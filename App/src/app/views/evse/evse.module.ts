@@ -74,6 +74,8 @@ import { ElectricianErrorReportActionComponent } from './electrician-error-repor
 import { Sitev2ActionComponent } from './sitev2/sitev2-action/sitev2-action.component';
 import { Sitev2Component } from './sitev2/sitev2.component';
 import { Sitev2DetailComponent } from './sitev2/sitev2-detail/sitev2-detail.component';
+import { RoleSettingComponent } from './role-setting/role-setting.component';
+import { RoleSettingActionComponent } from './role-setting/role-setting-action/role-setting-action.component';
 
 interface Environment {
   production: boolean;
@@ -163,7 +165,9 @@ const mapOptions:  LazyMapsAPILoaderConfigLiteral = {
     ElectricianErrorReportActionComponent,
     Sitev2Component,
     Sitev2ActionComponent,
-    Sitev2DetailComponent
+    Sitev2DetailComponent,
+    RoleSettingComponent,
+    RoleSettingActionComponent
 
   ]
 })

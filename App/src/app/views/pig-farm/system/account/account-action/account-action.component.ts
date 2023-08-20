@@ -114,7 +114,7 @@ id: any;
   getAccountNo() {
     if (this.model?.accountGroup && this.role) {
       this.service.getAccountNo(this.role, this.model.accountGroup).subscribe(res=> {
-  this.model.accountNo =  res['value'];
+      this.model.accountNo =  res['value'];
       })
     }
    
@@ -298,8 +298,49 @@ id: any;
      );
  
    }
+   validateFields() {
+    if (!this.model.accountNo) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_NO' }), true);
+      return false;
+    }
+    if (!this.model.accountName) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_Name' }), true);
+      return false;
+    }
+    if (!this.model.accountIdcard) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_IDCARD' }), true);
+      return false;
+    }
+    if (this.idcardValidator()) {
+      this.alertify.error(this.translate.instant("Begin with 1 English letter followed by 9 digits"), true);
+      return false;
+    }
+    if (!this.model.uid) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_UID' }), true);
+      return false;
+    }
+    if (!this.model.upwd) {
+      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_PWD' }), true);
+      return false;
+    }
+    if (this.model.upwd != this.model.reupwd && this.model.accountId === 0) {
+      this.alertify.error(this.translate.instant("PasswordNotMatch"), true);
+      return false;
+    }
+    return true;
+   }
+   idcardValidator() {
+    const regex = /^[A-Za-z][0-9]{9}$/;
+  
+    if (!regex.test(this.model.accountIdcard)) {
+      return true; // Error when format is invalid
+    }
+    return false;
+  }
    save() {
-
+    if (this.validateFields() === false) {
+      return;
+    }
     if (this.model.accountId > 0) {
       this.update();
     } else {

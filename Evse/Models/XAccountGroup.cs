@@ -20,6 +20,7 @@ namespace Evse.Models
         public string Guid { get; set; }
         public bool? CanSeeAllFarm { get; set; }
         public int? OrderBy { get; set; }
+        public string Remarks { get; set; }
 
     }
 }

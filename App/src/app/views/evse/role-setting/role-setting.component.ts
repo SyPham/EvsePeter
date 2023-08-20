@@ -1,3 +1,4 @@
+
 import { BaseComponent } from 'herr-core';
 import { TranslateService } from '@ngx-translate/core';
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
@@ -5,7 +6,7 @@ import { AlertifyService } from 'src/app/_core/_service/alertify.service';
 import { ExcelExportCompleteArgs, ExcelExportProperties, GridComponent, QueryCellInfoEventArgs } from '@syncfusion/ej2-angular-grids';
 import { Tooltip } from '@syncfusion/ej2-angular-popups';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { XAccountGroup } from 'src/app/_core/_model/xaccount-group';
 import { ActionConstant, MessageConstants } from 'src/app/_core/_constants';
 import { XAccountGroupService } from 'src/app/_core/_service/xaccount-group.service';
@@ -17,11 +18,11 @@ import { FilteringEventArgs } from '@syncfusion/ej2-angular-dropdowns';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-xaccount-group',
-  templateUrl: './xaccount-group.component.html',
-  styleUrls: ['./xaccount-group.component.scss']
+  selector: 'app-role-setting',
+  templateUrl: './role-setting.component.html',
+  styleUrls: ['./role-setting.component.scss']
 })
-export class XAccountGroupComponent extends BaseComponent implements OnInit {
+export class RoleSettingComponent extends BaseComponent implements OnInit {
   data: XAccountGroup[] = [];
   password = '';
   modalReference: NgbModalRef;
@@ -36,7 +37,8 @@ export class XAccountGroupComponent extends BaseComponent implements OnInit {
   @ViewChild('optionModal') templateRef: TemplateRef<any>;
   @ViewChild('odsTemplate', {static:true}) public odsTemplate: any;
   loading: number;
-  permissions: any[];
+  permissionsL: any[];
+  permissionsR: any[];
   permissionData: any[];
   accountGroupGuid: any;
   fields = { text: 'name', value: 'codeNo' };
@@ -52,12 +54,14 @@ export class XAccountGroupComponent extends BaseComponent implements OnInit {
     public modalService: NgbModal,
     private alertify: AlertifyService,
     private route: ActivatedRoute,
+    private router: Router,
     private datePipe: DatePipe,
     public translate: TranslateService,
   ) { super(translate,environment.apiUrl);  }
 
   ngOnInit() {
-    this.toolbarOptions = ['ExcelExport',{template: this.odsTemplate}, 'Add', 'Search'];
+    //this.toolbarOptions = ['ExcelExport',{template: this.odsTemplate}, 'Add', 'Search'];
+    this.toolbarOptions = ['Add'];
     let lang = localStorage.getItem('lang');
     let languages = JSON.parse(localStorage.getItem('languages'));
     // setCulture(lang);
@@ -148,7 +152,6 @@ toolbarClick(args) {
         case 'grid_add':
           args.cancel = true;
           this.model = {} as any;
-          this.openModal(this.templateRef);
           break;
         default:
           break;
@@ -262,82 +265,16 @@ toolbarClick(args) {
       this.create();
     }
   }
-  async openModal(template, data = {} as XAccountGroup) {
-    const farmGuid = localStorage.getItem('farmGuid');
-    if (data?.id > 0) {
-      try {
-        this.title = 'ACCOUNT_GROUP_EDIT_MODAL';
-        this.model = {...data};
-        this.modalReference = this.modalService.open(template, {size: 'xl', backdrop: 'static'});
-        this.getAudit(this.model.id);
-        this.loading = 1;
-        this.accountGroupGuid = data.guid;
-        const guid = this.accountGroupGuid || "";
-        const lang = localStorage.getItem('lang');
-        this.permissionData = [];
-        this.permissions = [];
-        this.model.permissions = {
-          guid: this.accountGroupGuid || "",
-          permissions: this.permissions,
-          addPermissions: null,
-          removePermissions: null,
-        }
-        const permissionData = await this.service.getPermissionsDropdown(guid,lang).toPromise();
-        this.permissionData = permissionData;
-        const permissions = await this.service.getPermissions(guid,lang).toPromise();
-        this.permissions = permissions || [];
-        this.model.permissions = {
-          guid: this.accountGroupGuid || "",
-          permissions: this.permissions,
-          addPermissions: null,
-          removePermissions: null,
-        }
-        this.loading = 0;
-      } catch (error) {
-        this.loading = 0;
-      }
-
-    } else {
-      this.title = 'ACCOUNT_GROUP_ADD_MODAL';
-      this.loading = 1;
-      this.model.id = 0;
-      this.model.farmGuid = farmGuid;
-      this.accountGroupGuid = this.model.guid;
-      this.modalReference = this.modalService.open(template, {size: 'xl', backdrop: 'static'});
-      const guid = this.accountGroupGuid || "";
-      const lang = localStorage.getItem('lang');
-      this.permissionData = [];
-      this.permissions = [];
-      this.model.permissions = {
-        guid: this.accountGroupGuid || "",
-        permissions: this.permissions,
-        addPermissions: null,
-        removePermissions: null,
-      }
-      try {
-        const permissionData = await this.service.getPermissionsDropdown(guid,lang).toPromise();
-        this.permissionData = permissionData;
-        this.model.permissions = {
-          guid: this.accountGroupGuid || "",
-          permissions: this.permissions,
-          addPermissions: null,
-          removePermissions: null,
-        }
-        this.loading = 0;
-      } catch (error) {
-        this.loading = 0;
-      }
-
-    }
+  edit(data) {
+    this.router.navigate([`/evse/setting-role/action/${data.id}`]);
   }
-  onChangePermission() {
-    this.model.permissions = {
-      guid: this.accountGroupGuid || "",
-      permissions: this.permissions,
-      addPermissions: null,
-      removePermissions: null,
-    }
+  check(data) {
+
   }
+  add() {
+    this.router.navigate([`/evse/setting-role/action/0`]);
+  }
+  
   odsExport() {
     const functionName = this.functionName;
     const printBy = this.printBy;
@@ -395,6 +332,30 @@ toolbarClick(args) {
   }
 
   fnEdit(e) {}
+  async openModal(template, data = {} as XAccountGroup) {
+    if (data?.id > 0) {
+      try {
+        this.model = {...data};
+        this.modalReference = this.modalService.open(template, {size: 'xl', backdrop: 'static'});
+        this.accountGroupGuid = data.guid;
+        const guid = this.accountGroupGuid || "";
+        const lang = localStorage.getItem('lang');
+        const permissions = await this.service.getPermissionsDropdown(guid,lang).toPromise();
+        let length = permissions.length
+        let rolesTemp = [...permissions];
+        let flength = Math.ceil(length/2);
+        this.permissionsL = rolesTemp.splice(0, flength)
+         rolesTemp = [...permissions];
+        this.permissionsR = rolesTemp.splice(flength, length);
+        this.loading = 0;
+      } catch (error) {
+        this.loading = 0;
+      }
+
+    } 
+
+  }
+
 }
 
 

@@ -1,0 +1,190 @@
+<div class="col-md-12" style="box-shadow: 1px 1px 20px; padding: 0">
+  <div class="card main-card">
+    <!-- <div class="card-header">
+      <h3 class="card-title"><i class="fas fa-users"></i> User List
+      </h3>
+    </div> -->
+    <div class="col-12 my-2">
+      <button type="button" (click)="add()" class="btn btn-sm btn-success">{{ 'Add role permissions' | translate }}</button>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive p-0">
+      <ejs-grid
+        #grid
+        id="grid"
+        [dataSource]="data"
+        [allowPaging]="true"
+        [allowResizing]="true"
+        gridLines="Both"
+        [locale]="locale"
+        (actionBegin)="actionBegin($event)"
+        (actionComplete)="actionComplete($event)"
+        [editSettings]="editSettings"
+        [pageSettings]="pageSettings"
+        [allowExcelExport]="true"
+        (recordDoubleClick)="onDoubleClick($event)"
+        (toolbarClick)="toolbarClick($event)"
+        (excelExportComplete)="excelExpComplete($event)"
+      >
+        <ng-template #odsTemplate let-data>
+          <button
+            class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib"
+            type="button"
+            id="grid_odsexport"
+            tabindex="-1"
+            (click)="odsExport()"
+            style="width: auto"
+          >
+            <span class="e-btn-icon e-pdfexport e-icons e-icon-left"></span
+            ><span class="e-tbar-btn-text"
+              >{{ "Ods Export" | translate }}
+            </span>
+          </button>
+        </ng-template>
+        <ng-template #pagerTemplate let-data>
+          <pre
+          class="page-text"
+          [translate]="pageText"
+          [translateParams]="{ items: grid.pageSettings.totalRecordsCount }"
+          > </pre>
+         <div class="d-flex justify-content-center">
+          <ngb-pagination
+          [collectionSize]="grid.pageSettings.totalRecordsCount"
+          [(page)]="grid.pageSettings.currentPage"
+          [pageSize]="grid.pageSettings.pageSize"
+          [maxSize]="5"
+          [rotate]="true"
+          [ellipses]="false"
+          [boundaryLinks]="true"
+        >
+        
+        <ng-template ngbPaginationFirst><i class="fa fa-step-backward"></i></ng-template>
+        <ng-template ngbPaginationLast><i class="fa fa-step-forward"></i></ng-template>
+        <ng-template ngbPaginationPrevious><i class="fa fa-caret-left"></i></ng-template>
+        <ng-template ngbPaginationNext><i class="fa fa-caret-right"></i></ng-template>
+        <ng-template ngbPaginationEllipsis>...</ng-template>
+        <ng-template ngbPaginationNumber let-page>{{ page }}</ng-template>
+        
+        </ngb-pagination>
+         </div>
+          </ng-template>
+        <e-columns>
+          <e-column
+            field="#"
+            [allowSearching]="false"
+            textAlign="Center"
+            headerTextAlign="Center"
+            isPrimaryKey="true"
+            [width]="50"
+            headerText="{{ 'Role number' | translate }}"
+          >
+            <ng-template #template let-data>
+              {{ NO(data.index) }}
+            </ng-template>
+            <ng-template #editTemplate let-data> # </ng-template>
+          </e-column>
+
+          <!-- <e-column
+            field="groupNo"
+            textAlign="Left"
+            headerTextAlign="Center"
+            headerText="{{ 'ACCOUNT_GROUP_NO' | translate }}"
+          >
+          </e-column> -->
+          <e-column
+            field="groupName"
+            textAlign="Center"
+            [width]="300"
+            headerTextAlign="Center"
+            headerText="{{ 'Role name' | translate }}"
+          >
+          </e-column>
+          
+          <e-column
+            field="option"
+            textAlign="Center"
+            headerTextAlign="Center"
+            headerTextAlign="Center"
+            [allowSorting]="false"
+            [allowSearching]="false"
+            [allowGrouping]="false"
+            [allowFiltering]="false"
+            [allowEditing]="false"
+            headerText="{{ 'OPTION' | translate }}"
+          >
+            <ng-template #template let-data>
+
+              <button type="button" (click)="edit(data)"  class="btn btn-sm btn-success mr-2">{{ 'Edit' | translate }}</button>
+              <button type="button" (click)="openModal(optionModal, data)"  class="btn btn-sm btn-primary mr-2">{{ 'Check' | translate }}</button>
+              <button type="button" (click)="delete(data.id)" class="btn btn-sm btn-danger">{{ 'Delete' | translate }}</button>
+            </ng-template>
+          </e-column>
+
+        </e-columns>
+      </ejs-grid>
+    </div>
+    <!-- /.card-body -->
+  </div>
+</div>
+
+
+<ng-template #optionModal let-modal>
+  
+  <div class="modal-body">
+    <div class="row">
+     <div class="col-12">
+      <button
+      type="button"
+      class="close mb-4"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+     </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-sm-2">
+        <label class="mb-0">{{'Role remarks' | translate}}: </label>
+      </div>
+      <div class="col-sm-6 text-secondary">
+        <textarea rows="5" [maxLength]="200" [(ngModel)]="model.remarks" class="form-control"></textarea>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-sm-2">
+        <label class="mb-0">{{'Permission' | translate}}: </label>
+      </div>
+      <div class="col-sm-6 text-secondary">
+      <div class="row">
+        <div class="col-6">
+          <div class="form-check" *ngFor="let item of permissionsL">
+            <div class="pretty p-default p-fill">
+              <input type="checkbox"  [id]="item.name" [checked]="true"  />
+              <div class="state">
+                  <label [for]="item.name">{{item.name}}</label>
+              </div>
+          </div>
+          </div>
+        </div>
+        <div class="col-6">
+
+
+          <div class="form-check" *ngFor="let item of permissionsR">
+            <div class="pretty p-default p-fill">
+              <input type="checkbox" [id]="item.name" [checked]="true"  />
+              <div class="state">
+                  <label [for]="item.name">{{item.name}}</label>
+              </div>
+          </div>
+          
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </div>
+ 
+</ng-template>

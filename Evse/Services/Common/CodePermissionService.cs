@@ -184,11 +184,10 @@ IRepositoryBase<XAccountGroup> repoXAccountGroup)
         public async Task<object> GetPermissionsByRoleId(string roleTemp, string lang)
         {
             var role = roleTemp.ToSafetyString();
-            var xaccountGroup = await _repoXAccountGroup.FindAll().Where(x=> EF.Functions.Collate(x.GroupNo, "SQL_Latin1_General_CP1_CS_AS") == role).FirstOrDefaultAsync();
+            var xaccountGroup = await _repoXAccountGroup.FindAll().Where(x=> x.Guid == role).FirstOrDefaultAsync();
            var roleGuid = "";
            if (xaccountGroup != null) {
             roleGuid = xaccountGroup.Guid;
-           }
             var query = from a in _repo.FindAll(x=> x.Status == "1")
                   
                     select new {
@@ -198,6 +197,18 @@ IRepositoryBase<XAccountGroup> repoXAccountGroup)
 
                     };
             return await query.ToListAsync();
+           } else {
+            var query = from a in _repo.FindAll(x=> x.Status == "1")
+                  
+                    select new {
+                        Guid = a.CodeNo,
+                        Name = lang == Languages.EN ? (a.CodeNameEn == "" || a.CodeNameEn == null ? a.CodeName : a.CodeNameEn) : lang == Languages.VI ? (a.CodeNameVn == "" || a.CodeNameVn == null ? a.CodeName : a.CodeNameVn) : lang == Languages.TW ? a.CodeName : lang == Languages.CN ? (a.CodeNameCn == "" || a.CodeNameCn == null ? a.CodeName : a.CodeNameCn) : a.CodeName,
+                        Checked = false
+
+                    };
+            return await query.ToListAsync();
+           }
+            
         }
     }
 }

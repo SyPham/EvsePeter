@@ -21,6 +21,8 @@ namespace Evse.DTO
         public bool? CanSeeAllFarm { get; set; }
         public StorePermissionDto Permissions { get; set; }
         public int? OrderBy { get; set; }
+        public string Remarks { get; set; }
+
 
     }
 }

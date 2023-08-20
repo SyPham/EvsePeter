@@ -3644,6 +3644,9 @@ namespace Evse.Data
                 entity.Property(e => e.UpdateDate)
                     .HasColumnName("UPDATE_DATE")
                     .HasColumnType("datetime");
+                      entity.Property(e => e.Remarks)
+                    .HasColumnName("Remarks")
+                    .HasMaxLength(200);
             });
 
             modelBuilder.Entity<XAccountGroupPermission>(entity =>

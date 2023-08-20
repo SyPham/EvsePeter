@@ -75,7 +75,9 @@ namespace Evse.DTO
     {
         public string Guid { get; set; }
        
+        public List<string> AddPermissions { get; set; }
         public List<string> Permissions { get; set; }
+        public List<string> RemovePermissions { get; set; }
 
     }
 public partial class StorePermissionForCheckBoxDto
