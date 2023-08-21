@@ -123,4 +123,22 @@ export class XAccountService extends CURDService<XAccount> {
   getAccountNo(type, accountGroupGuid) {
     return this.http.get<any>(`${this.base}XAccount/GetAccountNo?type=${type}&accountGroupGuid=${accountGroupGuid}`, {});
   }
+  SP_CheckIDCard(idCard, type) {
+    return this.http.get<any>(`${this.base}XAccount/SP_CheckIDCard?idCard=${idCard}&type=${type}`, {});
+  }
+  SP_CheckContactTel(contactTel) {
+    return this.http.get<any>(`${this.base}XAccount/SP_CheckContactTel?contactTel=${contactTel}`, {});
+  }
+  SP_Check_Mobile(mobile) {
+    return this.http.get<any>(`${this.base}XAccount/SP_Check_Mobile?mobile=${mobile}`, {});
+  }
+  SP_CheckMemberNO(no) {
+    return this.http.get<any>(`${this.base}XAccount/SP_CheckMemberNO?no=${no}`, {});
+  }
+  SP_Generate_NO(accountGroupGuid) {
+    return this.http.get<any>(`${this.base}XAccount/SP_Generate_NO?accountGroupGuid=${accountGroupGuid}`, {});
+  }
+  getNewId(accountGroupGuid) {
+    return this.http.get<any>(`${this.base}XAccount/GetNewId?accountGroupGuid=${accountGroupGuid}`, {});
+  }
 }

@@ -616,3 +616,6 @@ color: white;
 .page-text {
   color:red;
 }
+.form-control.is-invalid { 
+  background-image: none !important;
+}

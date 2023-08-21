@@ -67,11 +67,18 @@ namespace Evse.Services
         Task<object> SP_Record_AccountCheck_Remove(string accountGuid);
         Task<object> SP_Record_AccountCheck_Confirm(string accountGuid);
         Task<object> SP_Record_AccountCheck_NeedCheck(string accountGuid);
+        Task<object> SP_CheckIDCard(string idCard, string type);
+        Task<object> SP_CheckMemberNO(string no);
+        Task<object> SP_CheckContactTel(string contactTel);
+        Task<object> SP_Check_Mobile(string mobile);
         Task<object> GetAccountNo(string type, string accountGroupGuid);
-
+        Task<object> SP_Generate_NO(string accountGroupGuid);
+        Task<object> GetNewId(string accountGroupGuid);
     }
     public class XAccountService : ServiceBase<XAccount, XAccountDto>, IXAccountService
     {
+        private readonly string _defaultConnection;
+
         private readonly ISPService _repoSp;
         private readonly IRepositoryBase<XAccount> _repo;
         private readonly IRepositoryBase<SystemConfig> _repoSystemConfig;
@@ -131,6 +138,8 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
             _repoSp = repoSp;
             _auditLogService = auditLogService;
             _repoSystemConfig = repoSystemConfig;
+            _defaultConnection = _configuration.GetConnectionString("DefaultConnection");
+
         }
 
         public override async Task<object> GetDataDropdownlist(DataManager data)
@@ -1276,10 +1285,10 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
                         value = await GenerateAccountNO(type, accountGroupGuid)
                     };
                 case "Landlord":
-                    string suffixElectrician = "O";
-                    var configValueElectrician = await _repoSystemConfig.FindAll(x => x.Type == "Electrician.NO").FirstOrDefaultAsync();
-                    suffixElectrician = configValueElectrician != null && !configValueElectrician.Value.IsNullOrEmpty() ? configValueElectrician.Value : suffixElectrician;
-                   suffixElectrician =  suffixElectrician + (accountTotal > 0 ? ++accountTotal : accountTotal).ToString("D9");
+                    string suffixLandlord = "O";
+                    var configValueElectrician = await _repoSystemConfig.FindAll(x => x.Type == "Landlord.NO").FirstOrDefaultAsync();
+                    suffixLandlord = configValueElectrician != null && !configValueElectrician.Value.IsNullOrEmpty() ? configValueElectrician.Value : suffixLandlord;
+                   suffixLandlord =  suffixLandlord + (accountTotal > 0 ? ++accountTotal : accountTotal).ToString("D9");
                 break;
                 case "Investor":
                     string suffixInvestor = "L";
@@ -1295,6 +1304,260 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
             return new {
                         value = result
                     };
+        }
+
+
+        public async Task<object> SP_CheckIDCard(string idCard, string type)
+        {
+            using (SqlConnection conn = new SqlConnection(_defaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                string sql = SP.Account.Check_Admin_ID_Card;
+                switch (type)
+                {
+                    case "Admin": 
+                    sql = SP.Account.Check_Admin_ID_Card;
+                    break;
+                      case "Admin2": 
+                    sql = SP.Account.Check_Admin2_ID_Card;
+                    break;
+                       case "Investor": 
+                    sql = SP.Account.Check_Investor_ID_Card;
+                    break;
+                         case "Electrician": 
+                    sql = SP.Account.Check_Electrician_ID_Card;
+                    break;
+                           case "Landlord": 
+                    sql = SP.Account.Check_Landlord_ID_Card;
+                    break;
+                     case "Engineer": 
+                    sql = SP.Account.Check_Engineer_ID_Card;
+                    break;
+                    default:
+                    return null;
+                    
+                }  
+                 var parameters = new DynamicParameters();
+                 parameters.Add("@Id_Card_Value", idCard);
+                 parameters.Add("@result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+               
+                try
+                {
+                    await conn.QueryAsync(sql, parameters, commandType: CommandType.StoredProcedure);
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"The ${sql} ID_Card_Value={idCard} executed successfully"
+                    }).ConfigureAwait(false);
+                    var result= parameters.Get<int>("@result");
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"SP: ${sql}, Type: {ex.GetType().Name}, Message: {ex.Message}, StackTrace: {ex.ToString()}"
+                    }).ConfigureAwait(false);
+                    return null;
+                }
+
+            }
+        }
+
+
+        public async Task<object> SP_CheckContactTel(string contactTel)
+        {
+            using (SqlConnection conn = new SqlConnection(_defaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                string sql = SP.Account.Check_ContactTel;
+             
+                 var parameters = new DynamicParameters();
+                 parameters.Add("@ContactTel_Value", contactTel);
+                 parameters.Add("@result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+               
+                try
+                {
+                    await conn.QueryAsync(sql, parameters, commandType: CommandType.StoredProcedure);
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"The ${sql} ContactTel_Value={contactTel} executed successfully"
+                    }).ConfigureAwait(false);
+                    var result= parameters.Get<int>("@result");
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"SP: ${sql}, Type: {ex.GetType().Name}, Message: {ex.Message}, StackTrace: {ex.ToString()}"
+                    }).ConfigureAwait(false);
+                    return null;
+                }
+
+            }
+        }
+        public async Task<object> SP_CheckMemberNO(string no)
+        {
+            using (SqlConnection conn = new SqlConnection(_defaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                string sql = SP.Account.Check_MemberNO;
+             
+                 var parameters = new DynamicParameters();
+                 parameters.Add("@Member_NO", no);
+                 parameters.Add("@result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+               
+                try
+                {
+                    await conn.QueryAsync(sql, parameters, commandType: CommandType.StoredProcedure);
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"The ${sql} Member_NO={no} executed successfully"
+                    }).ConfigureAwait(false);
+                    var result= parameters.Get<int>("@result");
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"SP: ${sql}, Type: {ex.GetType().Name}, Message: {ex.Message}, StackTrace: {ex.ToString()}"
+                    }).ConfigureAwait(false);
+                    return null;
+                }
+
+            }
+        }
+ 
+ public async Task<object> SP_Generate_NO(string accountGroupGuid)
+        {
+            var accountGroup = await _repoXAccountGroup.FindAll(x => x.Guid.Equals(accountGroupGuid)).AsNoTracking().FirstOrDefaultAsync();
+            if (accountGroup == null) return null;
+
+            using (SqlConnection conn = new SqlConnection(_defaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                string sql = SP.Account.Generate_Admin_NO;
+                switch (accountGroup.GroupName)
+                {
+                   case "Admin": 
+                    sql = SP.Account.Generate_Admin_NO;
+                    break;
+                      case "Admin2": 
+                    sql = SP.Account.Generate_Admin2_NO;
+                    break;
+                       case "Investor": 
+                    sql = SP.Account.Generate_Investor_NO;
+                    break;
+                         case "Electrician": 
+                    sql = SP.Account.Generate_Electrician_NO;
+                    break;
+                           case "Landlord": 
+                    sql = SP.Account.Generate_Landlord_NO;
+                    break;
+                     case "Engineer": 
+                    sql = SP.Account.Generate_Engineer_NO;
+                    break;
+                    default:
+                    return null;
+                }
+                 var parameters = new DynamicParameters();
+                 parameters.Add("@accountGroupGuid", accountGroupGuid);
+                 parameters.Add("@NO", dbType: DbType.String, direction: ParameterDirection.Output, size: 10);
+               
+                try
+                {
+                    await conn.QueryAsync(sql, parameters, commandType: CommandType.StoredProcedure);
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"The ${sql} accountGroupGuid={accountGroupGuid} executed successfully"
+                    }).ConfigureAwait(false);
+                    var result= parameters.Get<string>("@NO");
+                    return new {
+                        value = result
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"SP: ${sql}, Type: {ex.GetType().Name}, Message: {ex.Message}, StackTrace: {ex.ToString()}"
+                    }).ConfigureAwait(false);
+                    return null;
+                }
+
+            }
+        }
+
+        public async Task<object> GetNewId(string accountGroupGuid)
+        {
+            var total = await _repo.FindAll(x => x.AccountGroup.Equals(accountGroupGuid)).AsNoTracking().CountAsync();
+            if (total > 0) {
+                return new {
+                    value =++total
+                };
+            }
+             return new {
+                    value = total
+                };
+        }
+
+        public async Task<object> SP_Check_Mobile(string mobile)
+        {
+            using (SqlConnection conn = new SqlConnection(_defaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                string sql = SP.Account.Check_ContactTel;
+             
+                 var parameters = new DynamicParameters();
+                 parameters.Add("@Mobile", mobile);
+                 parameters.Add("@result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+               
+                try
+                {
+                    await conn.QueryAsync(sql, parameters, commandType: CommandType.StoredProcedure);
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"The ${sql} Mobile={mobile} executed successfully"
+                    }).ConfigureAwait(false);
+                    var result= parameters.Get<int>("@result");
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"SP: ${sql}, Type: {ex.GetType().Name}, Message: {ex.Message}, StackTrace: {ex.ToString()}"
+                    }).ConfigureAwait(false);
+                    return null;
+                }
+
+            }
         }
     }
 }

@@ -15,6 +15,9 @@ import { XAccountGroup } from 'src/app/_core/_model/xaccount-group';
 import { environment } from 'src/environments/environment';
 import { ImagePathConstants, MessageConstants } from 'src/app/_core/_constants';
 import { AlertifyService, UtilitiesService } from '@pigfarm-core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { catchError, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 declare let $: any;
 
 @Component({
@@ -36,6 +39,7 @@ export class AccountActionComponent implements OnInit {
   xaccountGroupData;
   apiHost = environment.apiUrl.replace('/api/', '');
   noImage = ImagePathConstants.NO_IMAGE;
+
   public onFiltering: any = (e: FilteringEventArgs) => {
     let query = new Query();
     //frame the query based on search string with filter type.
@@ -43,7 +47,7 @@ export class AccountActionComponent implements OnInit {
     //pass the filter data source, filter query to updateData method.
     e.updateData(this.permissionData, query);
   };
-id: any;
+  id: any;
   audit: XAccount;
   alert = {
     updateMessage: this.translate.instant(MessageConstants.UPDATE_MESSAGE),
@@ -65,6 +69,9 @@ id: any;
     no_message: this.translate.instant(MessageConstants.NO_MSG),
   };
   sexData: any;
+  checkMobile: any = 1;
+  checkaccountIdcard = 1;
+  checkContactTel = 1;
   constructor(
     private service: XAccountService,
     private serviceAccountType: AccountTypeService,
@@ -78,7 +85,7 @@ id: any;
      private config: NgbTooltipConfig,
     public translate: TranslateService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
 
   ) { }
   role = '';
@@ -115,6 +122,16 @@ id: any;
     if (this.model?.accountGroup && this.role) {
       this.service.getAccountNo(this.role, this.model.accountGroup).subscribe(res=> {
       this.model.accountNo =  res['value'];
+      })
+    }
+   
+  }
+  SP_Generate_NO() {
+    if (this.model?.accountGroup) {
+      this.service.SP_Generate_NO(this.model.accountGroup).subscribe(res=> {
+        if ( res) {
+          this.model.accountNo =  res['value'];
+        }
       })
     }
    
@@ -162,7 +179,7 @@ id: any;
     return this.noImage;
   }
   reset() {
-    this.id = null;
+    this.id = 0;
     this.model = <XAccount>{};
     this.model.status = '1';
     this.model.accountId = 0;
@@ -201,8 +218,13 @@ id: any;
           this.model.accountGroup = roleTemp[0].guid
         }
         if (this.model.accountId === 0) {
-          this.getAccountNo();
+          this.SP_Generate_NO();
+        this.service.getNewId(roles[0].guid).subscribe(res => {
+          this.model.accountId = res['value'];
+        })
+
         }
+        
       });
   }
   getFarms() {
@@ -298,54 +320,93 @@ id: any;
      );
  
    }
-   validateFields() {
-    if (!this.model.accountNo) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_NO' }), true);
-      return false;
+   
+  validateFields() {
+    return of(
+      !this.model.accountNo ? this.translate.instant("InputDataIncorrect", {field: this.role + '_NO' }) :
+      !this.model.accountName ? this.translate.instant("InputDataIncorrect", {field: this.role + '_Name' }) :
+      true
+    ).pipe(
+      switchMap(validationResult => {
+        if (validationResult !== true) {
+          this.alertify.error(validationResult, true);
+          return of(false);
+        }
+        
+        return this.service.SP_CheckIDCard(this.model.accountIdcard, this.role).pipe(
+          switchMap(checkaccountIdcard => {
+            this.checkaccountIdcard = checkaccountIdcard;
+            if (checkaccountIdcard == 0) {
+              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_IDCARD' }), true);
+              return of(false);
+            }
+      
+            if (!this.model.uid) {
+              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_UID' }), true);
+              return of(false);
+            }
+            if (!this.model.upwd) {
+              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_PWD' }), true);
+              return of(false);
+            }
+            if (this.model.upwd !== this.model.reupwd && this.model.accountId === 0) {
+              this.alertify.error(this.translate.instant("PasswordNotMatch"), true);
+              return of(false);
+            }
+
+            if (this.model.contactTel) {
+             return this.service.SP_CheckContactTel(this.model.contactTel).pipe(
+                switchMap(value => {
+                  this.checkContactTel = value;
+                  if (value === 0) {
+                    this.alertify.error(this.translate.instant("Contact Tel Invalid"), true);
+                    return of (false);
+                  } 
+                  return of (true)
+                })
+              )
+           
+            }
+            if (this.model.accountMobile) {
+              return this.service.SP_Check_Mobile(this.model.accountMobile).pipe(
+                 switchMap(value => {
+                   this.checkMobile = value;
+                   if (value === 0) {
+                     this.alertify.error(this.translate.instant("Mobile Invalid"), true);
+                     return of (false);
+                   } 
+                   return of (true)
+                 })
+               )
+            
+             }
+            return of(true);
+          }),
+
+          catchError(error => {
+            return of(false);
+          })
+        );
+      })
+    );
+  }
+  contactTelChange(value) {
+    if (!value) {
+      this.checkContactTel = 1
     }
-    if (!this.model.accountName) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_Name' }), true);
-      return false;
-    }
-    if (!this.model.accountIdcard) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_IDCARD' }), true);
-      return false;
-    }
-    if (this.idcardValidator()) {
-      this.alertify.error(this.translate.instant("Begin with 1 English letter followed by 9 digits"), true);
-      return false;
-    }
-    if (!this.model.uid) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_UID' }), true);
-      return false;
-    }
-    if (!this.model.upwd) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_PWD' }), true);
-      return false;
-    }
-    if (this.model.upwd != this.model.reupwd && this.model.accountId === 0) {
-      this.alertify.error(this.translate.instant("PasswordNotMatch"), true);
-      return false;
-    }
-    return true;
-   }
-   idcardValidator() {
-    const regex = /^[A-Za-z][0-9]{9}$/;
-  
-    if (!regex.test(this.model.accountIdcard)) {
-      return true; // Error when format is invalid
-    }
-    return false;
   }
    save() {
-    if (this.validateFields() === false) {
-      return;
-    }
-    if (this.model.accountId > 0) {
-      this.update();
-    } else {
-      this.create();
-    }
+    this.validateFields().subscribe(value => {
+      if (value) {
+       
+        if (this.model.accountId > 0) {
+          this.update();
+        } else {
+          this.create();
+        }
+      }
+    })
+   
   }
   ToFormatModel(model: any) {
     for (let key in model) {

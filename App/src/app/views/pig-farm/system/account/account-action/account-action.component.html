@@ -4,12 +4,20 @@
       <div class="card-header" *ngIf="isDisabledAll == false">
         <button
         type="submit"
-      
+        *ngIf="id === 0"
         (click)="save()"
         class="btn btn-success"
       >
-        {{ "SAVE" | translate }}
+        {{ "Add new account" | translate }}
       </button>
+      <button
+      type="submit"
+      *ngIf="id > 0"
+      (click)="save()"
+      class="btn btn-success"
+    >
+      {{ "SAVE" | translate }}
+    </button>
       </div>
       <div class="card-body">
           <div class="d-flex justify-content-center" *ngIf="loading == 1">
@@ -17,11 +25,10 @@
               <span class="sr-only">Loading...</span>
             </div>
            </div>
-
            <div class="form-group row">
             <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
             <div class="col-sm-10">
-              <span *ngIf="model?.accountId > 0">{{model.accountId}}</span>
+              <span *ngIf="id > 0">{{model.accountId}}</span>
             </div>
           </div>
 
@@ -60,7 +67,6 @@
             <label for="accountNO" class="col-sm-2 col-form-label">{{ this.role + '_NO' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
               <input [disabled]="isDisabledAll" [maxLength]="5" type="text"  class="form-control" [(ngModel)]="model.accountNo" [class.is-invalid]="!model.accountNo" id="accountNO" [placeholder]="'Enter a ' + this.role + ' NO' | translate">
-             <small *ngIf="!model.accountNo" class="form-text text-danger">{{ "InputDataIncorrect" | translate: { field:role + '_NO'} }}</small>
             </div>
           </div>
 
@@ -68,7 +74,6 @@
             <label for="accountName" class="col-sm-2 col-form-label">{{ this.role + '_Name' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
               <input [disabled]="isDisabledAll" type="text" class="form-control" [(ngModel)]="model.accountName" [class.is-invalid]="!model.accountName" id="accountName" [placeholder]="'Enter a ' + this.role + ' name' | translate">
-             <small *ngIf="!model.accountName" class="form-text text-danger">{{ "InputDataIncorrect" | translate: { field:role + '_Name'} }}</small>
             </div>
           </div>
 
@@ -93,9 +98,8 @@
           <div class="form-group row">
             <label for="accountIdCard" class="col-sm-2 col-form-label">{{ this.role + '_IDCARD' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll"  [maxlength]="10" type="text" class="form-control" [(ngModel)]="model.accountIdcard" [class.is-invalid]="!model.accountIdcard && idcardValidator()" id="accountIdCard" [placeholder]="'Enter a ' + this.role + ' IDCARD' | translate">
-             <small *ngIf="!model.accountIdcard" class="form-text text-danger">{{ "InputDataIncorrect" | translate: { field:role + '_IDCARD'} }}</small>
-             <small *ngIf="idcardValidator()" class="form-text text-danger">{{ "Begin with 1 English letter followed by 9 digits" | translate }}</small>
+              <input [disabled]="isDisabledAll"  [maxlength]="10" type="text" class="form-control" [(ngModel)]="model.accountIdcard" [class.is-invalid]="!model.accountIdcard || checkaccountIdcard == 0" id="accountIdCard" [placeholder]="'Enter a ' + this.role + ' IDCARD' | translate">
+             
             </div>
           </div>
 
@@ -110,7 +114,6 @@
             <label for="accountUid" class="col-sm-2 col-form-label">{{ this.role + '_UID' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
               <input [disabled]="isDisabledAll" type="text" class="form-control" id="accountUid" [(ngModel)]="model.uid" [class.is-invalid]="!model.uid" [placeholder]="'Enter a ' + this.role + ' uid' | translate">
-             <small *ngIf="!model.uid" class="form-text text-danger">{{ "InputDataIncorrect" | translate: { field:role + '_UID'} }}</small>
             </div>
           </div>
 
@@ -125,12 +128,11 @@
                 <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
                </span>
              </div>
-             <small *ngIf="!model.upwd" class="form-text text-danger">{{ "InputDataIncorrect" | translate: { field:role + '_PWD'} }}</small>
 
             </div>
           </div>
 
-          <div class="form-group row" *ngIf="model?.accountId == 0">
+          <div class="form-group row" *ngIf="id == 0">
             <label for="accountRePassword" class="col-sm-2 col-form-label">{{ this.role + '_Re_PWD' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10 ">
              <div class="password">
@@ -140,7 +142,6 @@
                 <i class="fa fa-eye-slash" *ngIf="inputTypeRePw==='text'" ></i>
                </span>
              </div>
-             <small *ngIf="model.upwd != model.reupwd && model.accountId === 0" class="form-text text-danger">{{'PasswordNotMatch' | translate}}</small>
 
             </div>
           </div>
@@ -172,7 +173,8 @@
           <div class="form-group row">
             <label for="contactTel" class="col-sm-2 col-form-label">{{ 'ContactTel' | translate }}</label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll" type="text" class="form-control" id="contactTel" [(ngModel)]="model.contactTel" [placeholder]="'Enter a contact tel' | translate">
+              <input [disabled]="isDisabledAll" (ngModelChange)="contactTelChange($event)" type="text" [maxlength]="10" class="form-control" id="contactTel" [class.is-invalid]="checkContactTel == 0" [(ngModel)]="model.contactTel" [placeholder]="'Enter a contact tel' | translate">
+             
             </div>
           </div>
 
@@ -196,7 +198,7 @@
               [maxlength]="200"
             ></textarea>
 
-            <div class="mr-auto" *ngIf="model?.accountId > 0">
+            <div class="mr-auto" *ngIf="id > 0">
               <p>
                 <span class='mr-2'> <span class='my-font-weight-bold'>{{ 'Create by' | translate}}</span> : {{audit?.createBy}}</span>
                 <span><span class='my-font-weight-bold'>{{ 'Create date time' | translate}}</span> : {{audit?.createDate}}</span>
@@ -299,7 +301,6 @@ headerText="{{ 'UID' | translate }}"
             </div>
           </div>
 
-          
       </div>
     
     </div>

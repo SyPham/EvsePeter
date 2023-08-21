@@ -307,7 +307,7 @@ toolbarClick(args) {
       }
   }
   fnAdd(args: any) {
-    debugger
+    
     if (args) {
       args.cancel = true;
     }

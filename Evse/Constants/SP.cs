@@ -306,7 +306,27 @@ namespace Evse.Constants
                 public const string SP_Record_AccountCheck_Remove = "SP_Record_AccountCheck_Remove";
                 public const string SP_Record_AccountCheck_Born = "SP_Record_AccountCheck_Born";
               
+            public const string Check_Admin_ID_Card = "Check_Admin_ID_Card";
+            public const string Check_Admin2_ID_Card = "Check_Admin2_ID_Card";
+            public const string Check_Investor_ID_Card = "Check_Investor_ID_Card";
+            public const string Check_Landlord_ID_Card = "Check_Landlord_ID_Card";
+            public const string Check_Member_ID_Card = "Check_Member_ID_Card";
+            public const string Check_Engineer_ID_Card = "Check_Engineer_ID_Card";
+            public const string Check_Electrician_ID_Card = "Check_Electrician_ID_Card";
+            public const string Check_ContactTel = "Check_ContactTel";
+            public const string Check_Mobile = "Check_Mobile";
 
-            }
+            public const string Check_MemberNO = "Check_MemberNO";
+
+            public const string Generate_Admin_NO = "Generate_Admin_NO";
+            public const string Generate_Admin2_NO = "Generate_Admin2_NO";
+            public const string Generate_Investor_NO = "Generate_Investor_NO";
+            public const string Generate_Landlord_NO = "Generate_Landlord_NO";
+            public const string Generate_Engineer_NO = "Generate_Engineer_NO";
+            public const string Generate_Electrician_NO = "Generate_Electrician_NO";
+
+
+            
+        }
     }
 }
