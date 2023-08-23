@@ -146,5 +146,11 @@ namespace Evse.Controllers
         {
             return Ok(await _service.AddDisplayPopup());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetNewId2()
+        {
+            return Ok(await _service.GetNewId());
+        }
     }
 }

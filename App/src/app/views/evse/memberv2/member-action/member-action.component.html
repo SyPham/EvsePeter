@@ -21,7 +21,7 @@
            <div class="form-group row">
             <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
             <div class="col-sm-10">
-              <span *ngIf="model.id > 0">{{model.id}}</span>
+              <span >{{model.id}}</span>
             </div>
           </div>
 
@@ -57,7 +57,7 @@
           </div>
 
            <div class="form-group row">
-            <label for="memberNO" class="col-sm-2 col-form-label">{{ this.role + '_NO' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <label for="memberNO" class="col-sm-2 col-form-label">{{ this.role + '_NO' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
               <input type="text"  class="form-control" [(ngModel)]="model.memberNo" [class.is-invalid]="!model.memberNo" id="memberNO" [placeholder]="'Enter a ' + this.role + ' NO' | translate">
 
@@ -65,7 +65,7 @@
           </div>
 
           <div class="form-group row">
-            <label for="memberName" class="col-sm-2 col-form-label">{{ this.role + '_Name' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <label for="memberName" class="col-sm-2 col-form-label">{{ this.role + '_Name' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" [(ngModel)]="model.memberName" id="memberName" [class.is-invalid]="!model.memberName" [placeholder]="'Enter a ' + this.role + ' name' | translate">
             </div>
@@ -94,12 +94,12 @@
           <div class="form-group row">
             <label for="memberMobile" class="col-sm-2 col-form-label">{{ this.role + '_MOBILE' | translate }}</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="memberMobile" [(ngModel)]="model.memberMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
+              <input type="text" (ngModelChange)="mobileChange($event)" [class.is-invalid]="checkMobile == 0" class="form-control" id="memberMobile" [(ngModel)]="model.memberMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
             </div>
           </div>
 
           <div class="form-group row">
-            <label for="memberUid" class="col-sm-2 col-form-label">{{ this.role + '_UID' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <label for="memberUid" class="col-sm-2 col-form-label">{{ this.role + '_UID' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="memberUid" [(ngModel)]="model.uid" [class.is-invalid]="!model.uid" [placeholder]="'Enter a ' + this.role + ' uid' | translate">
             </div>
@@ -107,11 +107,11 @@
 
 
           <div class="form-group row">
-            <label for="memberPassword" class="col-sm-2 col-form-label">{{ this.role + '_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+            <label for="memberPassword" class="col-sm-2 col-form-label">{{ this.role + '_PWD' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10 ">
              <div class="password">
               <input [type]="inputType" class="form-control" id="memberPassword" [(ngModel)]="model.upwd" [class.is-invalid]="!model.upwd" [placeholder]="'Enter a pwd' | translate">
-              <span class="eye" (click)="togglePassword()" *ngIf="model.id === 0">
+              <span class="eye" (click)="togglePassword()" *ngIf="id=== 0">
                 <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
                 <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
                </span>
@@ -119,8 +119,8 @@
             </div>
           </div>
 
-          <div class="form-group row" *ngIf="model.id == 0">
-            <label for="memberRePassword" class="col-sm-2 col-form-label">{{ this.role + '_Re_PWD' | translate }} <span *ngIf="model.id ===0" style="color:red">(*)</span></label>
+          <div class="form-group row" *ngIf="id== 0">
+            <label for="memberRePassword" class="col-sm-2 col-form-label">{{ this.role + '_Re_PWD' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10 ">
              <div class="password">
               <input [type]="inputTypeRePw" (change)="changeRepassword($event)" class="form-control" id="memberRePassword" [class.is-invalid]="model.reupwd != model.upwd && model.id === 0" [(ngModel)]="model.reupwd" [placeholder]="'Enter a re pwd' | translate">
@@ -317,10 +317,18 @@
               rows="4"
             ></textarea>
 
-            <div class="mr-auto" *ngIf="model.id > 0">
+            <div class="mr-auto" *ngIf="id> 0">
               <p>
                 <span class='mr-2'> <span class='my-font-weight-bold'>{{ 'Create by' | translate}}</span> : {{audit?.createBy}}</span>
                 <span><span class='my-font-weight-bold'>{{ 'Create date time' | translate}}</span> : {{audit?.createDate}}</span>
+              </p>
+             
+            </div>
+
+            <div class="mr-auto" *ngIf="id === 0">
+              <p>
+                <span class='mr-2'> <span class='my-font-weight-bold'>{{ 'Create by' | translate}}</span> : {{currentUser?.username}}</span>
+                <span><span class='my-font-weight-bold'>{{ 'Create date time' | translate}}</span> : {{currentDate | date: 'yyyy/MM/dd HH:mm:ss'}}</span>
               </p>
              
             </div>
@@ -329,7 +337,7 @@
           </div>
           
           
-          <div class="form-group row" *ngIf="model.id > 0">
+          <div class="form-group row" *ngIf="id> 0">
             <label for="contactTel" class="col-sm-2 col-form-label">{{ '' | translate }}</label>
             <div class="col-sm-10">
             <label class="">{{ 'Audit_Logs' | translate }}</label>

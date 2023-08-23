@@ -18,6 +18,8 @@ import { XAccountService } from 'src/app/_core/_service/xaccount.service';
 import { EmitType, detach, Browser, createElement, isNullOrUndefined, EventHandler } from '@syncfusion/ej2-base';
 import { FileInfo, RemovingEventArgs, SelectedEventArgs, UploaderComponent } from '@syncfusion/ej2-angular-inputs';
 import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-popups';
+import { Observable, from, of } from 'rxjs';
+import { switchMap, catchError, mergeMap } from 'rxjs/operators';
 declare let $: any;
 
 @Component({
@@ -74,6 +76,8 @@ export class MemberActionComponent implements OnInit {
   };
 id: any;
   audit: Member;
+  currentDate = new Date();
+  currentUser = JSON.parse(localStorage.getItem('user'))
   alert = {
     updateMessage: this.translate.instant(MessageConstants.UPDATE_MESSAGE),
     updateTitle: this.translate.instant(MessageConstants.UPDATE_TITLE),
@@ -94,6 +98,7 @@ id: any;
     no_message: this.translate.instant(MessageConstants.NO_MSG),
   };
   sexData: any;
+  checkMobile: any = 0;
 
   constructor(
     private service: MemberService,
@@ -113,42 +118,46 @@ id: any;
 
   }
   role = 'Member';
- async ngOnInit() {
+  ngOnInit() {
   this.id = +this.route.snapshot.params['id'];
   this.role = this.route.snapshot.data['functionCode'];
-
   if ( this.id === 0) {
     this.reset()
 
-  } else {
-  const model=  await this.getId();
-  if (model == null) {
-    this.alertify.errorConfirm("", this.translate.instant("Not found record"), () => {
-      this.router.navigateByUrl("/")
-      return;
-    })
-   
-  }
-  this.model = model;
-  this.path = {
-    saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=1` ,
-    removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=1`
-};
-this.path2 = {
-  saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=2` ,
-  removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=2`
-};
-this.path3 = {
-  saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=3` ,
-  removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=3`
-};
-this.path4 = {
-  saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=4` ,
-  removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=4`
-};
+  
 
-    this.getAudit(this.id);
-   this.auditLogs();
+  } else {
+  this.getDetail().subscribe(model => {
+    if (model == null) {
+      this.alertify.errorConfirm("", this.translate.instant("Not found record"), () => {
+        this.router.navigateByUrl("/")
+        return;
+      })
+     
+    }
+    
+    this.model = model;
+    this.path = {
+      saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=1` ,
+      removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=1`
+  };
+  this.path2 = {
+    saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=2` ,
+    removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=2`
+  };
+  this.path3 = {
+    saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=3` ,
+    removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=3`
+  };
+  this.path4 = {
+    saveUrl: environment.apiUrl+ `Member/Save?id=${this.model.id}&type=4` ,
+    removeUrl: environment.apiUrl+ `Member/Remove?id=${this.model.id}&type=4`
+  };
+  
+      this.getAudit(this.id);
+     this.auditLogs();
+  });
+ 
 
   }
     this.getEmployeesByMemberID(0);
@@ -161,7 +170,11 @@ this.path4 = {
    this.uploadConfig4();
 
   }
- 
+  mobileChange(value) {
+    if (!value) {
+      this.checkMobile = 1
+    }
+  }
   getAccountNo() {
     if (this.model?.memberNo && this.role) {
       this.serviceXAccount.getAccountNo(this.role, this.model.memberNo).subscribe(res=> {
@@ -180,6 +193,27 @@ this.path4 = {
   }
   loadDetail() {
    return this.service.getById(this.id).toPromise()
+  }
+  getDetail(): Observable<any> {
+    const accessToken = localStorage.getItem('token');
+    const lang = localStorage.getItem('lang');
+    let query = new Query().where('id', 'equal', this.id);
+  
+    return from(
+      new DataManager({
+        url: `${environment.apiUrl}Member/LoadData?lang=${lang}`,
+        adaptor: new UrlAdaptor,
+        headers: [{ authorization: `Bearer ${accessToken}` }]
+      }).executeQuery(query)
+    ).pipe(
+      mergeMap((x: any) => {
+        if (x.result.result.length > 0) {
+          return of(x.result.result[0]);
+        } else {
+          return of(null);
+        }
+      })
+    );
   }
  async getId() {
     const accessToken = localStorage.getItem('token');
@@ -234,7 +268,9 @@ this.path4 = {
     this.model.id = 0;
     this.model.roleType = '03';
     this.contactRel = '';
-   
+    this.service.getNewId().subscribe(res => {
+      this.model.id = res['value'];
+    })
   }
   contactRel = ''
  
@@ -360,36 +396,50 @@ this.path4 = {
  
    }
    validateFields() {
-    if (!this.model.memberNo) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_NO' }), true);
-      return false;
-    }
-    if (!this.model.memberName) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_Name' }), true);
-      return false;
-    }
-   
-    if (!this.model.uid) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_UID' }), true);
-      return false;
-    }
-    if (!this.model.upwd) {
-      this.alertify.error(this.translate.instant("InputDataIncorrect" ,{field:this.role + '_PWD' }), true);
-      return false;
-    }
-    if (this.model.upwd != this.model.reupwd && this.model.id === 0) {
-      this.alertify.error(this.translate.instant("PasswordNotMatch"), true);
-      return false;
-    }
-    return true;
-   }
-   save() {
+    return of(
+      !this.model.memberNo ? this.translate.instant("InputDataIncorrect", {field: this.role + '_NO' }) :
+      !this.model.memberName ? this.translate.instant("InputDataIncorrect", {field: this.role + '_Name' }) :
+      !this.model.uid ? this.translate.instant("InputDataIncorrect", {field: this.role + '_UID' }) :
+      !this.model.upwd ? this.translate.instant("InputDataIncorrect", {field: this.role + '_PWD' }) :
+      !(this.model.upwd !== this.model.reupwd && this.model.id === 0) ? this.translate.instant("PasswordNotMatch") :
+      true
+    ).pipe(
+      switchMap(validationResult => {
+        if (validationResult !== true) {
+          this.alertify.error(validationResult, true);
+          return of(false);
+        }
+        if (this.model.memberMobile) {
+        return this.serviceXAccount.SP_Check_Mobile(this.model.memberMobile).pipe(
+          switchMap(checkMobile => {
+            this.checkMobile = checkMobile;
+            if (checkMobile == 0) {
+              this.alertify.error(this.translate.instant("Mobile Invalid"), true);
+              return of(false);
+            }
+            return of(true);
+          }),
 
+          catchError(error => {
+            return of(false);
+          })
+        );
+      }
+
+      })
+    );
+  }
+ 
+   save() {
+    this.validateFields().subscribe(value => {
+      if (value) {
     if (this.model.id > 0) {
       this.update();
     } else {
       this.create();
     }
+  }
+})
   }
   ToFormatModel(model: any) {
     for (let key in model) {

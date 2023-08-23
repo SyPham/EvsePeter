@@ -72,6 +72,8 @@ export class AccountActionComponent implements OnInit {
   checkMobile: any = 1;
   checkaccountIdcard = 1;
   checkContactTel = 1;
+  currentDate = new Date();
+  currentUser = JSON.parse(localStorage.getItem('user'))
   constructor(
     private service: XAccountService,
     private serviceAccountType: AccountTypeService,
@@ -393,6 +395,11 @@ export class AccountActionComponent implements OnInit {
   contactTelChange(value) {
     if (!value) {
       this.checkContactTel = 1
+    }
+  }
+  mobileChange(value) {
+    if (!value) {
+      this.checkMobile = 1
     }
   }
    save() {

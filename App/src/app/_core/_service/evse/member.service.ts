@@ -55,5 +55,7 @@ export class MemberService extends CURDService<Member> {
   removeFile(id, type): Observable<OperationResult> {
     return this.http.post<OperationResult>(`${this.base}Member/Remove?id=${id}&type=${type}`, {}).pipe(catchError(this.handleError));
   }
-
+  getNewId() {
+    return this.http.get<any>(`${this.base}Member/GetNewId2`, {});
+  }
 }

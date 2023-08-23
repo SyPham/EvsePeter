@@ -40,6 +40,8 @@ namespace Evse.Services
         Task<OperationResult> RemoveFile(decimal id, string type);
         Task<UserAction> CheckDisplayPopupByCurrentUser();
         Task<OperationResult> AddDisplayPopup();
+        Task<object> GetNewId();
+
     }
     public class MemberService : ServiceBase<Member, MemberDto>, IMemberService, IScopeService
     {
@@ -921,5 +923,19 @@ IRepositoryBase<UserAction> repoUserAction)
             }
 
         }
+
+         public async Task<object> GetNewId()
+        {
+            var total = await _repo.FindAll().AsNoTracking().CountAsync();
+            if (total > 0) {
+                return new {
+                    value =++total
+                };
+            }
+             return new {
+                    value = total
+                };
+        }
+
     }
 }
