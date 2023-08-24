@@ -406,7 +406,7 @@ export class AccountActionComponent implements OnInit {
     this.validateFields().subscribe(value => {
       if (value) {
        
-        if (this.model.accountId > 0) {
+        if (this.id > 0) {
           this.update();
         } else {
           this.create();

@@ -123,9 +123,6 @@ id: any;
   this.role = this.route.snapshot.data['functionCode'];
   if ( this.id === 0) {
     this.reset()
-
-  
-
   } else {
   this.getDetail().subscribe(model => {
     if (model == null) {
@@ -340,6 +337,7 @@ id: any;
        this.alert.createTitle,
        this.alert.createMessage,
        () => {
+        this.model.id = 0;
         this.model.memberStatus = this.model.status + ''
          this.service.insertForm(this.ToFormatModel(this.model)).subscribe(
            (res) => {
@@ -401,7 +399,7 @@ id: any;
       !this.model.memberName ? this.translate.instant("InputDataIncorrect", {field: this.role + '_Name' }) :
       !this.model.uid ? this.translate.instant("InputDataIncorrect", {field: this.role + '_UID' }) :
       !this.model.upwd ? this.translate.instant("InputDataIncorrect", {field: this.role + '_PWD' }) :
-      !(this.model.upwd !== this.model.reupwd && this.model.id === 0) ? this.translate.instant("PasswordNotMatch") :
+      this.model.upwd !== this.model.reupwd && this.model.id === 0 ? this.translate.instant("PasswordNotMatch") :
       true
     ).pipe(
       switchMap(validationResult => {
@@ -433,7 +431,7 @@ id: any;
    save() {
     this.validateFields().subscribe(value => {
       if (value) {
-    if (this.model.id > 0) {
+    if (this.id > 0) {
       this.update();
     } else {
       this.create();

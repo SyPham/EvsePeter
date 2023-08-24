@@ -657,6 +657,7 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
             try
             {
                 var item = _mapper.Map<XAccount>(model);
+                item.AccountId = 0;
                 item.Upwd = model.Upwd.ToSha512();
                 //item.Guid = Guid.NewGuid().ToString("N") + DateTime.Now.ToString("ssff");
                 //item.Upwd = item.Upwd.ToEncrypt();
