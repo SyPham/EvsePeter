@@ -395,11 +395,14 @@ IRepositoryBase<UserAction> repoUserAction)
                 var checkMemberNo = await CheckExistNo(model.MemberNo);
                 if (!checkMemberNo.Success) return checkMemberNo;
             }
-            if (itemModel.Upwd != model.Upwd)
+            var item = _mapper.Map<Member>(model);
+
+            if (! model.Upwd.IsNullOrEmpty())
             {
                 itemModel.Upwd = model.Upwd.ToSha512();
+            } else {
+                item.Upwd = itemModel.Upwd;
             }
-            var item = _mapper.Map<Member>(model);
 
 
             // Nếu có đổi ảnh thì xóa ảnh cũ và thêm ảnh mới

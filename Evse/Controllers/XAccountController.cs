@@ -262,14 +262,19 @@ namespace Evse.Controllers
             return Ok(await _service.SP_Check_Mobile(mobile));
         }
         [HttpGet]
-        public async Task<IActionResult> SP_CheckIDCard(string idCard, string type)
+        public async Task<IActionResult> SP_CheckIDCard(string idCard, string type, string guid)
         {
-            return Ok(await _service.SP_CheckIDCard(idCard, type));
+            return Ok(await _service.SP_CheckIDCard(idCard, type, guid));
         }
           [HttpGet]
-        public async Task<IActionResult> SP_CheckMemberNO(string no)
+        public async Task<IActionResult> Check_Member_ID_Card(string idCard, string guid)
         {
-            return Ok(await _service.SP_CheckMemberNO(no));
+            return Ok(await _service.Check_Member_ID_Card(idCard, guid));
+        }
+          [HttpGet]
+        public async Task<IActionResult> SP_CheckMemberNO(string no, string guid)
+        {
+            return Ok(await _service.SP_CheckMemberNO(no, guid));
         }
         [HttpGet]
         public async Task<IActionResult> SP_Generate_NO(string accountGroupGuid)

@@ -110,6 +110,7 @@ export class AccountActionComponent implements OnInit {
    
   }
   this.model = model;
+  this.model.upwd = null;
     this.getAudit(this.id);
    this.auditLogs();
 
@@ -335,7 +336,7 @@ export class AccountActionComponent implements OnInit {
           return of(false);
         }
         
-        return this.service.SP_CheckIDCard(this.model.accountIdcard, this.role).pipe(
+        return this.service.SP_CheckIDCard(this.model.accountIdcard, this.role, this.model?.guid || "").pipe(
           switchMap(checkaccountIdcard => {
             this.checkaccountIdcard = checkaccountIdcard;
             if (checkaccountIdcard == 0) {
@@ -347,7 +348,7 @@ export class AccountActionComponent implements OnInit {
               this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_UID' }), true);
               return of(false);
             }
-            if (!this.model.upwd) {
+            if (!this.model.upwd && this.id === 0) {
               this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_PWD' }), true);
               return of(false);
             }

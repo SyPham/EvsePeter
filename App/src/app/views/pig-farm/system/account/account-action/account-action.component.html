@@ -28,7 +28,7 @@
            <div class="form-group row">
             <label for="ID" class="col-sm-2 col-form-label">{{ 'ID' | translate }}</label>
             <div class="col-sm-10">
-              <span *ngIf="id > 0">{{model.accountId}}</span>
+              <span >{{model.accountId}}</span>
             </div>
           </div>
 
@@ -106,7 +106,7 @@
           <div class="form-group row">
             <label for="accountMobile" class="col-sm-2 col-form-label">{{ this.role + '_MOBILE' | translate }}</label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll" (ngModelChange)="mobileChange($event)" [class.is-invalid]="checkMobile == 0" [maxlength]="10" type="tel" class="form-control" id="accountMobile" [(ngModel)]="model.accountMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
+              <input [disabled]="isDisabledAll" appNumbersOnly (ngModelChange)="mobileChange($event)" [class.is-invalid]="checkMobile == 0" [maxlength]="10" type="tel" class="form-control" id="accountMobile" [(ngModel)]="model.accountMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
             </div>
           </div>
 
@@ -122,8 +122,8 @@
             <label for="accountPassword" class="col-sm-2 col-form-label">{{ this.role + '_PWD' | translate }} <span *ngIf="model.accountId ===0" style="color:red">(*)</span></label>
             <div class="col-sm-10 ">
              <div class="password">
-              <input [disabled]="isDisabledAll" [type]="inputType" class="form-control" id="accountPassword" [(ngModel)]="model.upwd" [class.is-invalid]="!model.upwd" [placeholder]="'Enter a pwd' | translate">
-              <span class="eye" (click)="togglePassword()" *ngIf="model.accountId === 0">
+              <input [disabled]="isDisabledAll" [type]="inputType" class="form-control" id="accountPassword" [(ngModel)]="model.upwd" [class.is-invalid]="!model.upwd && id === 0" [placeholder]="'Enter a pwd' | translate">
+              <span class="eye" (click)="togglePassword()" >
                 <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
                 <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
                </span>
@@ -173,7 +173,7 @@
           <div class="form-group row">
             <label for="contactTel" class="col-sm-2 col-form-label">{{ 'ContactTel' | translate }}</label>
             <div class="col-sm-10">
-              <input [disabled]="isDisabledAll" (ngModelChange)="contactTelChange($event)" type="text" [maxlength]="10" class="form-control" id="contactTel" [class.is-invalid]="checkContactTel == 0" [(ngModel)]="model.contactTel" [placeholder]="'Enter a contact tel' | translate">
+              <input [disabled]="isDisabledAll" appNumbersOnly (ngModelChange)="contactTelChange($event)" type="text" [maxlength]="10" class="form-control" id="contactTel" [class.is-invalid]="checkContactTel == 0" [(ngModel)]="model.contactTel" [placeholder]="'Enter a contact tel' | translate">
              
             </div>
           </div>

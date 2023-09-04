@@ -1528,13 +1528,6 @@
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.0.tgz#96116f2a912e0c02817345b3c10751069920d553"
   integrity sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==
 
-"@sweetalert2/ngx-sweetalert2@^8.1.1":
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/@sweetalert2/ngx-sweetalert2/-/ngx-sweetalert2-8.1.1.tgz#3f4a488dec9e1dae754f2e8a6d61b2306d486b17"
-  integrity sha512-yWBgzWN0uCcmc4lU/HQ+gH5pak1NC6y373nDSHyxnMCXN/+nEz4PB16ulRGProR7SJPw0naEX3jnHnyfbEetcg==
-  dependencies:
-    tslib "^1.10.0"
-
 "@sweetalert2/theme-bootstrap-4@^5.0.8":
   version "5.0.15"
   resolved "https://registry.yarnpkg.com/@sweetalert2/theme-bootstrap-4/-/theme-bootstrap-4-5.0.15.tgz#bede688c13784acf73e01352e00d3e7fb8d69e01"
@@ -10604,10 +10597,10 @@ sweetalert2@^11.4.0:
   resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.6.16.tgz#ed3062b4b06a5dc81bb4fe4f245ff8b9e432b2d8"
   integrity sha512-T2FO8LptErsjE4r0WMfiSk4YbeUvPadNaUZ/cADMEOnws000znrf8zFX9S5e/spvzJDyRI5En73WQyDZhGypxQ==
 
-sweetalert2@^9.17.2:
-  version "9.17.4"
-  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-9.17.4.tgz#ab8ed721e0d1c22aef627c2116787fe99a60f679"
-  integrity sha512-T6Js/kjtGmpekE1tPT+drdgsedEnaet03mMadKUMvtBlFzVLcYy8kvIuchaQJ09rhG5bdmRRMQ2sEK0ZnHi1vg==
+sweetalert2@^11.7.27:
+  version "11.7.27"
+  resolved "https://registry.yarnpkg.com/sweetalert2/-/sweetalert2-11.7.27.tgz#de19294e1b5ae7991de27bb4ae34aff3570aaa0e"
+  integrity sha512-QbRXGQn1sb7HEhzA/K2xtWIwQHh/qkSbb1w6jYcTql2xy17876lTREEt1D4X6Q0x2wHtfUjKJ+Cb8IVkRoq7DQ==
 
 swiper@6:
   version "6.8.4"

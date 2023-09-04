@@ -177,6 +177,28 @@ export class AlertifyService {
       }
     });
   }
+  errorForgotPassword(message: string, btnText: string, callBack: any, showCancelButton = false, errorCallBack = () => {}) {
+    Swal.fire({
+      text: message,
+      iconColor: 'danger',
+      iconHtml: `<i class="fa fa-exclamation-circle text-danger" aria-hidden="true"></i>`,
+      title: `${this.trans.instant("Forgot password title")}`,
+      confirmButtonColor: '#47a556',
+      showCancelButton: showCancelButton,
+      allowOutsideClick: false,
+       customClass: {
+        icon: 'icon-no-border'
+    },
+      confirmButtonText: `${this.trans.instant(btnText)}`,
+      cancelButtonText: this.trans.instant('No') || 'No'
+    }).then((result) => {
+      if (result.value) {
+       callBack();
+      } else {
+        errorCallBack()
+      }
+    });
+  }
   error(message: string, noToast?: boolean) {
     if (!noToast) {
       this.Toast.fire({

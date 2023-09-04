@@ -79,6 +79,9 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngOnInit(): void {
     localStorage.setItem('role', this.role);
+    this.lang = 'tw';
+    localStorage.setItem('lang', 'tw');
+    this.resetLang();
     this.getRoles();
     const accessToken = localStorage.getItem('token');
     const refreshToken = localStorage.getItem('refresh_token');
@@ -93,12 +96,23 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       this.router.navigate([uri]);
     }
   }
+  resetLang() {
+    this.authService.getLanguages(this.lang).subscribe(languages => {
+      localStorage.setItem("languages", JSON.stringify(languages))
+
+    })
+  }
   onChangeRemember(args) {
     this.remember = args.target.checked;
   }
   authentication() {
     return this.authService
       .login(this.username, this.password, this.role).toPromise();
+  }
+  forgot() {
+    this.alertifyService.errorForgotPassword(this.trans.instant("Forgot password messsage"), "Sure", () => {
+
+    })
   }
   getRoles() {
   this.xaccountGroup.getAll().pipe(

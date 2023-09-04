@@ -67,8 +67,9 @@ namespace Evse.Services
         Task<object> SP_Record_AccountCheck_Remove(string accountGuid);
         Task<object> SP_Record_AccountCheck_Confirm(string accountGuid);
         Task<object> SP_Record_AccountCheck_NeedCheck(string accountGuid);
-        Task<object> SP_CheckIDCard(string idCard, string type);
-        Task<object> SP_CheckMemberNO(string no);
+        Task<object> SP_CheckIDCard(string idCard, string type, string guid);
+        Task<object> SP_CheckMemberNO(string no, string guid);
+        Task<object> Check_Member_ID_Card(string idCard, string guid);
         Task<object> SP_CheckContactTel(string contactTel);
         Task<object> SP_Check_Mobile(string mobile);
         Task<object> GetAccountNo(string type, string accountGroupGuid);
@@ -716,11 +717,13 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
             }
             var item = _mapper.Map<XAccount>(model);
 
-            if (itemModel.Upwd != model.Upwd)
+            if (!model.Upwd.IsNullOrEmpty())
             {
                 item.Upwd = model.Upwd.ToSha512();
             }
-
+            else {
+                item.Upwd = itemModel.Upwd;
+            }
             // Nếu có đổi ảnh thì xóa ảnh cũ và thêm ảnh mới
             var avatarUniqueFileName = string.Empty;
             var avatarFolderPath = "FileUploads\\images\\account\\avatar";
@@ -1308,7 +1311,7 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
         }
 
 
-        public async Task<object> SP_CheckIDCard(string idCard, string type)
+        public async Task<object> SP_CheckIDCard(string idCard, string type, string guid)
         {
             using (SqlConnection conn = new SqlConnection(_defaultConnection))
             {
@@ -1343,6 +1346,7 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
                 }  
                  var parameters = new DynamicParameters();
                  parameters.Add("@Id_Card_Value", idCard);
+                 parameters.Add("@GUID", guid == "" ? null  : guid) ;
                  parameters.Add("@result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                
                 try
@@ -1407,7 +1411,46 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
 
             }
         }
-        public async Task<object> SP_CheckMemberNO(string no)
+        
+         public async Task<object> Check_Member_ID_Card(string idCard, string guid)
+        {
+            using (SqlConnection conn = new SqlConnection(_defaultConnection))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    await conn.OpenAsync();
+                }
+                string sql = SP.Account.Check_Member_ID_Card;
+             
+                 var parameters = new DynamicParameters();
+                 parameters.Add("@ID_Card_Value", idCard);
+                 parameters.Add("@GUID", guid == "" ? null : guid);
+                 parameters.Add("@result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+               
+                try
+                {
+                    await conn.QueryAsync(sql, parameters, commandType: CommandType.StoredProcedure);
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"The ${sql} ID_Card_Value={idCard} executed successfully"
+                    }).ConfigureAwait(false);
+                    var result= parameters.Get<int>("@result");
+                    return result;
+                }
+                catch (Exception ex)
+                {
+                    await _logger.LogStoreProcedure(new LoggerParams
+                    {
+                        Type = EvseLogConst.StoredProcedure,
+                        LogText = $"SP: ${sql}, Type: {ex.GetType().Name}, Message: {ex.Message}, StackTrace: {ex.ToString()}"
+                    }).ConfigureAwait(false);
+                    return null;
+                }
+
+            }
+        }
+        public async Task<object> SP_CheckMemberNO(string no, string guid)
         {
             using (SqlConnection conn = new SqlConnection(_defaultConnection))
             {
@@ -1419,6 +1462,7 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
              
                  var parameters = new DynamicParameters();
                  parameters.Add("@Member_NO", no);
+                 parameters.Add("@GUID", guid == "" ? null : guid);
                  parameters.Add("@result", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
                
                 try

@@ -123,8 +123,11 @@ export class XAccountService extends CURDService<XAccount> {
   getAccountNo(type, accountGroupGuid) {
     return this.http.get<any>(`${this.base}XAccount/GetAccountNo?type=${type}&accountGroupGuid=${accountGroupGuid}`, {});
   }
-  SP_CheckIDCard(idCard, type) {
-    return this.http.get<any>(`${this.base}XAccount/SP_CheckIDCard?idCard=${idCard}&type=${type}`, {});
+  SP_CheckIDCard(idCard, type, guid) {
+    return this.http.get<any>(`${this.base}XAccount/SP_CheckIDCard?idCard=${idCard}&type=${type}&guid=${guid}`, {});
+  }
+  Check_Member_ID_Card(idCard, guid) {
+    return this.http.get<any>(`${this.base}XAccount/Check_Member_ID_Card?idCard=${idCard}&guid=${guid}`, {});
   }
   SP_CheckContactTel(contactTel) {
     return this.http.get<any>(`${this.base}XAccount/SP_CheckContactTel?contactTel=${contactTel}`, {});
@@ -132,8 +135,8 @@ export class XAccountService extends CURDService<XAccount> {
   SP_Check_Mobile(mobile) {
     return this.http.get<any>(`${this.base}XAccount/SP_Check_Mobile?mobile=${mobile}`, {});
   }
-  SP_CheckMemberNO(no) {
-    return this.http.get<any>(`${this.base}XAccount/SP_CheckMemberNO?no=${no}`, {});
+  SP_CheckMemberNO(no, guid) {
+    return this.http.get<any>(`${this.base}XAccount/SP_CheckMemberNO?no=${no}&guid=${guid}`, {});
   }
   SP_Generate_NO(accountGroupGuid) {
     return this.http.get<any>(`${this.base}XAccount/SP_Generate_NO?accountGroupGuid=${accountGroupGuid}`, {});

@@ -94,7 +94,7 @@
           <div class="form-group row">
             <label for="memberMobile" class="col-sm-2 col-form-label">{{ this.role + '_MOBILE' | translate }}</label>
             <div class="col-sm-10">
-              <input type="text" (ngModelChange)="mobileChange($event)" [class.is-invalid]="checkMobile == 0" class="form-control" id="memberMobile" [(ngModel)]="model.memberMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
+              <input type="text" [maxlength]="10" (ngModelChange)="mobileChange($event)" appNumbersOnly [class.is-invalid]="checkMobile == 0" class="form-control" id="memberMobile" [(ngModel)]="model.memberMobile" [placeholder]="'Enter a ' + this.role + ' mobile' | translate">
             </div>
           </div>
 
@@ -110,8 +110,8 @@
             <label for="memberPassword" class="col-sm-2 col-form-label">{{ this.role + '_PWD' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10 ">
              <div class="password">
-              <input [type]="inputType" class="form-control" id="memberPassword" [(ngModel)]="model.upwd" [class.is-invalid]="!model.upwd" [placeholder]="'Enter a pwd' | translate">
-              <span class="eye" (click)="togglePassword()" *ngIf="id=== 0">
+              <input [type]="inputType" class="form-control" id="memberPassword" [(ngModel)]="model.upwd" [class.is-invalid]="!model.upwd && id === 0" [placeholder]="'Enter a pwd' | translate">
+              <span class="eye" (click)="togglePassword()">
                 <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
                 <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
                </span>
@@ -338,7 +338,7 @@
           
           
           <div class="form-group row" *ngIf="id> 0">
-            <label for="contactTel" class="col-sm-2 col-form-label">{{ '' | translate }}</label>
+            <label class="col-sm-2 col-form-label">{{ '' | translate }}</label>
             <div class="col-sm-10">
             <label class="">{{ 'Audit_Logs' | translate }}</label>
               

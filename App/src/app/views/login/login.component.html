@@ -34,7 +34,7 @@
            </span>
           </div>
 
-          <div class="forgot-password"><a href="/forgot-password">{{'Forgot password?' | translate}}</a></div>
+          <div class="forgot-password"><a (click)="forgot()">{{'Forgot password?' | translate}}</a></div>
           <button class="btn-login" id='submit' [disabled]="!username || !password" [class.disabled]="!username || !password">
 
             <span *ngIf="loading == 1" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

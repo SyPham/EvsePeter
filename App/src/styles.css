@@ -619,3 +619,6 @@ color: white;
 .form-control.is-invalid { 
   background-image: none !important;
 }
+.icon-no-border {
+  border: none !important;
+}
