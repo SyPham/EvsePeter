@@ -1,7 +1,7 @@
 
 import { Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { AlertifyService } from '../../_core/_service/alertify.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { UserForLogin } from 'src/app/_core/_model/user';
 import { Subscription, forkJoin, from, of } from 'rxjs';
@@ -78,9 +78,14 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
   ngOnInit(): void {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+      
+        this.resetLang();
+      }
+    });
     localStorage.setItem('role', this.role);
-    this.lang = 'tw';
-    localStorage.setItem('lang', 'tw');
+  
     this.resetLang();
     this.getRoles();
     const accessToken = localStorage.getItem('token');
@@ -97,6 +102,8 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
   resetLang() {
+    this.lang = 'tw';
+    localStorage.setItem('lang', 'tw');
     this.authService.getLanguages(this.lang).subscribe(languages => {
       localStorage.setItem("languages", JSON.stringify(languages))
 
