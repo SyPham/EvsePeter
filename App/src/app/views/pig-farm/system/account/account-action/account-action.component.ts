@@ -326,8 +326,8 @@ export class AccountActionComponent implements OnInit {
    
   validateFields() {
     return of(
-      !this.model.accountNo ? this.translate.instant("InputDataIncorrect", {field: this.role + '_NO' }) :
-      !this.model.accountName ? this.translate.instant("InputDataIncorrect", {field: this.role + '_Name' }) :
+      !this.model.accountNo ? this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_NO') }) :
+      !this.model.accountName ? this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_Name') }) :
       true
     ).pipe(
       switchMap(validationResult => {
@@ -340,16 +340,16 @@ export class AccountActionComponent implements OnInit {
           switchMap(checkaccountIdcard => {
             this.checkaccountIdcard = checkaccountIdcard;
             if (checkaccountIdcard == 0) {
-              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_IDCARD' }), true);
+              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_IDCARD') }), true);
               return of(false);
             }
       
             if (!this.model.uid) {
-              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_UID' }), true);
+              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_UID') }), true);
               return of(false);
             }
             if (!this.model.upwd && this.id === 0) {
-              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.role + '_PWD' }), true);
+              this.alertify.error(this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_PWD') }), true);
               return of(false);
             }
             if (this.model.upwd !== this.model.reupwd && this.model.accountId === 0) {
@@ -404,6 +404,7 @@ export class AccountActionComponent implements OnInit {
     }
   }
    save() {
+    this.model.uid = this.model.accountNo;
     this.validateFields().subscribe(value => {
       if (value) {
        

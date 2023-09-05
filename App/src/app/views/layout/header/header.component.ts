@@ -136,12 +136,20 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   goToProfile() {
     this.router.navigate(["/profile"]);
   }
+  resetLang() {
+    this.lang = 'tw';
+    localStorage.setItem('lang', 'tw');
+    this.authService.getLanguages(this.lang).subscribe(languages => {
+      localStorage.setItem("languages", JSON.stringify(languages))
+      this.trans.use('tw');
+    })
+  }
   logout() {
     this.authService.logOut().subscribe(() => {
       const uri = this.router.url;
       this.cookieService.delete('remember_landlord');
       this.cookieService.delete('key_temp_landlord');
-
+      this.resetLang();
       this.router.navigate(["login"], {
         queryParams: { uri },
         replaceUrl: true,

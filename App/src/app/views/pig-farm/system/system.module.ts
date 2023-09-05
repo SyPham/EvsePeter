@@ -66,6 +66,8 @@ declare var require: any;
 import { L10n, loadCldr, setCulture } from '@syncfusion/ej2-base';
 import { AccountActionComponent } from './account/account-action/account-action.component';
 import { AccountContractComponent } from './account/account-contract/account-contract.component';
+import { NumbersOnlyDirective } from '../../../_core/_directive/numbers-only.directive';
+import { EvseModule } from '../../evse/evse.module';
 loadCldr(
   require('cldr-data/supplemental/numberingSystems.json'),
   require('cldr-data/main/en/ca-gregorian.json'),

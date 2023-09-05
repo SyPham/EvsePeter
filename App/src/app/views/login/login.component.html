@@ -29,8 +29,8 @@
           <div class="account password">
             <input [type]="inputType" name='password' placeholder="{{'Password' | translate}}" [(ngModel)]="password" />
            <span class="eye" (click)="togglePassword()">
-            <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
-            <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
+            <i class="fa fa-eye-slash" *ngIf="inputType==='password'" ></i>
+            <i class="fa fa-eye" *ngIf="inputType==='text'" ></i>
            </span>
           </div>
 

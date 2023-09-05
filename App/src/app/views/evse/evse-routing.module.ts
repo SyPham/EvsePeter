@@ -35,7 +35,7 @@ import { Sitev2ActionComponent } from './sitev2/sitev2-action/sitev2-action.comp
 import { Sitev2DetailComponent } from './sitev2/sitev2-detail/sitev2-detail.component';
 import { RoleSettingComponent } from './role-setting/role-setting.component';
 import { RoleSettingActionComponent } from './role-setting/role-setting-action/role-setting-action.component';
-import { NumbersOnlyDirective } from './numbers-only.directive';
+import { NumbersOnlyDirective } from '../../_core/_directive/numbers-only.directive';
 
 const routes: Routes = [
   {

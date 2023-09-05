@@ -1575,7 +1575,7 @@ IRepositoryBase<SystemConfig> repoSystemConfig)
                 {
                     await conn.OpenAsync();
                 }
-                string sql = SP.Account.Check_ContactTel;
+                string sql = SP.Account.Check_Mobile;
              
                  var parameters = new DynamicParameters();
                  parameters.Add("@Mobile", mobile);

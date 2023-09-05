@@ -59,7 +59,7 @@
            <div class="form-group row">
             <label for="memberNO" class="col-sm-2 col-form-label">{{ this.role + '_NO' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
-              <input type="text"  class="form-control" [(ngModel)]="model.memberNo" [class.is-invalid]="!model.memberNo" id="memberNO" [placeholder]="'Enter a ' + this.role + ' NO' | translate">
+              <input type="text" [maxlength]="100"  class="form-control" [(ngModel)]="model.memberNo" [class.is-invalid]="!model.memberNo" id="memberNO" [placeholder]="'Enter a ' + this.role + ' NO' | translate">
 
             </div>
           </div>
@@ -67,7 +67,7 @@
           <div class="form-group row">
             <label for="memberName" class="col-sm-2 col-form-label">{{ this.role + '_Name' | translate }} <span *ngIf="id===0" style="color:red">(*)</span></label>
             <div class="col-sm-10">
-              <input type="text" [maxlength]="100" class="form-control" [(ngModel)]="model.memberName" id="memberName" [class.is-invalid]="!model.memberName" [placeholder]="'Enter a ' + this.role + ' name' | translate">
+              <input type="text" [maxlength]="200" class="form-control" [(ngModel)]="model.memberName" id="memberName" [class.is-invalid]="!model.memberName" [placeholder]="'Enter a ' + this.role + ' name' | translate">
             </div>
           </div>
 
@@ -112,8 +112,8 @@
              <div class="password">
               <input [type]="inputType" class="form-control" id="memberPassword" [(ngModel)]="model.upwd" [class.is-invalid]="!model.upwd && id === 0" [placeholder]="'Enter a pwd' | translate">
               <span class="eye" (click)="togglePassword()">
-                <i class="fa fa-eye" *ngIf="inputType==='password'" ></i>
-                <i class="fa fa-eye-slash" *ngIf="inputType==='text'" ></i>
+                <i class="fa fa-eye-slash" *ngIf="inputType==='password'" ></i>
+                <i class="fa fa-eye" *ngIf="inputType==='text'" ></i>
                </span>
              </div>
             </div>
@@ -125,8 +125,8 @@
              <div class="password">
               <input [type]="inputTypeRePw" (change)="changeRepassword($event)" class="form-control" id="memberRePassword" [class.is-invalid]="model.reupwd != model.upwd && model.id === 0" [(ngModel)]="model.reupwd" [placeholder]="'Enter a re pwd' | translate">
               <span class="eye" (click)="toggleRePassword()">
-                <i class="fa fa-eye" *ngIf="inputTypeRePw==='password'" ></i>
-                <i class="fa fa-eye-slash" *ngIf="inputTypeRePw==='text'" ></i>
+                <i class="fa fa-eye-slash" *ngIf="inputTypeRePw==='password'" ></i>
+                <i class="fa fa-eye" *ngIf="inputTypeRePw==='text'" ></i>
                </span>
              </div>
 

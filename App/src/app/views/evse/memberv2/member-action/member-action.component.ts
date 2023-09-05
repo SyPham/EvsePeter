@@ -396,10 +396,10 @@ id: any;
    
    validateFields() {
     return of(
-      !this.model.memberNo ? this.translate.instant("InputDataIncorrect", {field: this.role + '_NO' }) :
-      !this.model.memberName ? this.translate.instant("InputDataIncorrect", {field: this.role + '_Name' }) :
-      !this.model.uid ? this.translate.instant("InputDataIncorrect", {field: this.role + '_UID' }) :
-      !this.model.upwd && this.id === 0 ? this.translate.instant("InputDataIncorrect", {field: this.role + '_PWD' }) :
+      !this.model.memberNo ? this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_NO') }) :
+      !this.model.memberName ? this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_Name') }) :
+      !this.model.uid ? this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_UID') }) :
+      !this.model.upwd && this.id === 0 ? this.translate.instant("InputDataIncorrect", {field: this.translate.instant(this.role + '_PWD') }) :
       this.model.upwd !== this.model.reupwd && this.model.id === 0 ? this.translate.instant("PasswordNotMatch") :
       true
     ).pipe(
