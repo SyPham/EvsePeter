@@ -358,7 +358,7 @@ export class AccountActionComponent implements OnInit {
             }
 
             if (this.model.contactTel) {
-             return this.service.SP_CheckContactTel(this.model.contactTel).pipe(
+             return this.service.SP_Check_Mobile(this.model.contactTel).pipe(
                 switchMap(value => {
                   this.checkContactTel = value;
                   if (value === 0) {

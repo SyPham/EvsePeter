@@ -126,7 +126,7 @@ export class RoleSettingActionComponent implements OnInit {
            this.xaccountGroup.add(this.item).subscribe(
              (res) => {
                if (res.success === true) {
-                 this.alertify.success(this.alert.created_ok_msg);
+                 this.alertify.success(this.alert.created_ok_msg, true);
                  this.router.navigate(['/evse/setting-role']);
                } else {
                  this.alertify.warning(this.alert.system_error_msg);
@@ -157,7 +157,7 @@ export class RoleSettingActionComponent implements OnInit {
        this.xaccountGroup.update(this.item).subscribe(
          (res) => {
            if (res.success === true) {
-             this.alertify.success(this.alert.updated_ok_msg);
+             this.alertify.success(this.alert.updated_ok_msg, true);
              this.router.navigate(['/evse/setting-role']);
            } else {
              this.alertify.warning(this.alert.system_error_msg);

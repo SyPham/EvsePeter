@@ -49,7 +49,7 @@
                     <ng-container
                       *ngFor="let item of roles; let i =index">
                         <div class="pretty p-default p-round p-thick" style="width: 105px;">
-                          <input [disabled]="isDisabledAll" type="radio" name="xaccountGroup" [value]="item.guid" (change)="checkedRole($event)" [checked]="checked(item,i)">
+                          <input [disabled]="item.groupNo != role" type="radio" name="xaccountGroup" [value]="item.guid" (change)="checkedRole($event)" [checked]="checked(item,i)">
                           <div class="state">
                               <label>{{item.groupNo  | translate}}</label>
                           </div>
